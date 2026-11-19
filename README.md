@@ -39,8 +39,8 @@ There's no public parts-counter or cash-register screen, and the customer never 
 
 ## Open items to verify before any production build
 
-1. **Platform and hosting.** The client says Hostinger, but the site builder and plan aren't verified. That decides whether the store is a WooCommerce plugin, a Hostinger builder store, Shopify embedded, or a separate subdomain.
-2. **Supplier.** This brief names jmatv.com. The Nov 10 discovery memo named rev-zone.pro. We need to confirm which supplier is the drop-ship partner, whether drop-ship is supported, and whether there's an API or data feed for catalog, price, stock, and fitment.
+1. **Platform and hosting.** The client confirmed Hostinger (hostinger.com) on 2026-11-19. The site builder and plan aren't verified yet. That decides whether the store is a WooCommerce plugin, a Hostinger builder store, Shopify embedded, or a separate subdomain.
+2. **Supplier: J&M ATV/UTV Supply (jmatv.com), confirmed by the client on 2026-11-19.** J&M is a dealer-only wholesale distributor on BigCommerce. Its public site doesn't mention drop-shipping, data feeds, or an API. Still to confirm: whether J&M drop-ships to customers and to the workshop, and whether it provides a catalog, price, stock, and fitment file or feed. rev-zone.pro appears to be the client's own retail storefront, not the supplier.
 3. **Payment processor.** Stripe, Square, or Shopify Payments. Match the shop's POS if possible.
 4. **Sales tax and shipping rules.** Arizona TPT handling, plus supplier shipping quotes or flat rates.
 5. **Staff sign-in.** How mechanics authenticate for workshop orders.
