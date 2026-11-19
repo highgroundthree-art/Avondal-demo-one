@@ -91,6 +91,8 @@ section.block{padding:56px 0}
 .band ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
 .band li{display:flex;gap:10px;align-items:flex-start;color:#e3e6ea}
 .band li svg{flex-shrink:0;width:20px;height:20px;color:var(--orange);margin-top:2px}
+.contact-panel{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}
+@media (max-width:760px){.contact-panel{grid-template-columns:1fr}.contact-panel .btn{flex:1 1 100%}}
 .rides{display:flex;flex-wrap:wrap;gap:10px}
 .ride{background:var(--card);border:1px solid #e2dccf;border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600}
 .ride small{font-weight:500;color:var(--muted)}
@@ -382,6 +384,7 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
       <a href="#home" data-soon="Tips &amp; Tricks">Tips &amp; Tricks</a>
       <a href="#home" data-soon="See Our Reviews">Reviews</a>
       <a href="#home" data-help>Returns &amp; Help</a>
+      <a href="#contact" data-nav="contact">Contact</a>
       <a href="#shop" class="shop-tab" data-nav="shop">Shop Parts</a>
     </nav>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
@@ -445,6 +448,20 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
       <p class="note">These come from testimonials the business publishes on its own site. They aren't independently verified reviews. The production build would link to the real reviews page.</p>
     </div>
   </section>
+
+  <section class="block" id="contact" style="padding-top:0">
+    <div class="wrap">
+      <div class="panel contact-panel">
+        <div><h2 style="font-size:26px;margin-bottom:4px">Contact the shop</h2>
+          <p style="margin:0;color:var(--muted)">Questions about a repair or a part? Call, email, or ask the parts assistant.</p></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn btn-primary" id="callBtn" href="#contact">Call <span class="cphone"></span></a>
+          <a class="btn btn-light" id="mailBtn" href="#contact">Email <span class="cemail"></span></a>
+          <button class="btn btn-light" data-help>Ask the assistant</button>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 
 <!-- SHOP -->
@@ -490,7 +507,7 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
 
 <footer class="site">
   <div class="wrap">
-    <div><b style="color:#fff">Avondale Dirt Bike &amp; ATV</b><br>Avondale, Arizona · (480) 270-4465</div>
+    <div><b style="color:#fff">Avondale Dirt Bike &amp; ATV</b><br>Avondale, Arizona · <span class="cphone"></span> · <span class="cemail"></span></div>
     <div>Demo prepared by High Ground Three. Sample listings only.</div>
   </div>
 </footer>
@@ -546,7 +563,8 @@ var CONFIG={
   EMAIL_ENDPOINT:"",
   EMAIL_TOKEN:"adb-demo-2026",
   SHOP_NAME:"Avondale Dirt Bike & ATV",
-  SHOP_PHONE:"(480) 270-4465"
+  SHOP_PHONE:"(480) 270-4465",
+  SHOP_EMAIL:"doughertyent@gmail.com"
 };
 /* ---------- icons ---------- */
 var IC={
@@ -647,7 +665,7 @@ var VIEWS=["home","shop","checkout","confirmation"];
 function route(){
   var h=(location.hash||"#home").slice(1);
   var target=h, scrollTo=null;
-  if(h==="services"){target="home";scrollTo="services";}
+  if(h==="services"||h==="contact"){target="home";scrollTo=h;}
   if(VIEWS.indexOf(target)<0)target="home";
   if(target==="checkout"&&cartCount()===0&&!S.lastOrder){target="shop";}
   if(target==="confirmation"&&!S.lastOrder){target="home";}
@@ -663,6 +681,10 @@ function route(){
 window.addEventListener("hashchange",route);
 
 /* ---------- home ---------- */
+document.querySelectorAll(".cphone").forEach(function(e){e.textContent=CONFIG.SHOP_PHONE;});
+document.querySelectorAll(".cemail").forEach(function(e){e.textContent=CONFIG.SHOP_EMAIL;});
+$("#callBtn").href="tel:"+CONFIG.SHOP_PHONE.replace(/[^\d+]/g,"");
+$("#mailBtn").href="mailto:"+CONFIG.SHOP_EMAIL;
 $("#svcGrid").innerHTML=SVC.map(function(s){return '<div class="svc"><div class="ico">'+IC[s[2]]+'</div><h3>'+esc(s[0])+'</h3><p>'+esc(s[1])+'</p></div>';}).join("");
 $("#schedBtn").addEventListener("click",function(){toast("In production this goes to the shop's existing service booking.");});
 document.querySelectorAll("[data-soon]").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();toast(a.dataset.soon+" is an existing page on the shop's site.");});});
@@ -976,7 +998,7 @@ var FAQ=[
  {k:["exchange","swap","different size"],a:"The quickest way to exchange is to start a return for the old part and place a new order for the right one. The shop can help you pick the correct part."},
  {k:["warranty","defect","defective","stopped working","failed"],a:"Defective parts go through a warranty review with the manufacturer. Start a return, choose \"Defective\", and we'll take it from there."},
  {k:["track","where","status","shipped","arrive","delivery"],a:"Your parts ship straight from our supplier. Tracking is emailed to you as soon as they ship. Send me your order number and I'll look it up."},
- {k:["phone","call","talk","person","human","someone","contact"],a:"You can reach the shop at "+CONFIG.SHOP_PHONE+". You don't need to call to complete a return, though. I can do it right here."},
+ {k:["phone","call","talk","person","human","someone","contact"],a:"You can reach the shop at "+CONFIG.SHOP_PHONE+" or "+CONFIG.SHOP_EMAIL+". You don't need to call to complete a return, though. I can do it right here."},
  {k:["install","labor","put it on","mechanic"],a:"The shop installs aftermarket parts and accessories. Use \"Schedule a Service\" on the home page to book it."}
 ];
 var CH={state:"idle",ord:null,sel:{},reason:"",cond:"",photo:false};
