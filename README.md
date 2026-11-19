@@ -15,7 +15,7 @@ An isolated demonstration of how Avondale Dirt Bike & ATV could add online parts
 | Area | What's in the demo |
 |---|---|
 | Home | Keeps the repair-shop identity and the seven advertised services. Adds a **Shop Parts** nav tab, and puts a **Shop Parts** button opposite **Schedule a Service** in the top third of the page. |
-| Shop | 39 sample listings in 9 categories, with search, category filter, sort, and a "Shopping for" vehicle filter. |
+| Shop | 42 real J&M ATV/UTV Supply listings (brand, part #, J&M photo, J&M retail price as listed 2026-11-19, J&M fitment text), with search, categories, sort, and a Make filter. All vehicle-specific parts are flagged "Fitment check required". |
 | Cart | Slide-out cart with quantity controls. It's kept in the browser for that viewer only. |
 | Checkout | Four steps: Delivery → Vehicle → Payment → Review. |
 | Confirmation | Order number, a fulfillment route diagram, and the planned "behind the scenes" workflow with the human review step. |

@@ -465,7 +465,7 @@ footer.site .wrap{display:block}
 </head>
 <body>
 
-<div class="demo-bar" role="note"><b>Demonstration build:</b> sample listings and demo prices. No real orders are placed and no cards are charged.</div>
+<div class="demo-bar" role="note"><b>Demonstration build:</b> real J&amp;M catalog listings and retail prices. No real orders are placed and no cards are charged.</div>
 
 <header class="site">
   <div class="wrap hbar">
@@ -643,9 +643,9 @@ footer.site .wrap{display:block}
     <b>Five-minute run sheet</b>
     <ol>
       <li><b>Home:</b> point out the new Shop Parts tab and the Shop Parts button next to Schedule a Service.</li>
-      <li><b>Shop:</b> search <i>"brake"</i>, then choose <i>1981 Honda CR250R</i> under "Shopping for". Point out the fitment flags.</li>
+      <li><b>Shop:</b> real J&amp;M parts, photos and retail prices. Search <i>"air filter"</i>, then pick <b>Honda</b> under Make. Point out the fitment flags.</li>
       <li>Hand Dennis the device. He adds two or three parts and opens the cart.</li>
-      <li>Show the other way to buy: tap <b>Find a part</b> and type <i>"brake pads for my CR250R"</i>. Add a part from the chat.</li>
+      <li>Show the other way to buy: tap <b>Find a part</b> and type <i>"air filter for my Honda TRX420"</i>. Add a part from the chat.</li>
       <li><b>Checkout as a customer:</b> he types <b>his real email</b>. Use "Fill demo details" for the rest. The order ships straight to the customer.</li>
       <li>On the confirmation page, walk through what happens behind the scenes and the human review step.</li>
       <li>Have him open his inbox. The real receipt arrives from the shop's Gmail.</li>
@@ -653,7 +653,7 @@ footer.site .wrap{display:block}
       <li>Turn on <b>Mechanic order</b> below and run the same flow again. This time it ships to the workshop with a work order number.</li>
     </ol>
     <div class="tog"><div><b>Mechanic order mode</b><small>Simulates a technician signed in. Orders ship to the workshop.</small></div><label class="sw"><input type="checkbox" id="staffTog"><span></span></label></div>
-    <div class="tog"><div><b>Show 2025 Honda CRF250R</b><small>Optional demo vehicle. It's a different model family from the CR250R.</small></div><label class="sw"><input type="checkbox" id="crfTog"><span></span></label></div>
+    
     <div class="tog"><div><b>Reset demo</b><small>Empties the cart and goes back to Home.</small></div><button class="btn btn-light" id="resetBtn" style="padding:8px 12px">Reset</button></div>
     <p class="note">Shortcut: press <b>P</b> to open or close this panel.</p>
   </div>
@@ -724,68 +724,71 @@ var CATS=[
  ["drivetrain","Drivetrain & Chain"],["filters","Filters, Oil & Fluids"],["controls","Controls & Cables"],["wheels","Tires & Wheels"],["accessories","Accessories & Protection"]
 ];
 var VEH=[
- {id:"any",label:"All vehicles"},
- {id:"xr100",label:"Honda XR100 (year not specified)",short:"Honda XR100"},
- {id:"cr81",label:"1981 Honda CR250R",short:"1981 Honda CR250R"},
- {id:"icebear",label:"Ice Bear trike (model/year not specified)",short:"Ice Bear trike"},
- {id:"crf25",label:"2025 Honda CRF250R (optional demo vehicle)",short:"2025 Honda CRF250R",optional:true}
+ {id:"any",label:"All makes"},
+ {id:"honda",label:"Honda"},{id:"kawasaki",label:"Kawasaki"},{id:"yamaha",label:"Yamaha"},{id:"polaris",label:"Polaris"},
+ {id:"canam",label:"Can-Am"},{id:"arcticcat",label:"Arctic Cat"},{id:"cfmoto",label:"CFMOTO"},{id:"chinese",label:"Chinese / GY6 / pit bike"}
 ];
-/* fit: "u" = universal/multi-fit; array = listed for (unverified) */
+/* Real J&M ATV/UTV Supply listings (jmatv.com), retail prices as listed 2026-11-19.
+   [jmIndex, name, sku, brand, retail, category, makes ("u" = universal), supplier fitment / description] */
 var P=[
- ["Sintered front brake pads","brakes",34.95,["xr100","cr81","crf25"],"Sintered compound pad set for a front disc brake."],
- ["Rear brake shoe set (drum)","brakes",29.95,["xr100","icebear"],"Replacement shoe pair for drum rear brakes."],
- ["DOT 4 brake fluid, 12 oz","brakes",9.95,"u","For systems that call for DOT 4. Check the reservoir cap first."],
- ["Front brake rotor","brakes",89.95,["crf25"],"Stainless replacement disc rotor."],
- ["Brake lever, forged","controls",24.95,["cr81","xr100"],"Replacement front brake lever."],
- ["Clutch cable","controls",18.95,["xr100","cr81","icebear"],"OE-style replacement clutch cable."],
- ["Throttle cable","controls",17.95,["xr100","cr81"],"Replacement throttle cable."],
- ["Grip set, 7/8\" bars","controls",14.95,"u","Half-waffle grips for standard 7/8\" handlebars."],
- ["Air filter, foam","filters",21.95,["xr100","cr81","icebear","crf25"],"Washable, reusable dual-stage foam air filter."],
- ["Oil filter","filters",8.95,["crf25"],"Cartridge-style oil filter."],
- ["4-stroke engine oil 10W-40, 1 qt","filters",11.95,"u","Motorcycle-rated 4-stroke oil. Follow the owner's manual."],
- ["2-stroke premix oil, 16 oz","filters",13.95,"u","Premix oil for 2-stroke engines. Mix to the manufacturer's ratio."],
- ["Air filter oil, 8 oz","filters",10.95,"u","Tacky oil for foam air filters."],
- ["Fork oil 5W, 16 oz","filters",12.95,"u","Suspension fluid. Confirm the weight against your manual."],
- ["Spark plug","electrical",6.95,["xr100","cr81","icebear"],"Standard replacement spark plug. Confirm heat range."],
- ["Iridium spark plug","electrical",14.95,["crf25"],"Iridium-tip plug for modern 4-strokes."],
- ["Battery, sealed AGM","electrical",64.95,["icebear","crf25"],"Maintenance-free sealed battery."],
- ["Ignition coil","electrical",54.95,["cr81"],"Replacement ignition coil."],
- ["Universal kill switch","electrical",12.95,"u","Handlebar-mount engine stop switch."],
- ["Top-end gasket kit","engine",32.95,["xr100","cr81"],"Head and base gaskets for a top-end job."],
- ["Piston kit, standard bore","engine",129.95,["cr81"],"Piston, rings, pin, and clips."],
- ["Piston ring set","engine",29.95,["xr100","cr81"],"Replacement ring set."],
- ["Carburetor rebuild kit","engine",36.95,["xr100","cr81","icebear"],"Jets, needle, gaskets, and o-rings."],
- ["Fuel line, 1/4\" ID, 3 ft","engine",7.95,"u","Clear fuel line. Measure your fitting before ordering."],
- ["Drive chain, 420","drivetrain",34.95,["xr100"],"420-pitch drive chain."],
- ["Drive chain, 520 O-ring","drivetrain",79.95,["cr81","crf25"],"520-pitch O-ring chain. Cut to length."],
- ["Front sprocket","drivetrain",22.95,["xr100","cr81","crf25"],"Steel countershaft sprocket."],
- ["Rear sprocket, steel","drivetrain",44.95,["xr100","cr81","crf25"],"Steel rear sprocket."],
- ["Chain lube, 6 oz","drivetrain",11.95,"u","Spray chain lube for O-ring and standard chains."],
- ["Fork seal & dust wiper kit","suspension",34.95,["xr100","cr81","crf25"],"Seal and wiper set for one fork rebuild."],
- ["Steering stem bearing kit","suspension",44.95,["xr100","cr81"],"Upper and lower steering bearings with seals."],
- ["Swingarm bearing kit","suspension",49.95,["cr81","crf25"],"Bearings, seals, and sleeves."],
- ["Front tire, off-road","wheels",89.95,["cr81","crf25"],"Intermediate-terrain front tire. Confirm the size first."],
- ["Inner tube, heavy duty","wheels",24.95,["xr100","cr81","crf25"],"Heavy-duty tube. Confirm the size first."],
- ["Rim lock","wheels",9.95,"u","Keeps the tire from slipping on the rim. Confirm rim width."],
- ["Handguards, wrap-around","accessories",69.95,"u","Wrap-around handguards for 7/8\" bars."],
- ["Skid plate","accessories",119.95,["crf25"],"Aluminum frame skid plate."],
- ["LED light bar, 10\"","accessories",59.95,"u","Auxiliary light bar. Check that local rules allow it."],
- ["Tie-down straps, set of 4","accessories",24.95,"u","Ratchet tie-downs for hauling."]
+ [4,"Brake Pads (CBD0402), Type 4B","CBD0402","MoGo",20.99,"brakes",["chinese"],"Brake pads, type 4B."],
+ [6,"Brake Pads (CBD0416), Type 4P-R","CBD0416","MoGo",20.99,"brakes",["chinese"],"Brake pads, type 4P-R."],
+ [12,"Brake Shoes, Can-Am/Polaris WE440045 (one pair)","BS151J","EPI Performance",25.99,"brakes",["canam","polaris","arcticcat"],"Fits (per J&M): Arctic Cat 90 Y-12 Youth 2002–05; Can-Am DS 70 Mini 2008–15; Polaris 50/90 Outlaw (rear), 90 2x4 2001–15."],
+ [13,"Heavy Duty Brakes SB54EX","BD120S","Streamline Brakes",30.95,"brakes",[],"Heavy-duty Streamline brake. See supplier listing for fitment."],
+ [63,"Brake Rotor No. 18-0096 (front)","BR896","All Balls Racing",66.42,"brakes",["canam"],"Fits (per J&M): Can-Am Commander 1000 DPS 2011–17, Commander 1000 LTD 2012–17."],
+ [14,"Uni-Filter Air Filter NU-4149ST","AF4149","Uni Filter",40.95,"filters",["honda"],"Fits (per J&M): Honda CRF450 2019."],
+ [64,"Uni Air Filter Honda NU-4142ST","AF4142","Uni Filter",38.95,"filters",["honda"],"Fits (per J&M): Honda TRX420 2007–13."],
+ [15,"Uni-Filter Air Filter NU-2357S","AF2357","Uni Filter",18.95,"filters",["kawasaki"],"Fits (per J&M): Kawasaki KLR250 1985."],
+ [16,"Uni Foam Filter Oil UFF100","UFF100","Uni Filter",13.95,"filters","u","Foam air filter oil."],
+ [9,"Klotz Synthetic Gear Lube 80W/90","KL8090","Klotz Lube",21.95,"filters","u","Synthetic 80W/90 gear oil. Check your manual for the right spec."],
+ [18,"NGK Spark Plug B9ES","PL143","NGK",3.40,"electrical",[],"NGK B9ES. Match the plug number your manual calls for."],
+ [66,"NGK Spark Plug BR8HS","PL223","NGK",5.49,"electrical",[],"NGK BR8HS standard plug. Match the plug number your manual calls for."],
+ [67,"NGK Spark Plug CR8EB","PL222","NGK",7.05,"electrical",[],"NGK CR8EB standard plug. Match the plug number your manual calls for."],
+ [19,"NGK Iridium Spark Plug DR8EIX","PL115","NGK",14.66,"electrical",[],"NGK DR8EIX iridium plug. Match the plug number your manual calls for."],
+ [25,"Motobatt AGM Battery MBYZ16HA","MBYZ16HA","Motobatt",143.63,"electrical",[],"Sealed, maintenance-free AGM battery with 4 terminals. Confirm size and terminal layout."],
+ [0,"Starter (ST509)","ST509","Wide Open Products",128.73,"electrical",["polaris"],"Fits (per J&M): Polaris Sportsman 400."],
+ [38,"Voltage Regulator Rectifier","REG3","RM Stator",56.54,"electrical",["kawasaki"],"Fits (per J&M): Kawasaki KLX650 1993–96."],
+ [52,"PeakRPM CDI Box (tested)","CDI8848","RM Stator",210.89,"electrical",[],"Plug-and-play aftermarket CDI box. See supplier listing for fitment."],
+ [49,"Ignition Coil (CCL0304)","CCL0304","MoGo",27.99,"electrical",["chinese"],"Fits (per J&M): GY6 150cc."],
+ [54,"Kill Switch, 2-wire","CKS0600","MoGo",15.99,"electrical","u","Handlebar engine kill switch, 2-wire."],
+ [39,"Honda Carburetor (replaces 16100-HN7-013)","CK9224","Quad Logic",175.59,"engine",["honda"],"Complete carburetor, replaces Honda 16100-HN7-013."],
+ [40,"Kawasaki Carburetor (replaces 15003-1080)","CK9127","Quad Logic",69.95,"engine",["kawasaki"],"Complete carburetor, replaces Kawasaki 15003-1080 / 15001-1382."],
+ [59,"JE Pistons Piston Kit 98.00mm","PK305X","Pro X",78.75,"engine",["honda"],"Fits (per J&M): Honda TRX450R 2006–09. 98.00mm bore, dome piston."],
+ [61,"Vertex Exhaust Gasket Kit 823136","EG3136","Vertex",9.88,"engine",["honda"],"Fits (per J&M): Honda SXS1000 Pioneer 2016–20."],
+ [62,"Cometic Gasket Kit, Polaris","GKP001C","Cometic Gasket",25.45,"engine",["polaris"],"Polaris gasket kit. See supplier listing for model."],
+ [55,"Petcock (PC002), Honda","PC002","Cycle Pro",19.52,"engine",["honda"],"Honda fuel petcock. Confirm model."],
+ [20,"Sprocket, 420 Chain, 12T","CSP031212","MoGo",16.99,"drivetrain",["chinese"],"Front sprocket for 420 chain, 12 tooth."],
+ [34,"CFMOTO CV Axle Assembly","AX79006","Wide Open Axles",159.50,"drivetrain",["cfmoto"],"Wide Open CV axle for CFMOTO ATV/UTV. Confirm position and model."],
+ [21,"Clutch Cable, Honda TRX450R","CB2405A","All Balls Racing",11.83,"controls",["honda"],"Fits (per J&M): Honda TRX450R 2004–08."],
+ [23,"Throttle Cable (CB1095A)","CB1095A","All Balls Racing",35.92,"controls",[],"Throttle cable. See supplier listing for fitment."],
+ [24,"Throttle Cable, T1 Style 27in","CCB275","MoGo",18.99,"controls",["chinese"],"T1-style throttle cable, 27 inches."],
+ [47,"Brake Lever, Right Hand","CBL0501R","MoGo",14.99,"controls",["chinese"],"Right-hand brake lever."],
+ [43,"Hand Grips, Red","M5403R","Emgo",7.50,"controls","u","Grips for standard 7/8in bars."],
+ [44,"Hand Grips, Black","M5401B","Emgo",6.95,"controls","u","Grips for standard 7/8in bars."],
+ [3,"Fork Steering Bearing Kit 22-1029","SB500","All Balls Racing",58.08,"suspension",[],"Steering stem bearing kit. See supplier listing for fitment."],
+ [27,"Ball Joint 42-1027","BJ601","All Balls Racing",32.99,"suspension",["kawasaki"],"Fits (per J&M): Kawasaki KFX 2003."],
+ [28,"Lower Ball Joint, Honda TRX250 42-1014","BJ303","All Balls Racing",48.22,"suspension",["honda"],"Fits (per J&M): Honda TRX250X / EX Sportrax 2001–21."],
+ [42,"Swing Arm Bearing Kit (SKIT53A)","SKIT53A","All Balls Racing",69.58,"suspension",["honda"],"Fits (per J&M): Honda TRX400EX 1999–2008, TRX400X 2009–14."],
+ [30,"Specialized ATV Tie Rod Upgrade Kit, Can-Am G2","TR5132SP","Specialized ATV",340.00,"suspension",["canam"],"Heavy-duty tie rod upgrade, made in the USA. Can-Am G2."],
+ [10,"Duro Buffalo ATV Tire 25x10-12, 4-ply","D251012","Duro Tire",165.50,"wheels",[],"Size 25x10-12, 4-ply. Match your tire size."],
+ [31,"Wheel Bearing Kit 25-1734","BK734","Wide Open Products",66.30,"wheels",[],"Wheel bearing kit (cross-ref 25-1734). See supplier listing for fitment."],
+ [32,"Rear Wheel Bearing Kit, Yamaha 25-1567","BK151","Wide Open Products",27.38,"wheels",["yamaha"],"Yamaha rear wheel bearing kit (cross-ref 25-1567). Confirm model."]
 ];
-var PRODUCTS=P.map(function(p,i){return {id:"p"+i,sku:"DEMO-"+(1100+i*7),name:p[0],cat:p[1],price:p[2],fit:p[3],desc:p[4],rank:i};});
+var PRODUCTS=P.map(function(p,i){return {id:"p"+i,sku:p[2],brand:p[3],name:p[1],cat:p[5],price:p[4],fit:p[6],desc:p[7],rank:i,img:"images/parts/jm"+p[0]+".jpg"};});
 var byId={};PRODUCTS.forEach(function(p){byId[p.id]=p;});
 function catName(c){for(var i=0;i<CATS.length;i++)if(CATS[i][0]===c)return CATS[i][1];return c;}
 function vehShort(id){for(var i=0;i<VEH.length;i++)if(VEH[i].id===id)return VEH[i].short||VEH[i].label;return id;}
+
 function money(n){return "$"+n.toFixed(2);}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
 
 /* ---------- state ---------- */
 var S={cart:{},cat:"all",q:"",veh:"any",sort:"feat",staff:false,crf:false,step:1,co:{},lastOrder:null,pay:"card"};
 var store={get:function(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
-var saved=store.get("adb_demo_state");
+var saved=store.get("adb_demo_state_v2");
 if(saved){S.cart=saved.cart||{};S.staff=!!saved.staff;S.crf=!!saved.crf;}
 S.orders=(saved&&saved.orders)||[];
-function persist(){store.set("adb_demo_state",{cart:S.cart,staff:S.staff,crf:S.crf,orders:S.orders.slice(-10)});}
+function persist(){store.set("adb_demo_state_v2",{cart:S.cart,staff:S.staff,crf:S.crf,orders:S.orders.slice(-10)});}
 
 var $=function(s){return document.querySelector(s);};
 
@@ -826,10 +829,9 @@ document.querySelectorAll("[data-soon]").forEach(function(a){a.addEventListener(
 $("#menuBtn").addEventListener("click",function(){var n=$("#nav");n.classList.toggle("open");this.setAttribute("aria-expanded",n.classList.contains("open"));});
 
 /* ---------- shop ---------- */
-function visibleVeh(){return VEH.filter(function(v){return !v.optional||S.crf;});}
+function visibleVeh(){return VEH;}
 function fitsVeh(p,v){if(v==="any")return true;if(p.fit==="u")return true;return p.fit.indexOf(v)>=0;}
 function prodVisible(p){
-  if(!S.crf&&p.fit!=="u"&&p.fit.length===1&&p.fit[0]==="crf25")return false;
   return true;
 }
 function filtered(){
@@ -848,24 +850,23 @@ function filtered(){
 }
 function fitBadge(p,full){
   if(p.fit==="u")return '<span class="fit univ">Universal / multi-fit</span>';
-  var names=p.fit.filter(function(v){return S.crf||v!=="crf25";}).map(vehShort);
+  var names=p.fit.map(vehShort);
   if(full)return '<span class="fit chk">Fitment check required</span>';
   return '<span class="fit chk" title="Listed for: '+esc(names.join(", "))+'">Fitment check required</span>';
 }
 function renderShop(){
   var vs=$("#veh");
-  vs.innerHTML='<optgroup label="Shopping for">'+visibleVeh().map(function(v){return '<option value="'+v.id+'"'+(v.id===S.veh?" selected":"")+'>'+(v.id==="any"?"Shopping for: All vehicles":esc(v.label))+'</option>';}).join("")+'</optgroup>';
-  if(!S.crf&&S.veh==="crf25"){S.veh="any";vs.value="any";}
+  vs.innerHTML='<optgroup label="Make">'+visibleVeh().map(function(v){return '<option value="'+v.id+'"'+(v.id===S.veh?" selected":"")+'>'+(v.id==="any"?"Make: All makes":esc(v.label))+'</option>';}).join("")+'</optgroup>';
   var base=PRODUCTS.filter(function(p){return prodVisible(p)&&fitsVeh(p,S.veh);});
   var counts={all:base.length};base.forEach(function(p){counts[p.cat]=(counts[p.cat]||0)+1;});
   var catBtns=[["all","All parts"]].concat(CATS);
+  catBtns=catBtns.filter(function(c){return c[0]==="all"||counts[c[0]]||S.cat===c[0];});
   $("#catList").innerHTML=catBtns.map(function(c){return '<button data-cat="'+c[0]+'" class="'+(S.cat===c[0]?"on":"")+'"><span>'+esc(c[1])+'</span><span class="n">'+(counts[c[0]]||0)+'</span></button>';}).join("");
   $("#chipBar").innerHTML=catBtns.map(function(c){return '<button data-cat="'+c[0]+'" class="'+(S.cat===c[0]?"on":"")+'">'+esc(c[1])+'</button>';}).join("");
   var vn=$("#vehNote");
   if(S.veh!=="any"){
     var v=VEH.filter(function(x){return x.id===S.veh;})[0];
-    var extra=S.veh==="crf25"?" This is a demo vehicle only. The CRF250R is a different model family from the CR250R.":(S.veh==="cr81"?"":" The year or model isn't specified, so the shop confirms fitment before ordering.");
-    vn.hidden=false;vn.innerHTML="<b>Showing parts listed for "+esc(v.label)+"</b>, plus universal items."+esc(extra)+" Demo listings aren't verified fitment data.";
+    vn.hidden=false;vn.innerHTML="<b>Showing parts J&amp;M lists for "+esc(v.label)+"</b>, plus universal items. Fitment to your exact year and model is confirmed by the shop before anything ships.";
   } else vn.hidden=true;
   var list=filtered();
   $("#count").textContent=list.length+" part"+(list.length===1?"":"s")+(S.q?' matching "'+S.q+'"':"");
@@ -875,8 +876,8 @@ function pic(p,cls){return p.img?'<img src="'+p.img+'" alt="'+esc(p.name)+'" loa
 function card(p){
   var inC=S.cart[p.id];
   return '<article class="pcard"><button class="pimg'+(p.img?' has-img':'')+'" data-open="'+p.id+'" aria-label="View '+esc(p.name)+'">'+pic(p)+(p.img?'':'<span class="ph">Photo placeholder</span>')+'</button>'+
-   '<div class="pbody"><div class="pcat">'+esc(catName(p.cat))+'</div><button class="pname" data-open="'+p.id+'">'+esc(p.name)+'</button>'+fitBadge(p)+
-   '<div class="prow"><div class="price">'+money(p.price)+'<small>Demo price</small></div><button class="add'+(inC?" added":"")+'" data-add="'+p.id+'">'+(inC?"✓ In cart":"Add")+'</button></div></div></article>';
+   '<div class="pbody"><div class="pcat">'+esc(p.brand)+' · '+esc(p.sku)+'</div><button class="pname" data-open="'+p.id+'">'+esc(p.name)+'</button>'+fitBadge(p)+
+   '<div class="prow"><div class="price">'+money(p.price)+'<small>J&amp;M retail</small></div><button class="add'+(inC?" added":"")+'" data-add="'+p.id+'">'+(inC?"✓ In cart":"Add")+'</button></div></div></article>';
 }
 var qT;$("#q").addEventListener("input",function(e){clearTimeout(qT);var v=e.target.value;qT=setTimeout(function(){S.q=v;renderShop();},120);});
 $("#veh").addEventListener("change",function(e){S.veh=e.target.value;renderShop();});
@@ -898,11 +899,11 @@ document.addEventListener("click",function(e){
 /* ---------- product modal ---------- */
 function openProduct(id){
   var p=byId[id];
-  var listed=p.fit==="u"?"Multi-fit or universal item. Confirm the specs listed in the description.":p.fit.filter(function(v){return S.crf||v!=="crf25";}).map(vehShort).join(", ");
+  var listed=p.fit==="u"?"Universal / multi-fit item":(p.fit.length?p.fit.map(vehShort).join(", "):"See supplier description");
   $("#pBox").innerHTML='<button class="x" data-close aria-label="Close">&times;</button><div class="pd"><div class="pimg'+(p.img?' has-img':'')+'">'+pic(p)+(p.img?'':'<span class="ph">Photo placeholder</span>')+'</div><div class="info">'+
    '<div class="pcat">'+esc(catName(p.cat))+'</div><h2>'+esc(p.name)+'</h2>'+fitBadge(p,true)+
-   '<p>'+esc(p.desc)+'</p><div class="kv"><div><b>SKU:</b> '+p.sku+' (demo)</div><div><b>Listed for:</b> '+esc(listed)+'</div><div><b>Availability:</b> confirmed with the supplier when the order is placed</div><div><b>Fitment:</b> demo listing, not verified against supplier data</div></div>'+
-   '<div class="price" style="font-size:26px;margin:10px 0">'+money(p.price)+'<small>Demo price</small></div>'+
+   '<p>'+esc(p.desc)+'</p><div class="kv"><div><b>Brand:</b> '+esc(p.brand)+'</div><div><b>Part #:</b> '+esc(p.sku)+'</div><div><b>Listed for:</b> '+esc(listed)+'</div><div><b>Supplier:</b> J&amp;M ATV/UTV Supply. Availability confirmed when the order is placed.</div><div><b>Fitment:</b> supplier listing. The shop confirms it fits your machine before ordering.</div></div>'+
+   '<div class="price" style="font-size:26px;margin:10px 0">'+money(p.price)+'<small>J&amp;M retail</small></div>'+
    '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div class="qty"><button id="mq-" aria-label="Less">−</button><span id="mq">1</span><button id="mq+" aria-label="More">+</button></div><button class="btn btn-primary" id="mAdd">Add to cart</button></div></div></div>';
   var q=1;
   document.getElementById("mq-").onclick=function(){q=Math.max(1,q-1);$("#mq").textContent=q;};
@@ -1077,10 +1078,9 @@ function renderConf(){
 /* ---------- presenter ---------- */
 $("#presFab").onclick=function(){$("#pres").classList.toggle("on");};
 $("#presX").onclick=function(){$("#pres").classList.remove("on");};
-var st=$("#staffTog"),cf=$("#crfTog");
-function applyFlags(){document.body.classList.toggle("staff",S.staff);st.checked=S.staff;cf.checked=S.crf;}
+var st=$("#staffTog");
+function applyFlags(){document.body.classList.toggle("staff",S.staff);st.checked=S.staff;}
 st.onchange=function(){S.staff=st.checked;S.step=1;persist();applyFlags();toast(S.staff?"Mechanic order mode on: orders ship to the workshop":"Customer mode: orders ship to the customer");if($("#v-checkout").classList.contains("on"))renderCheckout();};
-cf.onchange=function(){S.crf=cf.checked;if(!S.crf&&S.veh==="crf25")S.veh="any";persist();if($("#v-shop").classList.contains("on"))renderShop();toast(S.crf?"2025 Honda CRF250R added as a demo vehicle":"CRF250R demo vehicle hidden");};
 $("#resetBtn").onclick=function(){S.cart={};S.co={};S.step=1;S.lastOrder=null;S.orders=[];chatStarted=false;$("#chatLog").innerHTML="";closeChat();S.q="";S.cat="all";S.veh="any";S.staff=false;$("#q").value="";persist();applyFlags();updateCart();$("#pres").classList.remove("on");location.hash="#home";route();toast("Demo reset");};
 
 
@@ -1150,7 +1150,7 @@ function qrRow(qrs){var r=document.createElement("div");r.className="qrs";
     b.onclick=function(){if(q[2]!=="toggle"){r.querySelectorAll("button").forEach(function(x){x.disabled=true;});me(q[0]);}q[1](b);};r.appendChild(b);});return r;}
 function menu(intro){
   bot(intro||"What can I help you with?",[
-   ["Find a part",function(){CH.state="find";bot("Tell me what you need. You can include your bike, e.g. <i>\"brake pads for my 1981 CR250R\"</i> or <i>\"air filter XR100\"</i>.");}],
+   ["Find a part",function(){CH.state="find";bot("Tell me what you need. You can include your bike, e.g. <i>\"air filter for my Honda TRX420\"</i> or <i>\"ball joint Kawasaki\"</i>.");}],
    ["Start a return",startReturn],["Return policy",function(){showPolicy();}],["Where's my order?",function(){CH.state="track";bot("Sure. What's your order number? It's on your receipt email and starts with ADB-.",lastOrderQR());}],
    ["A part doesn't fit",function(){answer("fit");}],["Something else",function(){CH.state="free";bot("Go ahead and type your question.");}]
   ]);
@@ -1222,38 +1222,42 @@ function submitReturn(freeLabel,review,reasonTxt){
 var STOP="i im i'm need needs a an the for my on of to some do you have got any part parts looking want wanted get find me please new replacement replace with and or is it that this one".split(" ");
 var SYN={pad:"pads",pads:"pad",plug:"spark",plugs:"spark",tyre:"tire",tyres:"tire",tires:"tire",shoes:"shoe",filters:"filter",sprockets:"sprocket",cables:"cable",seals:"seal",bearings:"bearing",gaskets:"gasket",lever:"lever",oil:"oil",lube:"lube",light:"light",lights:"light",grips:"grip",carb:"carburetor",carby:"carburetor",tube:"tube",tubes:"tube",chains:"chain",rotor:"rotor",rotors:"rotor",fork:"fork",forks:"fork",shock:"suspension"};
 function detectVeh(low){
-  if(/xr\s?-?100/.test(low))return "xr100";
-  if(/cr\s?-?250\s?r?\b/.test(low)&&!/crf/.test(low))return "cr81";
-  if(/\b(19)?81\b/.test(low)&&/cr|honda/.test(low))return "cr81";
-  if(/ice\s?bear/.test(low))return "icebear";
-  if(/crf\s?-?250/.test(low))return S.crf?"crf25":"crf-off";
+  if(/ice\s?bear/.test(low))return "custom";
+  if(/honda|xr\s?-?\d|crf|cr\s?-?\d{2,3}|trx|pioneer|sportrax/.test(low))return "honda";
+  if(/kawasaki|klx|klr|kfx|\bkx/.test(low))return "kawasaki";
+  if(/yamaha|yz|raptor|grizzly|banshee|\bttr|\bwr\d/.test(low))return "yamaha";
+  if(/polaris|sportsman|outlaw|ranger|rzr|phoenix|sawtooth|predator/.test(low))return "polaris";
+  if(/can-?am|commander|outlander|renegade|\bds\s?\d/.test(low))return "canam";
+  if(/arctic\s?cat/.test(low))return "arcticcat";
+  if(/cf\s?moto/.test(low))return "cfmoto";
+  if(/gy6|chinese|pit\s?bike|taotao|coolster|ssr/.test(low))return "chinese";
   return null;
 }
 function searchParts(text){
   var low=text.toLowerCase(),veh=detectVeh(low);
-  var clean=low.replace(/xr\s?-?100|crf\s?-?250r?|cr\s?-?250r?|ice\s?bear|\b(19)?81\b|honda|trike|bike|atv|dirt/g," ");
+  var clean=low.replace(/\b(19|20)?\d{2}\b|xr\s?-?\d+|crf\s?-?\d+r?|cr\s?-?\d+r?|trx\s?\d*|ice\s?bear|honda|kawasaki|yamaha|polaris|can-?am|arctic\s?cat|cf\s?moto|trike|bike|atv|utv|quad|dirt/g," ");
   var toks=clean.split(/[^a-z0-9"]+/).filter(function(t){return t.length>1&&STOP.indexOf(t)<0;});
   var ex=[];toks.forEach(function(t){ex.push(t);if(SYN[t])ex.push(SYN[t]);if(t.length>3&&t.slice(-1)==="s")ex.push(t.slice(0,-1));});
   var res=PRODUCTS.filter(prodVisible).map(function(p){
     var nm=p.name.toLowerCase(),hay=(p.name+" "+catName(p.cat)+" "+p.desc).toLowerCase(),sc=0;
     ex.forEach(function(t){if(nm.indexOf(t)>=0)sc+=3;else if(hay.indexOf(t)>=0)sc+=1;});
     return {p:p,sc:sc};}).filter(function(r){return r.sc>=3;});
-  if(veh&&veh!=="crf-off")res=res.filter(function(r){return fitsVeh(r.p,veh);});
+  if(veh&&veh!=="custom")res=res.filter(function(r){return fitsVeh(r.p,veh);});
   res.sort(function(a,b){return b.sc-a.sc||(a.p.fit==="u")-(b.p.fit==="u")||a.p.rank-b.p.rank;});
   return {veh:veh,toks:toks,list:res.slice(0,4).map(function(r){return r.p;}),total:res.length};
 }
 function showFind(text){
   var r=searchParts(text);
-  if(r.veh==="crf-off"){bot("The 2025 CRF250R isn't in our online catalog yet. The shop can still source parts for it.",[["Request this part",function(){startRequest(text,"2025 Honda CRF250R");}],["Main menu",function(){menu();}]]);return;}
+  if(r.veh==="custom"){bot("Custom builds like the Ice Bear trike need parts matched by hand. Send the shop a part request and Dennis will source it.",[["Request this part",function(){startRequest(text,"Ice Bear trike");}],["Main menu",function(){menu();}]]);return;}
   if(!r.list.length){CH.state="idle";
     bot("I couldn't find that in our online catalog. The shop can source most dirt bike and ATV parts, though. Want me to send them a part request? They'll email you back with price and availability.",
       [["Yes, request this part",function(){startRequest(text,r.veh?vehShort(r.veh):"");}],["Search again",function(){CH.state="find";bot("Okay. Try describing it another way.");}],["Main menu",function(){menu();}]]);return;}
-  var vtxt=r.veh?" for the <b>"+esc(vehShort(r.veh))+"</b>":"";
+  var vtxt=r.veh?" listed for <b>"+esc(vehShort(r.veh))+"</b>":"";
   bot("Here's what I found"+vtxt+":",null,function(){
     var box=document.createElement("div");box.className="pfind";
-    box.innerHTML=r.list.map(function(p){return '<div class="row"><div class="th">'+pic(p)+'</div><div><div class="nm">'+esc(p.name)+'</div><div class="mt">'+money(p.price)+' · '+(p.fit==="u"?"Universal / multi-fit":"Fitment check required")+'</div></div><button class="ca" data-chatadd="'+p.id+'">Add</button></div>';}).join("");
+    box.innerHTML=r.list.map(function(p){return '<div class="row"><div class="th">'+pic(p)+'</div><div><div class="nm">'+esc(p.name)+'</div><div class="mt">'+esc(p.brand)+' · '+money(p.price)+' · '+(p.fit==="u"?"Universal":"Fitment check")+'</div></div><button class="ca" data-chatadd="'+p.id+'">Add</button></div>';}).join("");
     $("#chatLog").appendChild(box);
-    var q=[];if(r.total>4)q.push(["See all "+r.total+" in the shop",function(){S.q=r.toks.join(" ");S.cat="all";S.veh=(r.veh&&r.veh!=="crf-off")?r.veh:"any";$("#q").value=S.q;closeChat();location.hash="#shop";if(location.hash==="#shop")renderShop();}]);
+    var q=[];if(r.total>4)q.push(["See all "+r.total+" in the shop",function(){S.q=r.toks.join(" ");S.cat="all";S.veh=(r.veh&&r.veh!=="custom")?r.veh:"any";$("#q").value=S.q;closeChat();location.hash="#shop";if(location.hash==="#shop")renderShop();}]);
     q.push(["Not what I need",function(){startRequest(text,r.veh?vehShort(r.veh):"");}]);
     $("#chatLog").appendChild(qrRow(q));scrollLog();CH.state="find";
   });
