@@ -24,6 +24,7 @@ function doPost(e) {
     let msg;
     if (d.type === 'receipt') msg = receipt_(d);
     else if (d.type === 'return') msg = returnMail_(d);
+    else if (d.type === 'request') msg = requestMail_(d);
     else return json_({ ok: false, error: 'unknown type' });
 
     GmailApp.sendEmail(to, msg.subject, msg.text, { htmlBody: msg.html, name: CONFIG.SHOP_NAME });
@@ -89,6 +90,20 @@ function returnMail_(d) {
     shopSubject: '[ADB-RETURN-REQ] ' + d.rma + ' · order ' + d.orderNo + ' · ' + (d.reason || ''),
     html: wrap_(body),
     text: text
+  };
+}
+
+function requestMail_(d) {
+  const body =
+    '<p>Thanks for your part request! Here is a copy for your records.</p>' +
+    '<p><b>Request #:</b> ' + esc_(d.reqNo) + '<br><b>Part:</b> ' + esc_(d.part) + '<br><b>Vehicle:</b> ' + esc_(d.vehicle) + '</p>' +
+    '<p>The shop will check price and availability and email you back. If you go ahead, we will set it up so you can order and pay online.</p>' +
+    '<p>Questions? Reply to this email or call ' + CONFIG.SHOP_PHONE + '.</p>';
+  return {
+    subject: 'Part request ' + d.reqNo + ' received · ' + CONFIG.SHOP_NAME,
+    shopSubject: '[ADB-PART-REQUEST] ' + d.reqNo + ' · ' + String(d.part || '').slice(0, 60) + ' · ' + (d.vehicle || ''),
+    html: wrap_(body),
+    text: 'Part request ' + d.reqNo + '\nPart: ' + d.part + '\nVehicle: ' + d.vehicle + '\n\nDemonstration only.'
   };
 }
 

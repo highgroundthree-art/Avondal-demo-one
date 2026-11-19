@@ -276,7 +276,7 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
 /* help chat */
 .chat-fab{position:fixed;right:16px;bottom:16px;z-index:55;background:var(--orange);color:#fff;border:0;border-radius:999px;padding:13px 18px;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(242,106,27,.4)}
 .chat-fab svg{width:20px;height:20px}
-.chat{position:fixed;right:16px;bottom:16px;z-index:85;width:min(400px,calc(100% - 32px));height:min(620px,calc(100% - 32px));background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.35);display:none;flex-direction:column;overflow:hidden}
+.chat{position:fixed;right:16px;bottom:16px;z-index:75;width:min(400px,calc(100% - 32px));height:min(620px,calc(100% - 32px));background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.35);display:none;flex-direction:column;overflow:hidden}
 .chat.on{display:flex}
 .chat-h{background:var(--ink);color:#fff;padding:12px 14px;display:flex;align-items:center;gap:10px}
 .chat-h .av{width:36px;height:36px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-family:var(--head);font-size:15px;flex-shrink:0}
@@ -302,6 +302,15 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
 .typing i{width:7px;height:7px;border-radius:50%;background:#aaa;animation:bl 1s infinite}
 .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
 @keyframes bl{0%,100%{opacity:.3}50%{opacity:1}}
+.pfind{background:#fff;border:1px solid #ebe6dc;border-radius:12px;padding:6px 10px;align-self:stretch;display:grid;gap:2px}
+.pfind .row{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid #f2efe9}
+.pfind .row:last-child{border-bottom:0}
+.pfind .th{width:44px;height:44px;border-radius:8px;background:#efeae1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pfind .th svg{width:26px;color:#3b3f46}.pfind .th img{width:100%;height:100%;object-fit:contain;background:#fff}
+.pfind .nm{font-size:13.5px;font-weight:600;line-height:1.25}
+.pfind .mt{font-size:12px;color:var(--muted)}
+.pfind .ca{background:var(--orange);color:#fff;border:0;border-radius:8px;padding:7px 10px;font-weight:700;font-size:13px}
+.pfind .ca.added{background:var(--green)}
 .rma{background:#fff8f2;border:1.5px dashed var(--orange);border-radius:10px;padding:10px 12px;margin-top:6px;font-family:var(--head);font-size:18px;letter-spacing:.06em;white-space:normal}
 
 @media (max-width:900px){
@@ -396,7 +405,7 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
         </div>
         <div class="right">
           <a class="btn btn-shop" href="#shop">Shop Parts &rarr;</a>
-          <div class="sub">Search, add to cart, check out online</div>
+          <div class="sub">Search, or just tell the parts assistant what you need</div>
         </div>
       </div>
     </div>
@@ -507,6 +516,7 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
       <li><b>Home:</b> point out the new Shop Parts tab and the Shop Parts button next to Schedule a Service.</li>
       <li><b>Shop:</b> search <i>"brake"</i>, then choose <i>1981 Honda CR250R</i> under "Shopping for". Point out the fitment flags.</li>
       <li>Hand Dennis the device. He adds two or three parts and opens the cart.</li>
+      <li>Show the other way to buy: tap <b>Find a part</b> and type <i>"brake pads for my CR250R"</i>. Add a part from the chat.</li>
       <li><b>Checkout as a customer:</b> he types <b>his real email</b>. Use "Fill demo details" for the rest. The order ships straight to the customer.</li>
       <li>On the confirmation page, walk through what happens behind the scenes and the human review step.</li>
       <li>Have him open his inbox. The real receipt arrives from the shop's Gmail.</li>
@@ -520,11 +530,11 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
   </div>
 </div>
 
-<button class="chat-fab" id="chatFab" data-help aria-label="Open help and returns chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg><span>Help<span class="lbl2"> &amp; Returns</span></span></button>
+<button class="chat-fab" id="chatFab" data-help aria-label="Open help and returns chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg><span>Find a part<span class="lbl2"> · Help</span></span></button>
 <div class="chat" id="chat" role="dialog" aria-label="Help and returns assistant">
-  <div class="chat-h"><div class="av">ADB</div><div class="t"><b>Parts Help &amp; Returns</b><small>Automated assistant · demo</small></div><button class="x" id="chatX" aria-label="Close chat">&times;</button></div>
+  <div class="chat-h"><div class="av">ADB</div><div class="t"><b>Parts Finder, Help &amp; Returns</b><small>Automated assistant · demo</small></div><button class="x" id="chatX" aria-label="Close chat">&times;</button></div>
   <div class="chat-log" id="chatLog" aria-live="polite"></div>
-  <form class="chat-in" id="chatForm"><label class="sr" for="chatTxt">Type a question</label><input id="chatTxt" placeholder="Ask about returns, refunds, fitment…" autocomplete="off"><button type="submit">Send</button></form>
+  <form class="chat-in" id="chatForm"><label class="sr" for="chatTxt">Type a question</label><input id="chatTxt" placeholder="Describe a part, or ask about returns…" autocomplete="off"><button type="submit">Send</button></form>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -982,6 +992,7 @@ function qrRow(qrs){var r=document.createElement("div");r.className="qrs";
     b.onclick=function(){if(q[2]!=="toggle"){r.querySelectorAll("button").forEach(function(x){x.disabled=true;});me(q[0]);}q[1](b);};r.appendChild(b);});return r;}
 function menu(intro){
   bot(intro||"What can I help you with?",[
+   ["Find a part",function(){CH.state="find";bot("Tell me what you need. You can include your bike, e.g. <i>\"brake pads for my 1981 CR250R\"</i> or <i>\"air filter XR100\"</i>.");}],
    ["Start a return",startReturn],["Return policy",function(){showPolicy();}],["Where's my order?",function(){CH.state="track";bot("Sure. What's your order number? It's on your receipt email and starts with ADB-.",lastOrderQR());}],
    ["A part doesn't fit",function(){answer("fit");}],["Something else",function(){CH.state="free";bot("Go ahead and type your question.");}]
   ]);
@@ -1048,18 +1059,83 @@ function submitReturn(freeLabel,review,reasonTxt){
       bot(ok?"📧 Sent! Your return confirmation is on its way to <b>"+esc(o.co.email)+"</b>.":"I couldn't send the email just now, but your return number <b>"+rma+"</b> is saved. Keep it for your records.",[["Main menu",function(){menu("Anything else I can help with?");}]]);});
   });
 }
+
+/* ---------- part finder (chat) ---------- */
+var STOP="i im i'm need needs a an the for my on of to some do you have got any part parts looking want wanted get find me please new replacement replace with and or is it that this one".split(" ");
+var SYN={pad:"pads",pads:"pad",plug:"spark",plugs:"spark",tyre:"tire",tyres:"tire",tires:"tire",shoes:"shoe",filters:"filter",sprockets:"sprocket",cables:"cable",seals:"seal",bearings:"bearing",gaskets:"gasket",lever:"lever",oil:"oil",lube:"lube",light:"light",lights:"light",grips:"grip",carb:"carburetor",carby:"carburetor",tube:"tube",tubes:"tube",chains:"chain",rotor:"rotor",rotors:"rotor",fork:"fork",forks:"fork",shock:"suspension"};
+function detectVeh(low){
+  if(/xr\s?-?100/.test(low))return "xr100";
+  if(/cr\s?-?250\s?r?\b/.test(low)&&!/crf/.test(low))return "cr81";
+  if(/\b(19)?81\b/.test(low)&&/cr|honda/.test(low))return "cr81";
+  if(/ice\s?bear/.test(low))return "icebear";
+  if(/crf\s?-?250/.test(low))return S.crf?"crf25":"crf-off";
+  return null;
+}
+function searchParts(text){
+  var low=text.toLowerCase(),veh=detectVeh(low);
+  var clean=low.replace(/xr\s?-?100|crf\s?-?250r?|cr\s?-?250r?|ice\s?bear|\b(19)?81\b|honda|trike|bike|atv|dirt/g," ");
+  var toks=clean.split(/[^a-z0-9"]+/).filter(function(t){return t.length>1&&STOP.indexOf(t)<0;});
+  var ex=[];toks.forEach(function(t){ex.push(t);if(SYN[t])ex.push(SYN[t]);if(t.length>3&&t.slice(-1)==="s")ex.push(t.slice(0,-1));});
+  var res=PRODUCTS.filter(prodVisible).map(function(p){
+    var nm=p.name.toLowerCase(),hay=(p.name+" "+catName(p.cat)+" "+p.desc).toLowerCase(),sc=0;
+    ex.forEach(function(t){if(nm.indexOf(t)>=0)sc+=3;else if(hay.indexOf(t)>=0)sc+=1;});
+    return {p:p,sc:sc};}).filter(function(r){return r.sc>=3;});
+  if(veh&&veh!=="crf-off")res=res.filter(function(r){return fitsVeh(r.p,veh);});
+  res.sort(function(a,b){return b.sc-a.sc||(a.p.fit==="u")-(b.p.fit==="u")||a.p.rank-b.p.rank;});
+  return {veh:veh,toks:toks,list:res.slice(0,4).map(function(r){return r.p;}),total:res.length};
+}
+function showFind(text){
+  var r=searchParts(text);
+  if(r.veh==="crf-off"){bot("The 2025 CRF250R isn't in our online catalog yet. The shop can still source parts for it.",[["Request this part",function(){startRequest(text,"2025 Honda CRF250R");}],["Main menu",function(){menu();}]]);return;}
+  if(!r.list.length){CH.state="idle";
+    bot("I couldn't find that in our online catalog. The shop can source most dirt bike and ATV parts, though. Want me to send them a part request? They'll email you back with price and availability.",
+      [["Yes, request this part",function(){startRequest(text,r.veh?vehShort(r.veh):"");}],["Search again",function(){CH.state="find";bot("Okay. Try describing it another way.");}],["Main menu",function(){menu();}]]);return;}
+  var vtxt=r.veh?" for the <b>"+esc(vehShort(r.veh))+"</b>":"";
+  bot("Here's what I found"+vtxt+":",null,function(){
+    var box=document.createElement("div");box.className="pfind";
+    box.innerHTML=r.list.map(function(p){return '<div class="row"><div class="th">'+pic(p)+'</div><div><div class="nm">'+esc(p.name)+'</div><div class="mt">'+money(p.price)+' · '+(p.fit==="u"?"Universal / multi-fit":"Fitment check required")+'</div></div><button class="ca" data-chatadd="'+p.id+'">Add</button></div>';}).join("");
+    $("#chatLog").appendChild(box);
+    var q=[];if(r.total>4)q.push(["See all "+r.total+" in the shop",function(){S.q=r.toks.join(" ");S.cat="all";S.veh=(r.veh&&r.veh!=="crf-off")?r.veh:"any";$("#q").value=S.q;closeChat();location.hash="#shop";if(location.hash==="#shop")renderShop();}]);
+    q.push(["Not what I need",function(){startRequest(text,r.veh?vehShort(r.veh):"");}]);
+    $("#chatLog").appendChild(qrRow(q));scrollLog();CH.state="find";
+  });
+}
+document.addEventListener("click",function(e){var b=e.target.closest("[data-chatadd]");if(!b)return;
+  var id=b.dataset.chatadd;if(b.classList.contains("added"))return;
+  addToCart(id,1);b.classList.add("added");b.textContent="✓ Added";
+  bot("Added <b>"+esc(byId[id].name)+"</b> to your cart ("+cartCount()+" item"+(cartCount()===1?"":"s")+").",[["Check out now",function(){closeChat();location.hash="#checkout";}],["Keep looking",function(){CH.state="find";bot("What else do you need?");}]]);});
+function startRequest(text,veh){CH.req={part:text,veh:veh||""};
+  if(!CH.req.veh){CH.state="req_veh";bot("Which vehicle is it for? Give the year, make and model. Write \"unknown\" for any part you're not sure of.");return;}
+  askReqEmail();}
+function askReqEmail(){CH.state="req_email";var last=S.orders.filter(o_cust).slice(-1)[0];
+  bot("What email should the shop reply to?",last&&last.co.email?[[last.co.email,function(){finishRequest(last.co.email);}]]:null);}
+function finishRequest(email){
+  if(!/^\S+@\S+\.\S+$/.test(email)){bot("That doesn't look like an email address. Try again.");CH.state="req_email";return;}
+  CH.state="idle";var no="ADB-REQ-"+Math.floor(1000+Math.random()*9000);
+  bot("Part request sent to the shop:\n<b>Request #:</b> "+no+"\n<b>Part:</b> "+esc(CH.req.part)+"\n<b>Vehicle:</b> "+esc(CH.req.veh)+"\n\nThey'll email <b>"+esc(email)+"</b> with price and availability. If you go ahead, they'll set it up so you can order and pay online.",null,function(){
+    if(!CONFIG.EMAIL_ENDPOINT){bot("📧 A copy of this request is emailed to you. (Real email isn't connected in this copy of the demo.)",[["Main menu",function(){menu();}]]);return;}
+    sendEmail("request",{to:email,reqNo:no,part:CH.req.part,vehicle:CH.req.veh},function(ok){
+      bot(ok?"📧 Sent. A copy of your request is in your inbox.":"Your request number "+no+" is saved, but I couldn't send the email copy just now.",[["Main menu",function(){menu("Anything else?");}]]);});
+  });
+}
 function freeText(t){
   var low=t.toLowerCase();
+  if(CH.state==="req_veh"){CH.req.veh=t;askReqEmail();return;}
+  if(CH.state==="req_email"){finishRequest(t.trim());return;}
   if(/adb-?demo-?\d{4}/i.test(t)||CH.state==="order"||CH.state==="track"){handleOrderNo(t);return;}
+  if(CH.state==="find"&&!/return|refund|policy|warranty|track|where.*order|human|person|phone|call/i.test(t)){showFind(t);return;}
   if(/\breturn\b|send (it|this) back/.test(low)&&!/policy|how long|window/.test(low)){startReturn();return;}
   if(/policy/.test(low)){showPolicy();return;}
   var best=null,score=0;FAQ.forEach(function(f){var s=0;f.k.forEach(function(k){if(low.indexOf(k)>=0)s+=k.length;});if(s>score){score=s;best=f;}});
+  var pr=searchParts(t);
+  if(pr.list.length&&(!best||score<6||/need|looking|want|have|got|sell|buy|price|cost|for my/.test(low))){showFind(t);return;}
   if(best){bot(best.a,[["Start a return",startReturn],["Main menu",function(){menu();}]]);return;}
-  bot("I'm not sure about that one. I can help with returns, refunds, fitment, damaged parts and order status. For anything else, the shop's number is "+CONFIG.SHOP_PHONE+".",[["Start a return",startReturn],["Return policy",function(){showPolicy();}],["Main menu",function(){menu();}]]);
+  if(/need|looking|want|have|got|sell|buy|price|for my/.test(low)){showFind(t);return;}
+  bot("I'm not sure about that one. I can find parts and help with returns, refunds, fitment, damaged parts and order status. For anything else, the shop's number is "+CONFIG.SHOP_PHONE+".",[["Find a part",function(){CH.state="find";bot("What part do you need?");}],["Start a return",startReturn],["Return policy",function(){showPolicy();}],["Main menu",function(){menu();}]]);
 }
 function openChat(mode){
   $("#chat").classList.add("on");$("#chatFab").style.display="none";
-  if(!chatStarted){chatStarted=true;bot("Hi! I'm the parts help assistant for "+esc(CONFIG.SHOP_NAME)+". I can answer return questions or start a return for you. No phone call needed.",null,function(){if(mode==="return")startReturn();else menu();});}
+  if(!chatStarted){chatStarted=true;bot("Hi! I'm the parts assistant for "+esc(CONFIG.SHOP_NAME)+". Tell me what part you're looking for and I'll find it, or I can help with a return. No phone call needed.",null,function(){if(mode==="return")startReturn();else menu();});}
   else if(mode==="return")startReturn();
   setTimeout(function(){var i=$("#chatTxt");if(i&&window.innerWidth>560)i.focus();},50);
 }
