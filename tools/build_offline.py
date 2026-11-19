@@ -15,7 +15,11 @@ svc = {}
 for n in os.listdir(os.path.join(root, "images/site")):
     if n.startswith("svc-"):
         svc[n[:-4]] = "data:image/jpeg;base64," + base64.b64encode(open(os.path.join(root, "images/site", n), "rb").read()).decode()
-js = "<script>window.__SVCIMG=" + __import__("json").dumps(svc) + ";</script>"
+parts = {}
+for n in os.listdir(os.path.join(root, "images/parts")):
+    parts[n[:-4]] = "data:image/jpeg;base64," + base64.b64encode(open(os.path.join(root, "images/parts", n), "rb").read()).decode()
+html = html.replace('img:"images/parts/jm"+p[0]+".jpg"', 'img:(window.__PARTIMG&&__PARTIMG["jm"+p[0]])||"images/parts/jm"+p[0]+".jpg"')
+js = "<script>window.__PARTIMG=" + __import__("json").dumps(parts) + ";window.__SVCIMG=" + __import__("json").dumps(svc) + ";</script>"
 html = html.replace("<script>\n(function(){", js + "\n<script>\n(function(){", 1)
 os.makedirs(os.path.join(root, "dist"), exist_ok=True)
 out = os.path.join(root, "dist", "avondale-demo-offline.html")
