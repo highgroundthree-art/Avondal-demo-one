@@ -57,7 +57,7 @@ GitHub Pages is fine for this static demo. It isn't a production e-commerce host
 
 The script is `apps-script/Code.gs`. It runs on the shop's Gmail account and sends:
 - **To the customer:** an order receipt, or a return confirmation with the RMA number and next steps.
-- **To the shop's own inbox:** a copy tagged `[ADB-PARTS-ORDER]` or `[ADB-RETURN-REQ]` for Gmail filters.
+- **To the owner (doughertyent@gmail.com):** a printable *ticket* for every order, shop order, return, and part request, with a TO DO checklist (fitment check, place J&M order, record tracking). Tags: `[ADB-PARTS-ORDER]`, `[ADB-SHOP-ORDER]`, `[ADB-RETURN-REQ]`, `[ADB-PART-REQUEST]`. Replying to a ticket goes straight to the customer, and customer replies come back to the owner.
 
 Safeguards: a shared token, 30 sends a day in total, 6 a day per address, and example.com/test.com addresses are refused.
 

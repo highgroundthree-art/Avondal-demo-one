@@ -888,6 +888,7 @@ function placeOrder(){
   S.orders.push(S.lastOrder);
   S.cart={};persist();updateCart();S.step=1;
   location.hash="#confirmation";
+  if(!o_cust(S.lastOrder)&&CONFIG.EMAIL_ENDPOINT){var so=S.lastOrder,sc=so.co;sendEmail("shoporder",{to:"shop",orderNo:so.no,date:so.date,wo:sc.wo,tech:sc.tech,cust:sc.cust||"",needBy:sc.eta||"",vehicle:sc.ymm||"",vin:sc.vin||"",notes:sc.notes||"",items:itemsArr(so),total:so.total},function(ok){toast(ok?"Shop order ticket emailed to the owner":"Couldn't email the shop ticket");});}
   if(S.lastOrder.emailState==="sending")sendEmail("receipt",receiptPayload(S.lastOrder),function(ok){S.lastOrder.emailState=ok?"sent":"failed";var el=$("#estat");if(el)el.outerHTML=emailStatus(S.lastOrder);});
 }
 
@@ -928,9 +929,9 @@ $("#resetBtn").onclick=function(){S.cart={};S.co={};S.step=1;S.lastOrder=null;S.
 
 /* ---------- email ---------- */
 function o_cust(o){return o.mode==="customer";}
-function itemsArr(o){return Object.keys(o.items).map(function(id){var p=byId[id];return {name:p.name,sku:p.sku,qty:o.items[id],price:p.price};});}
+function itemsArr(o){return Object.keys(o.items).map(function(id){var p=byId[id];return {name:p.name,sku:p.sku,qty:o.items[id],price:p.price,fit:p.fit==="u"?"Universal / multi-fit":"FITMENT CHECK REQUIRED"};});}
 function receiptPayload(o){var c=o.co;return {type:"receipt",to:c.email,orderNo:o.no,date:o.date,name:c.name,
-  shipTo:[c.name,c.addr,c.city+", "+c.state+" "+c.zip].join("\n"),vehicle:c.ymm||"",items:itemsArr(o),total:o.total,
+  shipTo:[c.name,c.addr,c.city+", "+c.state+" "+c.zip].join("\n"),vehicle:c.ymm||"",vin:c.vin||"",notes:c.notes||"",phone:c.phone||"",items:itemsArr(o),total:o.total,
   payment:o.pay==="card"?"Card ending "+((c.cc||"").replace(/\D/g,"").slice(-4)||"4242")+" (simulated)":"Wallet (simulated)"};}
 function sendEmail(type,payload,cb){
   if(!CONFIG.EMAIL_ENDPOINT){cb&&cb(false);return;}
@@ -1052,7 +1053,7 @@ function submitReturn(freeLabel,review,reasonTxt){
    :["<b>Don't ship anything yet.</b> Watch for your return label by email.","Pack the part in its original packaging and write <b>"+rma+"</b> on a slip inside the box.","Ship it to the address on the label. Parts that came from our supplier may go back to the supplier's warehouse, not to the shop.","Your refund goes out after the part is received and inspected."];
   var instructionsHTML="<ol>"+steps.map(function(x){return "<li>"+x+"</li>";}).join("")+"</ol>";
   bot("Your return request is in. Your return number is:<div class=\"rma\">"+rma+"</div>Next steps:"+instructionsHTML+POLICY_TAG,null,function(){
-    var payload={to:o.co.email,name:o.co.name,orderNo:o.no,rma:rma,reason:reasonTxt,freeLabel:freeLabel,review:review,items:parts,steps:steps.map(function(x){return x.replace(/<[^>]+>/g,"");})};
+    var payload={to:o.co.email,name:o.co.name,phone:o.co.phone||"",vehicle:o.co.ymm||"",photo:CH.photo,orderNo:o.no,rma:rma,reason:reasonTxt,freeLabel:freeLabel,review:review,items:parts,steps:steps.map(function(x){return x.replace(/<[^>]+>/g,"");})};
     if(!CONFIG.EMAIL_ENDPOINT){bot("📧 A confirmation with these steps is emailed to <b>"+esc(o.co.email)+"</b>. (Real email isn't connected in this copy of the demo.)",[["Main menu",function(){menu();}]]);return;}
     var log=$("#chatLog"),st=cEl('<span style="display:flex;gap:8px;align-items:center"><span class="spin"></span>Emailing your return confirmation…</span>',"msg bot");log.appendChild(st);scrollLog();
     sendEmail("return",payload,function(ok){st.remove();
