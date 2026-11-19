@@ -18,6 +18,8 @@ An isolated demonstration of how Avondale Dirt Bike & ATV could add online parts
 | Cart | Slide-out cart with quantity controls. It's kept in the browser for that viewer only. |
 | Checkout | Four steps: Delivery → Vehicle → Payment → Review. |
 | Confirmation | Order number, a fulfillment route diagram, and the planned "behind the scenes" workflow with the human review step. |
+| Email receipt | Real receipt emailed from the shop's Gmail (via Google Apps Script) when `CONFIG.EMAIL_ENDPOINT` is set. The receipt is always previewed on screen too. |
+| Help & Returns assistant | Scripted chat: Q&A, return policy, order lookup, and a step-by-step return with RMA number, instructions, and a follow-up email. It uses a **sample** return policy, clearly labeled. |
 | Presenter panel | Bottom-left button, or press **P**. Has the run sheet, Mechanic order mode, the optional CRF250R toggle, and Reset. |
 
 ### Two fulfillment paths
@@ -50,3 +52,17 @@ There's no public parts-counter or cash-register screen, and the customer never 
 ## Hosting note
 
 GitHub Pages is fine for this static demo. It isn't a production e-commerce host: there's no server-side checkout, payment, or order storage. The production store needs a real commerce platform.
+
+## Turning on real emails (Google Apps Script)
+
+The script is `apps-script/Code.gs`. It runs on the shop's Gmail account and sends:
+- **To the customer:** an order receipt, or a return confirmation with the RMA number and next steps.
+- **To the shop's own inbox:** a copy tagged `[ADB-PARTS-ORDER]` or `[ADB-RETURN-REQ]` for Gmail filters.
+
+Safeguards: a shared token, 30 sends a day in total, 6 a day per address, and example.com/test.com addresses are refused.
+
+Setup:
+1. Sign in to Chrome as the shop's Gmail account and open script.google.com. Click **New project** and paste in `Code.gs`.
+2. Run `testSendToMe` once and approve the permissions. A sample receipt lands in that inbox.
+3. Go to **Deploy → New deployment → Web app**. Set *Execute as*: **Me**, and *Who has access*: **Anyone**. Then click **Deploy** and copy the web app URL.
+4. Paste the URL into `index.html` at `CONFIG.EMAIL_ENDPOINT` and commit. Send the URL to Claude and the commit is done for you.

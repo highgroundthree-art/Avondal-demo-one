@@ -252,6 +252,58 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
 .view{display:none}
 .view.on{display:block}
 
+
+/* product photos */
+.pimg img{width:100%;height:100%;object-fit:contain;background:#fff;padding:8px}
+.pimg.has-img{background:#fff}
+.line .thumb img{width:100%;height:100%;object-fit:contain;border-radius:8px;background:#fff}
+
+/* email preview */
+.mail{background:#fff;border:1px solid #e2dccf;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);margin-top:10px}
+.mail-h{background:#f7f5f0;border-bottom:1px solid #e9e4da;padding:12px 16px;font-size:13.5px;display:grid;gap:2px}
+.mail-h b{display:inline-block;width:62px;color:var(--muted);font-weight:600}
+.mail-b{padding:18px 20px;font-size:14.5px}
+.mail-b .brand{font-family:var(--head);font-size:20px;letter-spacing:.04em;text-transform:uppercase;border-bottom:3px solid var(--orange);padding-bottom:6px;margin-bottom:12px}
+.mail-b table{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0}
+.mail-b td{padding:7px 0;border-bottom:1px solid #f0ece4}
+.mail-b td.r{text-align:right;white-space:nowrap}
+.estat{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;padding:10px 14px;border-radius:10px;background:#eef3fa;color:#1d4f86}
+.estat.ok{background:#e6f4ec;color:#17653a}
+.estat.warn{background:#fff3e0;color:#8a5a10}
+.spin{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp 1s linear infinite;flex-shrink:0}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* help chat */
+.chat-fab{position:fixed;right:16px;bottom:16px;z-index:55;background:var(--orange);color:#fff;border:0;border-radius:999px;padding:13px 18px;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(242,106,27,.4)}
+.chat-fab svg{width:20px;height:20px}
+.chat{position:fixed;right:16px;bottom:16px;z-index:85;width:min(400px,calc(100% - 32px));height:min(620px,calc(100% - 32px));background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.35);display:none;flex-direction:column;overflow:hidden}
+.chat.on{display:flex}
+.chat-h{background:var(--ink);color:#fff;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.chat-h .av{width:36px;height:36px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-family:var(--head);font-size:15px;flex-shrink:0}
+.chat-h .t{flex:1;line-height:1.2}
+.chat-h .t b{display:block;font-size:15px}
+.chat-h .t small{color:#b9bec6;font-size:12px}
+.chat-h .x{color:#fff}
+.chat-log{flex:1;overflow-y:auto;padding:14px;background:#f5f3ef;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:86%;padding:10px 13px;border-radius:14px;font-size:14.5px;line-height:1.45;white-space:pre-line}
+.msg.bot{background:#fff;border:1px solid #ebe6dc;align-self:flex-start;border-bottom-left-radius:4px}
+.msg.me{background:var(--ink);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.msg ol,.msg ul{margin:6px 0 0;padding-left:20px;white-space:normal}
+.msg li{margin-bottom:4px}
+.msg .pol{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8a5a10;margin-top:6px}
+.qrs{display:flex;flex-wrap:wrap;gap:6px;align-self:flex-start;max-width:100%}
+.qrs button{background:#fff;border:1.5px solid var(--orange);color:var(--orange-d);border-radius:999px;padding:7px 12px;font-size:13.5px;font-weight:600}
+.qrs button:hover{background:#fff3ea}
+.qrs button.sel{background:var(--orange);color:#fff}
+.chat-in{display:flex;gap:8px;padding:10px;border-top:1px solid #eee;background:#fff}
+.chat-in input{flex:1;border:1px solid #d6d0c4;border-radius:999px;padding:10px 14px;font-size:15px;min-width:0}
+.chat-in button{background:var(--orange);color:#fff;border:0;border-radius:999px;padding:0 16px;font-weight:700}
+.typing{align-self:flex-start;background:#fff;border:1px solid #ebe6dc;border-radius:14px;padding:10px 14px;display:flex;gap:4px}
+.typing i{width:7px;height:7px;border-radius:50%;background:#aaa;animation:bl 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes bl{0%,100%{opacity:.3}50%{opacity:1}}
+.rma{background:#fff8f2;border:1.5px dashed var(--orange);border-radius:10px;padding:10px 12px;margin-top:6px;font-family:var(--head);font-size:18px;letter-spacing:.06em;white-space:normal}
+
 @media (max-width:900px){
   nav.main{display:none;position:absolute;top:66px;left:0;right:0;background:var(--ink);flex-direction:column;align-items:stretch;padding:8px 12px 14px;gap:2px}
   nav.main.open{display:flex}
@@ -269,6 +321,9 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
   .hero-ctas .btn{width:100%}
 }
 @media (max-width:560px){
+  .chat{right:0;bottom:0;width:100%;height:100%;border-radius:0}
+  .chat-fab{padding:11px 14px;font-size:14px;right:12px;bottom:12px}
+  .chat-fab .lbl2{display:none}
   .route,.fgrid{grid-template-columns:1fr}
   .hbar{gap:10px}
   .pres-fab{padding:6px 10px;font-size:12px;opacity:.85}
@@ -317,6 +372,7 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
       <a href="#services" data-nav="services">Services</a>
       <a href="#home" data-soon="Tips &amp; Tricks">Tips &amp; Tricks</a>
       <a href="#home" data-soon="See Our Reviews">Reviews</a>
+      <a href="#home" data-help>Returns &amp; Help</a>
       <a href="#shop" class="shop-tab" data-nav="shop">Shop Parts</a>
     </nav>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
@@ -450,9 +506,11 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
     <ol>
       <li><b>Home:</b> point out the new Shop Parts tab and the Shop Parts button next to Schedule a Service.</li>
       <li><b>Shop:</b> search <i>"brake"</i>, then choose <i>1981 Honda CR250R</i> under "Shopping for". Point out the fitment flags.</li>
-      <li>Add two or three parts. Open the cart and change a quantity.</li>
-      <li><b>Checkout as a customer:</b> the order ships direct to the customer. Use the "Fill demo details" button on each step.</li>
+      <li>Hand Dennis the device. He adds two or three parts and opens the cart.</li>
+      <li><b>Checkout as a customer:</b> he types <b>his real email</b>. Use "Fill demo details" for the rest. The order ships straight to the customer.</li>
       <li>On the confirmation page, walk through what happens behind the scenes and the human review step.</li>
+      <li>Have him open his inbox. The real receipt arrives from the shop's Gmail.</li>
+      <li>Tap <b>Help &amp; Returns</b>, then "Start a return". He picks the part and a reason and gets a return number plus a follow-up email.</li>
       <li>Turn on <b>Mechanic order</b> below and run the same flow again. This time it ships to the workshop with a work order number.</li>
     </ol>
     <div class="tog"><div><b>Mechanic order mode</b><small>Simulates a technician signed in. Orders ship to the workshop.</small></div><label class="sw"><input type="checkbox" id="staffTog"><span></span></label></div>
@@ -462,11 +520,24 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
   </div>
 </div>
 
+<button class="chat-fab" id="chatFab" data-help aria-label="Open help and returns chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg><span>Help<span class="lbl2"> &amp; Returns</span></span></button>
+<div class="chat" id="chat" role="dialog" aria-label="Help and returns assistant">
+  <div class="chat-h"><div class="av">ADB</div><div class="t"><b>Parts Help &amp; Returns</b><small>Automated assistant · demo</small></div><button class="x" id="chatX" aria-label="Close chat">&times;</button></div>
+  <div class="chat-log" id="chatLog" aria-live="polite"></div>
+  <form class="chat-in" id="chatForm"><label class="sr" for="chatTxt">Type a question</label><input id="chatTxt" placeholder="Ask about returns, refunds, fitment…" autocomplete="off"><button type="submit">Send</button></form>
+</div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (function(){
 "use strict";
+/* ===== CONFIG: paste the Apps Script web-app URL between the quotes to turn on real emails ===== */
+var CONFIG={
+  EMAIL_ENDPOINT:"",
+  EMAIL_TOKEN:"adb-demo-2026",
+  SHOP_NAME:"Avondale Dirt Bike & ATV",
+  SHOP_PHONE:"(480) 270-4465"
+};
 /* ---------- icons ---------- */
 var IC={
  engine:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><rect x="12" y="20" width="34" height="26" rx="3"/><path d="M20 20v-6h18v6M46 28h8v10h-8M12 30H6v6h6M22 46v6M36 46v6"/><circle cx="29" cy="33" r="6"/></svg>',
@@ -553,7 +624,8 @@ var S={cart:{},cat:"all",q:"",veh:"any",sort:"feat",staff:false,crf:false,step:1
 var store={get:function(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
 var saved=store.get("adb_demo_state");
 if(saved){S.cart=saved.cart||{};S.staff=!!saved.staff;S.crf=!!saved.crf;}
-function persist(){store.set("adb_demo_state",{cart:S.cart,staff:S.staff,crf:S.crf});}
+S.orders=(saved&&saved.orders)||[];
+function persist(){store.set("adb_demo_state",{cart:S.cart,staff:S.staff,crf:S.crf,orders:S.orders.slice(-10)});}
 
 var $=function(s){return document.querySelector(s);};
 
@@ -632,9 +704,10 @@ function renderShop(){
   $("#count").textContent=list.length+" part"+(list.length===1?"":"s")+(S.q?' matching "'+S.q+'"':"");
   $("#grid").innerHTML=list.length?list.map(card).join(""):'<div class="empty"><b>No parts match that search.</b><br>Try a different word, or <button class="btn btn-light" data-clear style="margin-top:10px;padding:8px 14px">clear filters</button></div>';
 }
+function pic(p,cls){return p.img?'<img src="'+p.img+'" alt="'+esc(p.name)+'" loading="lazy">':IC[p.cat];}
 function card(p){
   var inC=S.cart[p.id];
-  return '<article class="pcard"><button class="pimg" data-open="'+p.id+'" aria-label="View '+esc(p.name)+'">'+IC[p.cat]+'<span class="ph">Photo placeholder</span></button>'+
+  return '<article class="pcard"><button class="pimg'+(p.img?' has-img':'')+'" data-open="'+p.id+'" aria-label="View '+esc(p.name)+'">'+pic(p)+(p.img?'':'<span class="ph">Photo placeholder</span>')+'</button>'+
    '<div class="pbody"><div class="pcat">'+esc(catName(p.cat))+'</div><button class="pname" data-open="'+p.id+'">'+esc(p.name)+'</button>'+fitBadge(p)+
    '<div class="prow"><div class="price">'+money(p.price)+'<small>Demo price</small></div><button class="add'+(inC?" added":"")+'" data-add="'+p.id+'">'+(inC?"✓ In cart":"Add")+'</button></div></div></article>';
 }
@@ -659,7 +732,7 @@ document.addEventListener("click",function(e){
 function openProduct(id){
   var p=byId[id];
   var listed=p.fit==="u"?"Multi-fit or universal item. Confirm the specs listed in the description.":p.fit.filter(function(v){return S.crf||v!=="crf25";}).map(vehShort).join(", ");
-  $("#pBox").innerHTML='<button class="x" data-close aria-label="Close">&times;</button><div class="pd"><div class="pimg">'+IC[p.cat]+'<span class="ph">Photo placeholder</span></div><div class="info">'+
+  $("#pBox").innerHTML='<button class="x" data-close aria-label="Close">&times;</button><div class="pd"><div class="pimg'+(p.img?' has-img':'')+'">'+pic(p)+(p.img?'':'<span class="ph">Photo placeholder</span>')+'</div><div class="info">'+
    '<div class="pcat">'+esc(catName(p.cat))+'</div><h2>'+esc(p.name)+'</h2>'+fitBadge(p,true)+
    '<p>'+esc(p.desc)+'</p><div class="kv"><div><b>SKU:</b> '+p.sku+' (demo)</div><div><b>Listed for:</b> '+esc(listed)+'</div><div><b>Availability:</b> confirmed with the supplier when the order is placed</div><div><b>Fitment:</b> demo listing, not verified against supplier data</div></div>'+
    '<div class="price" style="font-size:26px;margin:10px 0">'+money(p.price)+'<small>Demo price</small></div>'+
@@ -678,7 +751,7 @@ function subtotal(){var s=0;for(var k in S.cart)s+=byId[k].price*S.cart[k];retur
 function addToCart(id,q){S.cart[id]=Math.min(20,(S.cart[id]||0)+q);persist();updateCart();if($("#v-shop").classList.contains("on"))renderShop();toast("Added to cart: "+byId[id].name);}
 function setQty(id,q){if(q<=0)delete S.cart[id];else S.cart[id]=Math.min(20,q);persist();updateCart();if($("#v-shop").classList.contains("on"))renderShop();if($("#v-checkout").classList.contains("on")){if(cartCount()===0){closeAll();location.hash="#shop";}else renderSummary();}}
 function lineHTML(id,editable){var p=byId[id],q=S.cart[id];
-  return '<div class="line"><div class="thumb">'+IC[p.cat]+'</div><div><div class="nm">'+esc(p.name)+'</div><div class="sku">'+p.sku+(editable?'':' · Qty '+q)+'</div>'+
+  return '<div class="line"><div class="thumb">'+pic(p)+'</div><div><div class="nm">'+esc(p.name)+'</div><div class="sku">'+p.sku+(editable?'':' · Qty '+q)+'</div>'+
    (editable?'<div><span class="qty"><button data-dec="'+id+'" aria-label="Decrease">−</button><span>'+q+'</span><button data-inc="'+id+'" aria-label="Increase">+</button></span><button class="rm" data-rm="'+id+'">Remove</button></div>':'')+
    '</div><div class="lp">'+money(p.price*q)+'</div></div>';}
 function updateCart(){
@@ -695,7 +768,7 @@ function closeAll(){$("#drawer").classList.remove("on");$("#pModal").classList.r
 $("#cartBtn").addEventListener("click",openCart);
 $("#scrim").addEventListener("click",closeAll);
 document.addEventListener("keydown",function(e){
-  if(e.key==="Escape"){closeAll();$("#pres").classList.remove("on");}
+  if(e.key==="Escape"){closeAll();$("#pres").classList.remove("on");closeChat();}
   var tag=(e.target.tagName||"").toLowerCase();
   if((e.key==="p"||e.key==="P")&&tag!=="input"&&tag!=="textarea"&&tag!=="select"&&!e.metaKey&&!e.ctrlKey){$("#pres").classList.toggle("on");}
 });
@@ -718,7 +791,7 @@ function renderCheckout(){renderSteps();renderSummary();
       '<div class="route">'+["customer","shop"].map(function(k){var o=SHIP[k],on=k===m;return '<div class="ropt'+(on?" on":" lock")+'" aria-current="'+on+'"><div class="tag">'+o.tag+(on?" ✓":"")+'</div><h4>'+o.title+'</h4><p>'+o.desc+'</p>'+flowSVG(o.to)+'</div>';}).join("")+'</div>'+
       '<p class="note">The path is set by who places the order: customers get it shipped to them, and mechanics get it shipped to the shop. (Presenter: switch with "Mechanic order mode".)</p>';
     if(m==="customer"){
-      h+='<h3 style="margin-top:18px;font-size:18px">Shipping address</h3><div class="fgrid">'+inp("name","Full name",{ac:"name"})+inp("email","Email",{type:"email",ac:"email",hint:"for order updates"})+inp("addr","Street address",{full:true,ac:"street-address"})+inp("city","City",{ac:"address-level2"})+'<div class="fgrid" style="gap:12px">'+inp("state","State",{value:"AZ"})+inp("zip","ZIP",{im:"numeric"})+'</div>'+inp("phone","Phone",{type:"tel",hint:"optional",ac:"tel"})+'</div>';
+      h+='<h3 style="margin-top:18px;font-size:18px">Shipping address</h3><div class="fgrid">'+inp("name","Full name",{ac:"name"})+inp("email","Email",{type:"email",ac:"email",hint:"your receipt is sent here"})+inp("addr","Street address",{full:true,ac:"street-address"})+inp("city","City",{ac:"address-level2"})+'<div class="fgrid" style="gap:12px">'+inp("state","State",{value:"AZ"})+inp("zip","ZIP",{im:"numeric"})+'</div>'+inp("phone","Phone",{type:"tel",hint:"optional",ac:"tel"})+'</div>';
     } else {
       h+='<h3 style="margin-top:18px;font-size:18px">Work order</h3><div class="fgrid">'+inp("wo","Work order #")+inp("tech","Technician")+inp("cust","Customer on the ticket",{hint:"optional"})+inp("eta","Needed by",{type:"date"})+'</div>'+
         '<div class="shipto"><b>Ships to</b>Avondale Dirt Bike &amp; ATV workshop: shop address on file<br><span style="color:var(--muted);font-size:13px">Address pulled from shop settings in production.</span></div>';
@@ -763,7 +836,7 @@ function wireStep(){
     if(S.step===1){d=m==="customer"?{name:"Jordan Demo",email:"jordan@example.com",addr:"123 Sample Trail",city:"Avondale",state:"AZ",zip:"85323",phone:""}:{wo:"WO-DEMO-0417",tech:"Demo Tech",cust:"Walk-in demo ticket",eta:""};}
     if(S.step===2){d={ymm:val("ymm")||"1981 Honda CR250R",vin:"",notes:"Demo order"};}
     if(S.step===3){d={cc:"4242 4242 4242 4242",exp:"12/29",cvc:"123"};}
-    for(var k in d){var el=document.getElementById(k);if(el)el.value=d[k];}
+    for(var k in d){var el=document.getElementById(k);if(el&&!el.value.trim())el.value=d[k];}
   };
   if(next)next.onclick=function(){
     keepAll();var e=validate();
@@ -801,19 +874,22 @@ function renderSummary(){
 function placeOrder(){
   var m=mode(),n=Math.floor(1000+Math.random()*9000);
   S.lastOrder={no:"ADB-DEMO-"+n,mode:m,items:JSON.parse(JSON.stringify(S.cart)),total:subtotal(),co:JSON.parse(JSON.stringify(S.co)),pay:S.pay};
+  S.lastOrder.date=new Date().toISOString();S.lastOrder.emailState=(o_cust(S.lastOrder)&&CONFIG.EMAIL_ENDPOINT)?"sending":"off";
+  S.orders.push(S.lastOrder);
   S.cart={};persist();updateCart();S.step=1;
   location.hash="#confirmation";
+  if(S.lastOrder.emailState==="sending")sendEmail("receipt",receiptPayload(S.lastOrder),function(ok){S.lastOrder.emailState=ok?"sent":"failed";var el=$("#estat");if(el)el.outerHTML=emailStatus(S.lastOrder);});
 }
 
 /* ---------- confirmation ---------- */
 function renderConf(){
   var o=S.lastOrder,c=o.co,cust=o.mode==="customer";
   var tag=cust?"[ADB-PARTS-ORDER]":"[ADB-SHOP-ORDER]";
-  var items=Object.keys(o.items).map(function(id){var p=byId[id];return '<div class="line"><div class="thumb">'+IC[p.cat]+'</div><div><div class="nm">'+esc(p.name)+'</div><div class="sku">'+p.sku+' · Qty '+o.items[id]+'</div></div><div class="lp">'+money(p.price*o.items[id])+'</div></div>';}).join("");
+  var items=Object.keys(o.items).map(function(id){var p=byId[id];return '<div class="line"><div class="thumb">'+pic(p)+'</div><div><div class="nm">'+esc(p.name)+'</div><div class="sku">'+p.sku+' · Qty '+o.items[id]+'</div></div><div class="lp">'+money(p.price*o.items[id])+'</div></div>';}).join("");
   $("#confBox").innerHTML='<div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></div>'+
    '<h1 style="font-size:36px">'+(cust?"Order received. Thank you!":"Shop order submitted")+'</h1>'+
    '<div class="ordno">Order '+o.no+'</div>'+
-   '<p style="color:var(--muted)">'+(cust?"A confirmation would be emailed to "+esc(c.email)+".":"Linked to work order #"+esc(c.wo)+" for "+esc(c.tech)+".")+' This is a demonstration, so no order was sent and nothing was charged.</p>'+
+   '<p style="color:var(--muted)">'+(cust?"Your receipt goes to "+esc(c.email)+".":"Linked to work order #"+esc(c.wo)+" for "+esc(c.tech)+".")+' This is a demonstration, so nothing was ordered from the supplier and nothing was charged.</p>'+
    '<h2 style="font-size:22px;margin-top:26px">How it gets there</h2>'+
    '<div class="flowbig"><div class="node">Supplier<small>ships the parts</small></div><div class="arrow">&rarr;</div><div class="node dest">'+(cust?esc(c.name)+'<small>'+esc(c.city)+', '+esc(c.state)+' '+esc(c.zip)+'</small>':'Avondale workshop<small>WO #'+esc(c.wo)+'</small>')+'</div></div>'+
    '<p class="note" style="margin-top:0">'+(cust?"Customer orders drop-ship to the customer. The shop never has to handle the box.":"Mechanic orders drop-ship to the workshop, ready for the job on the lift.")+'</p>'+
@@ -824,6 +900,8 @@ function renderConf(){
     '<li class="wall"><div class="num">3</div><div><b class="tt">The owner reviews and sends it</b><span>This is the human review step. Nothing goes to the supplier until the owner checks fitment and price and clicks Send himself.</span></div></li>'+
     '<li><div class="num">4</div><div><b class="tt">Tracking goes out</b><span>'+(cust?"The customer gets a shipping update when the supplier ships.":"The tech sees the expected arrival on the work order.")+'</span></div></li>'+
    '</ol>'+
+   (cust?'<h2 style="font-size:22px;margin-top:26px">Email receipt</h2>'+emailStatus(o)+receiptPreview(o):'')+
+   '<div style="margin-top:18px"><button class="btn btn-light" data-help="return">Need to return something? Ask the assistant</button></div>'+
    '<h2 style="font-size:22px;margin-top:26px">Items</h2><div class="panel" style="padding:8px 18px">'+items+'<div class="tot big" style="padding:10px 0"><span>Demo total</span><span>'+money(o.total)+'</span></div></div>'+
    '<div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap"><a class="btn btn-primary" href="#shop">Keep shopping</a><a class="btn btn-light" href="#home">Back to home</a></div>';
 }
@@ -835,7 +913,160 @@ var st=$("#staffTog"),cf=$("#crfTog");
 function applyFlags(){document.body.classList.toggle("staff",S.staff);st.checked=S.staff;cf.checked=S.crf;}
 st.onchange=function(){S.staff=st.checked;S.step=1;persist();applyFlags();toast(S.staff?"Mechanic order mode on: orders ship to the workshop":"Customer mode: orders ship to the customer");if($("#v-checkout").classList.contains("on"))renderCheckout();};
 cf.onchange=function(){S.crf=cf.checked;if(!S.crf&&S.veh==="crf25")S.veh="any";persist();if($("#v-shop").classList.contains("on"))renderShop();toast(S.crf?"2025 Honda CRF250R added as a demo vehicle":"CRF250R demo vehicle hidden");};
-$("#resetBtn").onclick=function(){S.cart={};S.co={};S.step=1;S.lastOrder=null;S.q="";S.cat="all";S.veh="any";S.staff=false;$("#q").value="";persist();applyFlags();updateCart();$("#pres").classList.remove("on");location.hash="#home";route();toast("Demo reset");};
+$("#resetBtn").onclick=function(){S.cart={};S.co={};S.step=1;S.lastOrder=null;S.orders=[];chatStarted=false;$("#chatLog").innerHTML="";closeChat();S.q="";S.cat="all";S.veh="any";S.staff=false;$("#q").value="";persist();applyFlags();updateCart();$("#pres").classList.remove("on");location.hash="#home";route();toast("Demo reset");};
+
+
+/* ---------- email ---------- */
+function o_cust(o){return o.mode==="customer";}
+function itemsArr(o){return Object.keys(o.items).map(function(id){var p=byId[id];return {name:p.name,sku:p.sku,qty:o.items[id],price:p.price};});}
+function receiptPayload(o){var c=o.co;return {type:"receipt",to:c.email,orderNo:o.no,date:o.date,name:c.name,
+  shipTo:[c.name,c.addr,c.city+", "+c.state+" "+c.zip].join("\n"),vehicle:c.ymm||"",items:itemsArr(o),total:o.total,
+  payment:o.pay==="card"?"Card ending "+((c.cc||"").replace(/\D/g,"").slice(-4)||"4242")+" (simulated)":"Wallet (simulated)"};}
+function sendEmail(type,payload,cb){
+  if(!CONFIG.EMAIL_ENDPOINT){cb&&cb(false);return;}
+  payload.token=CONFIG.EMAIL_TOKEN;payload.type=type;
+  var done=false,timer=setTimeout(function(){if(!done){done=true;cb&&cb(false);}},15000);
+  try{
+    fetch(CONFIG.EMAIL_ENDPOINT,{method:"POST",body:JSON.stringify(payload)})
+      .then(function(r){return r.json();})
+      .then(function(j){if(done)return;done=true;clearTimeout(timer);cb&&cb(!!(j&&j.ok));})
+      .catch(function(){if(done)return;done=true;clearTimeout(timer);cb&&cb(false);});
+  }catch(e){done=true;clearTimeout(timer);cb&&cb(false);}
+}
+function emailStatus(o){
+  var to=esc(o.co.email||"");
+  if(o.emailState==="sending")return '<div class="estat" id="estat"><span class="spin"></span>Sending the receipt to '+to+'…</div>';
+  if(o.emailState==="sent")return '<div class="estat ok" id="estat">✓ Receipt sent to '+to+'. Check your inbox (and spam, the first time).</div>';
+  if(o.emailState==="failed")return '<div class="estat warn" id="estat">The email couldn\'t be sent right now. Here\'s what the customer receives:</div>';
+  return '<div class="estat" id="estat">Here\'s the receipt email the customer receives:</div>';
+}
+function mailFrame(to,subject,body){
+  return '<div class="mail"><div class="mail-h"><div><b>From</b>'+esc(CONFIG.SHOP_NAME)+'</div><div><b>To</b>'+esc(to)+'</div><div><b>Subject</b>'+esc(subject)+'</div></div><div class="mail-b"><div class="brand">'+esc(CONFIG.SHOP_NAME)+'</div>'+body+'</div></div>';}
+function receiptPreview(o){
+  var c=o.co,rows=itemsArr(o).map(function(i){return '<tr><td>'+esc(i.name)+'<br><small style="color:#888">'+i.sku+' · Qty '+i.qty+'</small></td><td class="r">'+money(i.price*i.qty)+'</td></tr>';}).join("");
+  var body='<p>Hi '+esc((c.name||"").split(" ")[0])+',</p><p>Thanks for your order! Here\'s your receipt. Your parts ship straight from our supplier to the address below, and we\'ll email tracking once they ship.</p>'+
+    '<p><b>Order '+o.no+'</b></p><table>'+rows+'<tr><td><b>Total</b></td><td class="r"><b>'+money(o.total)+'</b></td></tr></table>'+
+    '<p><b>Ships to</b><br>'+esc(c.name)+'<br>'+esc(c.addr)+'<br>'+esc(c.city)+', '+esc(c.state)+' '+esc(c.zip)+'</p>'+
+    '<p>Need to return something? Use <b>Help &amp; Returns</b> on our website and give the assistant this order number.</p>'+
+    '<p style="color:#888;font-size:12.5px">Demonstration only. No payment was taken and no parts will ship.</p>';
+  return mailFrame(c.email,"Your order "+o.no+" from "+CONFIG.SHOP_NAME,body);
+}
+
+/* ---------- help & returns assistant ---------- */
+var POLICY_TAG='<span class="pol">Sample policy. The shop sets the final terms.</span>';
+var FAQ=[
+ {k:["how long","window","days","deadline","time limit"],a:"You can request a return within 30 days of delivery."+POLICY_TAG},
+ {k:["refund","money back","credit"],a:"Refunds go back to your original payment method once the returned part is received and inspected. We email you when it's processed."+POLICY_TAG},
+ {k:["label","return shipping","who pays","shipping cost","postage"],a:"If we sent the wrong part or it arrived damaged or defective, we email you a prepaid return label. For other returns (ordered the wrong part, changed your mind), return shipping comes out of your refund."+POLICY_TAG},
+ {k:["installed","used","mounted","ridden"],a:"Parts that have been installed or used can't be returned unless they're defective. Defective parts go through a warranty review, and we help you file it."+POLICY_TAG},
+ {k:["electrical","stator","coil","battery","cdi","regulator"],a:"Electrical parts can only be returned unopened, because they can't be tested once installed. Defective electrical parts go through a warranty review."+POLICY_TAG},
+ {k:["fit","fitment","wrong part","doesn't fit","doesnt fit","compatible"],a:"If a part doesn't fit, start a return and choose \"Doesn't fit my vehicle\". Include your year, make and model. If we confirmed fitment before shipping and it's still wrong, the return label is on us."+POLICY_TAG},
+ {k:["damaged","broken","cracked","bent","missing"],a:"Sorry about that! Report shipping damage within 48 hours of delivery and include a photo. Start a return and choose \"Arrived damaged\"."+POLICY_TAG},
+ {k:["exchange","swap","different size"],a:"The quickest way to exchange is to start a return for the old part and place a new order for the right one. The shop can help you pick the correct part."},
+ {k:["warranty","defect","defective","stopped working","failed"],a:"Defective parts go through a warranty review with the manufacturer. Start a return, choose \"Defective\", and we'll take it from there."},
+ {k:["track","where","status","shipped","arrive","delivery"],a:"Your parts ship straight from our supplier. Tracking is emailed to you as soon as they ship. Send me your order number and I'll look it up."},
+ {k:["phone","call","talk","person","human","someone","contact"],a:"You can reach the shop at "+CONFIG.SHOP_PHONE+". You don't need to call to complete a return, though. I can do it right here."},
+ {k:["install","labor","put it on","mechanic"],a:"The shop installs aftermarket parts and accessories. Use \"Schedule a Service\" on the home page to book it."}
+];
+var CH={state:"idle",ord:null,sel:{},reason:"",cond:"",photo:false};
+var chatStarted=false;
+function cEl(h,cls){var d=document.createElement("div");d.className=cls;d.innerHTML=h;return d;}
+function scrollLog(){var l=$("#chatLog");l.scrollTop=l.scrollHeight;}
+function bot(html,qrs,cb){
+  var log=$("#chatLog"),t=cEl("<i></i><i></i><i></i>","typing");log.appendChild(t);scrollLog();
+  setTimeout(function(){t.remove();log.appendChild(cEl(html,"msg bot"));if(qrs)log.appendChild(qrRow(qrs));scrollLog();cb&&cb();},450);
+}
+function me(txt){$("#chatLog").appendChild(cEl(esc(txt),"msg me"));scrollLog();}
+function qrRow(qrs){var r=document.createElement("div");r.className="qrs";
+  qrs.forEach(function(q){var b=document.createElement("button");b.type="button";b.textContent=q[0];
+    b.onclick=function(){if(q[2]!=="toggle"){r.querySelectorAll("button").forEach(function(x){x.disabled=true;});me(q[0]);}q[1](b);};r.appendChild(b);});return r;}
+function menu(intro){
+  bot(intro||"What can I help you with?",[
+   ["Start a return",startReturn],["Return policy",function(){showPolicy();}],["Where's my order?",function(){CH.state="track";bot("Sure. What's your order number? It's on your receipt email and starts with ADB-.",lastOrderQR());}],
+   ["A part doesn't fit",function(){answer("fit");}],["Something else",function(){CH.state="free";bot("Go ahead and type your question.");}]
+  ]);
+}
+function lastOrderQR(){var cs=S.orders.filter(o_cust).slice(-1);return cs.length?[[cs[0].no,function(){handleOrderNo(cs[0].no);}]]:null;}
+function answer(key){for(var i=0;i<FAQ.length;i++){if(FAQ[i].k.indexOf(key)>=0){bot(FAQ[i].a,[["Start a return",startReturn],["Main menu",function(){menu();}]]);return;}}}
+function showPolicy(){
+  bot("Here's how returns work:<ul><li>Request a return within <b>30 days</b> of delivery</li><li>Parts must be <b>unused, in their original packaging</b></li><li>Installed parts can only be returned if they're defective (warranty review)</li><li>Electrical parts can only be returned unopened</li><li>Report shipping damage within <b>48 hours</b>, with a photo</li><li>If we made a mistake or the part is damaged or defective, the return label is free</li></ul>"+POLICY_TAG,
+   [["Start a return",startReturn],["Main menu",function(){menu();}]]);
+}
+function startReturn(){CH={state:"order",ord:null,sel:{},reason:"",cond:"",photo:false};
+  bot("Let's get that started. What's your order number? It's on your receipt and starts with ADB-.",lastOrderQR());}
+function findOrder(no){no=no.toUpperCase().replace(/\s/g,"");for(var i=S.orders.length-1;i>=0;i--)if(S.orders[i].no===no)return S.orders[i];return null;}
+function handleOrderNo(txt){
+  var m=txt.toUpperCase().match(/ADB-?DEMO-?\d{4}/);var o=m?findOrder(m[0].replace(/ADB-?DEMO-?/,"ADB-DEMO-")):null;
+  if(!o){bot("I couldn't find that order. Check the receipt email for a number like ADB-DEMO-1234 and try again.",[["Main menu",function(){menu();}]]);CH.state=CH.state==="track"?"track":"order";return;}
+  if(!o_cust(o)){bot("That's a workshop order, tied to work order #"+esc(o.co.wo)+". Shop orders are handled directly by the shop, not through this assistant.",[["Main menu",function(){menu();}]]);CH.state="idle";return;}
+  if(CH.state==="track"){CH.state="idle";
+    bot("Found it: <b>"+o.no+"</b> for "+esc(o.co.name)+".\nStatus: <b>Order received</b>. It ships straight from our supplier to "+esc(o.co.city)+", "+esc(o.co.state)+", and tracking is emailed once it ships.\n<small style=\"color:#888\">Demo status</small>",[["Start a return",startReturn],["Main menu",function(){menu();}]]);return;}
+  CH.ord=o;CH.state="items";
+  var ids=Object.keys(o.items);
+  if(ids.length===1){CH.sel[ids[0]]=true;bot("Found order <b>"+o.no+"</b>. You're returning the <b>"+esc(byId[ids[0]].name)+"</b>.");askReason();return;}
+  var qrs=ids.map(function(id){return [byId[id].name+" (×"+o.items[id]+")",function(b){CH.sel[id]=!CH.sel[id];b.classList.toggle("sel",CH.sel[id]);},"toggle"];});
+  qrs.push(["Continue →",function(b){var n=Object.keys(CH.sel).filter(function(k){return CH.sel[k];});
+    if(!n.length){b.disabled=false;b.parentNode.querySelectorAll("button").forEach(function(x){x.disabled=false;});bot("Tap at least one part first.");return;}askReason();}]);
+  bot("Found order <b>"+o.no+"</b> for "+esc(o.co.name)+". Which parts are you returning? Tap each one, then Continue.",qrs);
+}
+function askReason(){CH.state="reason";
+  bot("What's the reason for the return?",[["Doesn't fit my vehicle",function(){setReason("fit");}],["Arrived damaged",function(){setReason("damaged");}],["Defective",function(){setReason("defective");}],["Ordered the wrong part",function(){setReason("wrong");}],["Changed my mind",function(){setReason("changed");}]]);}
+function setReason(r){CH.reason=r;CH.state="cond";
+  if(r==="damaged"){bot("Sorry it showed up that way. Can you add a photo of the damage? It speeds things up.",[["Add a photo",function(){pickPhoto();}],["Skip for now",function(){finishEval();}]]);return;}
+  bot("Has the part been installed or used?",[["No, unused in original packaging",function(){CH.cond="unused";finishEval();}],["Yes, it's been installed",function(){CH.cond="installed";finishEval();}]]);}
+function pickPhoto(){var used=false;function go(){if(used)return;used=true;finishEval();}
+  var i=document.createElement("input");i.type="file";i.accept="image/*";
+  i.onchange=function(){if(i.files&&i.files[0]){var u=URL.createObjectURL(i.files[0]);CH.photo=true;
+    $("#chatLog").appendChild(cEl('<img src="'+u+'" alt="Damage photo" style="max-width:180px;border-radius:10px;display:block">',"msg me"));scrollLog();
+    if(!used){used=true;bot("Got the photo, thanks.",null,finishEval);}}};
+  i.click();
+  bot("Choose a photo from your device. If you'd rather not, tap Skip.",[["Skip photo",go]]);}
+function finishEval(){
+  var r=CH.reason,c=CH.cond,o=CH.ord;
+  if((r==="changed"||r==="wrong"||r==="fit")&&c==="installed"){CH.state="idle";
+    bot("Under the return policy, parts that have been installed can't be returned unless they're defective. If you think it's defective, I can start a warranty review instead."+POLICY_TAG,
+      [["It's defective, start a review",function(){CH.reason="defective";finishEval();}],["Call the shop",function(){answer("phone");}],["Main menu",function(){menu();}]]);return;}
+  var freeLabel=(r==="damaged"||r==="defective"||(r==="fit"));
+  var review=(r==="defective"&&c==="installed");
+  CH.state="confirm";
+  var items=Object.keys(CH.sel).filter(function(k){return CH.sel[k];}).map(function(id){return esc(byId[id].name)+" ×"+o.items[id];}).join("<br>");
+  var reasons={fit:"Doesn't fit my vehicle",damaged:"Arrived damaged",defective:"Defective",wrong:"Ordered the wrong part",changed:"Changed my mind"};
+  bot("Here's your return request:\n<b>Order:</b> "+o.no+"\n<b>Parts:</b><br>"+items+"\n<b>Reason:</b> "+reasons[r]+(review?"\n<b>Type:</b> Warranty review":"")+"\n<b>Return label:</b> "+(freeLabel?"Free (prepaid)":"Cost comes out of your refund")+"\n<b>Confirmation email:</b> "+esc(o.co.email),
+    [["Submit return request",function(){submitReturn(freeLabel,review,reasons[r]);}],["Cancel",function(){menu("No problem, nothing was submitted.");}]]);
+}
+function submitReturn(freeLabel,review,reasonTxt){
+  var o=CH.ord,rma="ADB-RMA-"+Math.floor(10000+Math.random()*90000);CH.state="idle";
+  var parts=Object.keys(CH.sel).filter(function(k){return CH.sel[k];}).map(function(id){return {name:byId[id].name,sku:byId[id].sku,qty:o.items[id]};});
+  var steps=review?["We send the part details to the manufacturer for warranty review. Expect an email from us with the result.","<b>Don't ship anything yet.</b> If the review needs the part back, we email you a prepaid label.","Keep the part and its packaging until you hear from us."]
+   :["<b>Don't ship anything yet.</b> Watch for your return label by email.","Pack the part in its original packaging and write <b>"+rma+"</b> on a slip inside the box.","Ship it to the address on the label. Parts that came from our supplier may go back to the supplier's warehouse, not to the shop.","Your refund goes out after the part is received and inspected."];
+  var instructionsHTML="<ol>"+steps.map(function(x){return "<li>"+x+"</li>";}).join("")+"</ol>";
+  bot("Your return request is in. Your return number is:<div class=\"rma\">"+rma+"</div>Next steps:"+instructionsHTML+POLICY_TAG,null,function(){
+    var payload={to:o.co.email,name:o.co.name,orderNo:o.no,rma:rma,reason:reasonTxt,freeLabel:freeLabel,review:review,items:parts,steps:steps.map(function(x){return x.replace(/<[^>]+>/g,"");})};
+    if(!CONFIG.EMAIL_ENDPOINT){bot("📧 A confirmation with these steps is emailed to <b>"+esc(o.co.email)+"</b>. (Real email isn't connected in this copy of the demo.)",[["Main menu",function(){menu();}]]);return;}
+    var log=$("#chatLog"),st=cEl('<span style="display:flex;gap:8px;align-items:center"><span class="spin"></span>Emailing your return confirmation…</span>',"msg bot");log.appendChild(st);scrollLog();
+    sendEmail("return",payload,function(ok){st.remove();
+      bot(ok?"📧 Sent! Your return confirmation is on its way to <b>"+esc(o.co.email)+"</b>.":"I couldn't send the email just now, but your return number <b>"+rma+"</b> is saved. Keep it for your records.",[["Main menu",function(){menu("Anything else I can help with?");}]]);});
+  });
+}
+function freeText(t){
+  var low=t.toLowerCase();
+  if(/adb-?demo-?\d{4}/i.test(t)||CH.state==="order"||CH.state==="track"){handleOrderNo(t);return;}
+  if(/\breturn\b|send (it|this) back/.test(low)&&!/policy|how long|window/.test(low)){startReturn();return;}
+  if(/policy/.test(low)){showPolicy();return;}
+  var best=null,score=0;FAQ.forEach(function(f){var s=0;f.k.forEach(function(k){if(low.indexOf(k)>=0)s+=k.length;});if(s>score){score=s;best=f;}});
+  if(best){bot(best.a,[["Start a return",startReturn],["Main menu",function(){menu();}]]);return;}
+  bot("I'm not sure about that one. I can help with returns, refunds, fitment, damaged parts and order status. For anything else, the shop's number is "+CONFIG.SHOP_PHONE+".",[["Start a return",startReturn],["Return policy",function(){showPolicy();}],["Main menu",function(){menu();}]]);
+}
+function openChat(mode){
+  $("#chat").classList.add("on");$("#chatFab").style.display="none";
+  if(!chatStarted){chatStarted=true;bot("Hi! I'm the parts help assistant for "+esc(CONFIG.SHOP_NAME)+". I can answer return questions or start a return for you. No phone call needed.",null,function(){if(mode==="return")startReturn();else menu();});}
+  else if(mode==="return")startReturn();
+  setTimeout(function(){var i=$("#chatTxt");if(i&&window.innerWidth>560)i.focus();},50);
+}
+function closeChat(){$("#chat").classList.remove("on");$("#chatFab").style.display="";}
+document.addEventListener("click",function(e){var t=e.target.closest("[data-help]");if(!t)return;e.preventDefault();$("#nav").classList.remove("open");openChat(t.dataset.help);});
+$("#chatX").onclick=closeChat;
+$("#chatForm").addEventListener("submit",function(e){e.preventDefault();var i=$("#chatTxt"),v=i.value.trim();if(!v)return;i.value="";me(v);freeText(v);});
 
 applyFlags();updateCart();route();
 })();
