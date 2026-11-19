@@ -7,7 +7,8 @@ An isolated demonstration of how Avondale Dirt Bike & ATV could add online parts
 ## Run it
 
 - **Online:** GitHub Pages serves `index.html` from the `main` branch root.
-- **Offline backup:** download `index.html` and open it in any browser. It's one file with no build step and no server. Without internet, it falls back from the Google fonts to system fonts.
+- **Offline backup:** `dist/avondale-demo-offline.html` is one file with all images built in. Open it in any browser. Rebuild it after any change with `python3 tools/build_offline.py`.
+- **Look and content:** the homepage mirrors avondaledirtbikeatv.com (captured 2026-11-19): his logo, shop photo, nav, Connect With Us form, Peace of Mind / Expert Repair band, testimonials, FAQs, service cards, Hourly Services, and footer. The changes are a **Shop Parts** tab in place of the broken "Part & Accessories" link, a Shop Parts panel in the hero, a cart, the Find-a-part/Help chat, and a Contact block. The template placeholder testimonials (Cody Fisher, Kristin Watson, Albert Flores, Jackson Hero) and the brand-logo strip are left out.
 
 ## What it shows
 
