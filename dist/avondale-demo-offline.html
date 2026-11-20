@@ -187,7 +187,7 @@ footer.site a{color:#d8dbe0}
 .panel{background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:22px;border:1px solid #ece7dd}
 .panel h2{font-size:24px}
 .route{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
-.ropt{border:2px solid #e2dccf;border-radius:12px;padding:16px;background:#fff;text-align:left;position:relative}
+.ropt{font:inherit;color:inherit;cursor:pointer;width:100%;border:2px solid #e2dccf;border-radius:12px;padding:16px;background:#fff;text-align:left;position:relative}
 .ropt.on{border-color:var(--orange);background:#fff8f2}
 .ropt.lock{opacity:.45;cursor:not-allowed}
 .ropt h4{font-family:var(--body);text-transform:none;letter-spacing:0;font-size:16px;margin:6px 0 4px}
@@ -647,6 +647,7 @@ footer.site .wrap{display:block}
       <li><b>Shop:</b> real J&amp;M parts, photos and retail prices. Search <i>"air filter"</i>, then pick <b>Honda</b> under Make. Point out the fitment flags.</li>
       <li>Hand Dennis the device. He adds two or three parts and opens the cart.</li>
       <li>Show the other way to buy: tap <b>Find a part</b> and type <i>"air filter for my Honda TRX420"</i>. Add a part from the chat.</li>
+      <li>At checkout, show both choices: <b>Ship to my address</b> or <b>Ship to the shop</b> (pickup or install). Dennis gets a ticket either way.</li>
       <li><b>Checkout as a customer:</b> he types <b>his real email</b>. Use "Fill demo details" for the rest. The order ships straight to the customer.</li>
       <li>On the confirmation page, walk through what happens behind the scenes and the human review step.</li>
       <li>Have him open his inbox. The real receipt arrives from the shop's Gmail.</li>
@@ -946,10 +947,12 @@ document.addEventListener("keydown",function(e){
 });
 
 /* ---------- checkout ---------- */
-var SHIP={ customer:{title:"Ship to me",tag:"Customer order",from:"Supplier",to:"Your address",desc:"Your parts ship straight from the supplier to the address you enter. Nothing routes through the shop."},
+var SHIP={ customer:{title:"Ship to my address",tag:"Home delivery",from:"Supplier",to:"Your address",desc:"Your parts ship straight from the supplier to the address you enter."},
+           pickup:{title:"Ship to the shop",tag:"Pick up / install",from:"Supplier",to:"Avondale shop",desc:"Parts ship to Avondale Dirt Bike & ATV. Pick them up, or have Dennis install them."},
            shop:{title:"Ship to the workshop",tag:"Mechanic order",from:"Supplier",to:"Avondale workshop",desc:"Parts ordered by shop staff for a repair ship straight to the workshop, tied to a work order."}};
 function flowSVG(to){return '<svg class="flow" viewBox="0 0 300 46" aria-hidden="true"><rect x="2" y="8" width="96" height="30" rx="6" fill="#f4f1ea" stroke="#d6d0c4"/><text x="50" y="28" font-size="12" text-anchor="middle" font-family="Inter,sans-serif" fill="#333">Supplier</text><path d="M104 23h88" stroke="#f26a1b" stroke-width="3" stroke-dasharray="6 4"/><path d="M190 16l10 7-10 7z" fill="#f26a1b"/><rect x="204" y="8" width="94" height="30" rx="6" fill="#fff8f2" stroke="#f26a1b"/><text x="251" y="28" font-size="12" text-anchor="middle" font-family="Inter,sans-serif" fill="#333">'+to+'</text></svg>';}
 function mode(){return S.staff?"shop":"customer";}
+function dest(){return S.staff?"workshop":(S.co.dest==="pickup"?"pickup":"home");}
 function renderSteps(){document.querySelectorAll("#steps div").forEach(function(d){var s=+d.dataset.s;d.className=s===S.step?"on":(s<S.step?"done":"");});}
 function val(id){var el=document.getElementById(id);return el?el.value.trim():"";}
 function keep(ids){ids.forEach(function(id){S.co[id]=val(id);});}
@@ -959,14 +962,22 @@ function inp(id,label,opts){opts=opts||{};var v=S.co[id]!=null?S.co[id]:(opts.va
 function renderCheckout(){renderSteps();renderSummary();
   var m=mode(),h="";
   if(S.step===1){
-    h='<h2>Where should this order go?</h2><p style="color:var(--muted);margin-top:0">'+(S.staff?"You're signed in as shop staff (demo), so this order ships to the workshop.":"You're shopping as a customer, so this order ships straight to you.")+'</p>'+
-      '<div class="route">'+["customer","shop"].map(function(k){var o=SHIP[k],on=k===m;return '<div class="ropt'+(on?" on":" lock")+'" aria-current="'+on+'"><div class="tag">'+o.tag+(on?" ✓":"")+'</div><h4>'+o.title+'</h4><p>'+o.desc+'</p>'+flowSVG(o.to)+'</div>';}).join("")+'</div>'+
-      '<p class="note">The path is set by who places the order: customers get it shipped to them, and mechanics get it shipped to the shop. (Presenter: switch with "Mechanic order mode".)</p>';
     if(m==="customer"){
-      h+='<h3 style="margin-top:18px;font-size:18px">Shipping address</h3><div class="fgrid">'+inp("name","Full name",{ac:"name"})+inp("email","Email",{type:"email",ac:"email",hint:"your receipt is sent here"})+inp("addr","Street address",{full:true,ac:"street-address"})+inp("city","City",{ac:"address-level2"})+'<div class="fgrid" style="gap:12px">'+inp("state","State",{value:"AZ"})+inp("zip","ZIP",{im:"numeric"})+'</div>'+inp("phone","Phone",{type:"tel",hint:"optional",ac:"tel"})+'</div>';
+      var d=dest();
+      h='<h2>Where should we send your parts?</h2><p style="color:var(--muted);margin-top:0">Choose one. Either way, the shop gets your order right away.</p>'+
+        '<div class="route">'+[["home","customer"],["pickup","pickup"]].map(function(k){var o=SHIP[k[1]],on=d===k[0];return '<button type="button" class="ropt'+(on?" on":"")+'" data-dest="'+k[0]+'" aria-pressed="'+on+'"><div class="tag">'+o.tag+(on?" ✓":"")+'</div><h4>'+o.title+'</h4><p>'+o.desc+'</p>'+flowSVG(o.to)+'</button>';}).join("")+'</div>';
+      if(d==="home"){
+        h+='<h3 style="margin-top:18px;font-size:18px">Shipping address</h3><div class="fgrid">'+inp("name","Full name",{ac:"name"})+inp("email","Email",{type:"email",ac:"email",hint:"your receipt is sent here"})+inp("addr","Street address",{full:true,ac:"street-address"})+inp("city","City",{ac:"address-level2"})+'<div class="fgrid" style="gap:12px">'+inp("state","State",{value:"AZ"})+inp("zip","ZIP",{im:"numeric"})+'</div>'+inp("phone","Phone",{type:"tel",hint:"optional",ac:"tel"})+'</div>';
+      } else {
+        h+='<h3 style="margin-top:18px;font-size:18px">Your contact info</h3><div class="fgrid">'+inp("name","Full name",{ac:"name"})+inp("email","Email",{type:"email",ac:"email",hint:"your receipt is sent here"})+inp("phone","Phone",{type:"tel",hint:"so the shop can tell you it's in",ac:"tel"})+
+          '<label class="f">When it arrives<select id="pickupOpt"><option value="pickup"'+(S.co.pickupOpt!=="install"?" selected":"")+'>I\'ll pick it up</option><option value="install"'+(S.co.pickupOpt==="install"?" selected":"")+'>Please install it (labor quoted separately)</option></select></label></div>'+
+          '<div class="shipto"><b>Ships to</b>Avondale Dirt Bike &amp; ATV, Avondale, AZ<br><span style="color:var(--muted);font-size:13px">Dennis contacts you when your parts arrive.</span></div>';
+      }
     } else {
+      h='<h2>Shop order</h2><p style="color:var(--muted);margin-top:0">You\'re signed in as shop staff (demo), so this order ships to the workshop.</p>'+
+        '<div class="route" style="grid-template-columns:1fr"><div class="ropt on"><div class="tag">Mechanic order ✓</div><h4>'+SHIP.shop.title+'</h4><p>'+SHIP.shop.desc+'</p>'+flowSVG(SHIP.shop.to)+'</div></div>';
       h+='<h3 style="margin-top:18px;font-size:18px">Work order</h3><div class="fgrid">'+inp("wo","Work order #")+inp("tech","Technician")+inp("cust","Customer on the ticket",{hint:"optional"})+inp("eta","Needed by",{type:"date"})+'</div>'+
-        '<div class="shipto"><b>Ships to</b>Avondale Dirt Bike &amp; ATV workshop: shop address on file<br><span style="color:var(--muted);font-size:13px">Address pulled from shop settings in production.</span></div>';
+        '<div class="shipto"><b>Ships to</b>Avondale Dirt Bike &amp; ATV workshop: shop address on file</div>';
     }
     h+='<div class="err" id="err"></div><div class="co-nav"><button class="btn btn-light" data-go="shop">&larr; Keep shopping</button><div style="display:flex;gap:8px"><button class="btn btn-light" id="fill">Fill demo details</button><button class="btn btn-primary" id="next">Continue</button></div></div>';
   }
@@ -991,7 +1002,7 @@ function renderCheckout(){renderSteps();renderSummary();
   if(S.step===4){
     var c=S.co;
     h='<h2>Review &amp; place order</h2>'+
-      '<div class="shipto"><b>Delivery</b>'+(m==="customer"?esc(c.name)+"<br>"+esc(c.addr)+", "+esc(c.city)+", "+esc(c.state)+" "+esc(c.zip)+'<br><span style="color:var(--muted);font-size:13px">Drop-ships from the supplier directly to this address</span>':'Avondale workshop (address on file)<br>Work order #'+esc(c.wo)+' · Tech: '+esc(c.tech)+'<br><span style="color:var(--muted);font-size:13px">Drop-ships from the supplier directly to the workshop</span>')+'</div>'+
+      '<div class="shipto"><b>Delivery</b>'+(m==="customer"?(dest()==="pickup"?'Ship to the shop: Avondale Dirt Bike &amp; ATV<br>'+esc(c.name)+' · '+(c.pickupOpt==="install"?"Shop installs":"Customer pickup")+'<br><span style="color:var(--muted);font-size:13px">Dennis contacts you when it arrives</span>':esc(c.name)+"<br>"+esc(c.addr)+", "+esc(c.city)+", "+esc(c.state)+" "+esc(c.zip)+'<br><span style="color:var(--muted);font-size:13px">Drop-ships from the supplier directly to this address</span>'):'Avondale workshop (address on file)<br>Work order #'+esc(c.wo)+' · Tech: '+esc(c.tech)+'<br><span style="color:var(--muted);font-size:13px">Drop-ships from the supplier directly to the workshop</span>')+'</div>'+
       '<div class="shipto"><b>Vehicle</b>'+esc(c.ymm||"Not specified")+(c.vin?" · VIN "+esc(c.vin):"")+(c.notes?'<br><span style="color:var(--muted);font-size:13px">'+esc(c.notes)+'</span>':'')+'</div>'+
       '<div class="shipto"><b>Payment</b>'+(m==="customer"?(S.pay==="card"?"Card ending "+esc((c.cc||"").replace(/\D/g,"").slice(-4)||"····")+" (simulated)":"Wallet (simulated)"):"Shop supplier account (demo)")+'</div>'+
       '<div class="co-nav"><button class="btn btn-light" id="back">&larr; Back</button><button class="btn btn-primary btn-lg" id="place">Place demo order</button></div>';
@@ -1001,11 +1012,12 @@ function renderCheckout(){renderSteps();renderSummary();
 }
 function wireStep(){
   var m=mode(),next=$("#next"),back=$("#back"),fill=$("#fill"),place=$("#place");
+  document.querySelectorAll("[data-dest]").forEach(function(b){b.onclick=function(){keepAll();S.co.dest=b.dataset.dest;renderCheckout();renderSummary();};});
   document.querySelectorAll("[data-pay]").forEach(function(b){b.onclick=function(){S.pay=b.dataset.pay;keepAll();renderCheckout();};});
   if(back)back.onclick=function(){keepAll();S.step--;renderCheckout();window.scrollTo(0,0);};
   if(fill)fill.onclick=function(){
     var d={};
-    if(S.step===1){d=m==="customer"?{name:"Jordan Demo",email:"jordan@example.com",addr:"123 Sample Trail",city:"Avondale",state:"AZ",zip:"85323",phone:""}:{wo:"WO-DEMO-0417",tech:"Demo Tech",cust:"Walk-in demo ticket",eta:""};}
+    if(S.step===1){d=m==="customer"?{name:"Jordan Demo",email:"jordan@example.com",addr:"123 Sample Trail",city:"Avondale",state:"AZ",zip:"85323",phone:"(623) 555-0142"}:{wo:"WO-DEMO-0417",tech:"Demo Tech",cust:"Walk-in demo ticket",eta:""};}
     if(S.step===2){d={ymm:val("ymm")||"1981 Honda CR250R",vin:"",notes:"Demo order"};}
     if(S.step===3){d={cc:"4242 4242 4242 4242",exp:"12/29",cvc:"123"};}
     for(var k in d){var el=document.getElementById(k);if(el&&!el.value.trim())el.value=d[k];}
@@ -1017,14 +1029,15 @@ function wireStep(){
   };
   if(place)place.onclick=placeOrder;
 }
-function keepAll(){document.querySelectorAll("#coPanel input,#coPanel textarea").forEach(function(el){S.co[el.id]=el.value.trim();});}
+function keepAll(){document.querySelectorAll("#coPanel input,#coPanel textarea,#coPanel select").forEach(function(el){S.co[el.id]=el.value.trim();});}
 function validate(){
   var m=mode(),c=S.co;
   if(S.step===1){
     if(m==="customer"){
-      if(!c.name||!c.addr||!c.city||!c.state||!c.zip)return "Please fill in your name and full shipping address, or tap Fill demo details.";
+      if(dest()==="pickup"){if(!c.name)return "Please enter your name, or tap Fill demo details.";}
+      else{if(!c.name||!c.addr||!c.city||!c.state||!c.zip)return "Please fill in your name and full shipping address, or tap Fill demo details.";
+      if(!/^\d{5}$/.test(c.zip))return "ZIP should be 5 digits.";}
       if(!/^\S+@\S+\.\S+$/.test(c.email||""))return "Please enter a valid email for order updates.";
-      if(!/^\d{5}$/.test(c.zip))return "ZIP should be 5 digits.";
     } else { if(!c.wo||!c.tech)return "A work order number and technician are required for mechanic orders."; }
   }
   if(S.step===3&&m==="customer"&&S.pay==="card"){
@@ -1038,20 +1051,20 @@ function renderSummary(){
   var sub=subtotal(), m=mode();
   $("#coSum").innerHTML='<h3 style="font-size:20px">Order summary</h3>'+ids.map(function(id){return lineHTML(id,S.step<4);}).join("")+
    '<div style="margin-top:10px"><div class="tot"><span>Subtotal</span><span>'+money(sub)+'</span></div>'+
-   '<div class="tot"><span>Shipping</span><span>'+(m==="customer"?"Quoted by supplier":"Shop account")+'</span></div>'+
+   '<div class="tot"><span>Shipping</span><span>'+(dest()==="home"?"Quoted by supplier":(dest()==="pickup"?"Free to the shop":"Shop account"))+'</span></div>'+
    '<div class="tot"><span>Sales tax</span><span>Calculated in production</span></div>'+
    '<div class="tot big"><span>Demo total</span><span>'+money(sub)+'</span></div></div>'+
-   '<div class="shipto" style="margin-top:12px"><b>Fulfillment</b>'+(m==="customer"?"Supplier &rarr; customer (drop-ship)":"Supplier &rarr; workshop (drop-ship)")+'</div>';
+   '<div class="shipto" style="margin-top:12px"><b>Fulfillment</b>'+({home:"Supplier &rarr; customer's address",pickup:"Supplier &rarr; shop (customer pickup)",workshop:"Supplier &rarr; workshop (mechanic order)"})[dest()]+'</div>';
 }
 function placeOrder(){
   var m=mode(),n=Math.floor(1000+Math.random()*9000);
-  S.lastOrder={no:"ADB-DEMO-"+n,mode:m,items:JSON.parse(JSON.stringify(S.cart)),total:subtotal(),co:JSON.parse(JSON.stringify(S.co)),pay:S.pay};
+  S.lastOrder={no:"ADB-DEMO-"+n,mode:m,dest:dest(),items:JSON.parse(JSON.stringify(S.cart)),total:subtotal(),co:JSON.parse(JSON.stringify(S.co)),pay:S.pay};
   S.lastOrder.date=new Date().toISOString();S.lastOrder.emailState=(o_cust(S.lastOrder)&&CONFIG.EMAIL_ENDPOINT)?"sending":"off";
   S.orders.push(S.lastOrder);
   S.cart={};persist();updateCart();S.step=1;
   location.hash="#confirmation";
-  if(!o_cust(S.lastOrder)&&CONFIG.EMAIL_ENDPOINT){var so=S.lastOrder,sc=so.co;sendEmail("shoporder",{to:"shop",orderNo:so.no,date:so.date,wo:sc.wo,tech:sc.tech,cust:sc.cust||"",needBy:sc.eta||"",vehicle:sc.ymm||"",vin:sc.vin||"",notes:sc.notes||"",items:itemsArr(so),total:so.total},function(ok){toast(ok?"Shop order ticket emailed to the owner":"Couldn't email the shop ticket");});}
-  if(S.lastOrder.emailState==="sending")sendEmail("receipt",receiptPayload(S.lastOrder),function(ok){S.lastOrder.emailState=ok?"sent":"failed";var el=$("#estat");if(el)el.outerHTML=emailStatus(S.lastOrder);});
+  if(!o_cust(S.lastOrder)&&CONFIG.EMAIL_ENDPOINT){var so=S.lastOrder,sc=so.co;so.shopEmailState="sending";sendEmail("shoporder",{to:"shop",orderNo:so.no,date:so.date,wo:sc.wo,tech:sc.tech,cust:sc.cust||"",needBy:sc.eta||"",vehicle:sc.ymm||"",vin:sc.vin||"",notes:sc.notes||"",items:itemsArr(so),total:so.total},function(ok){so.shopEmailState=ok?"sent":"failed";var el=$("#ostat");if(el)el.outerHTML=ownerStatus(so);});}
+  if(S.lastOrder.emailState==="sending")sendEmail("receipt",receiptPayload(S.lastOrder),function(ok){S.lastOrder.emailState=ok?"sent":"failed";var el=$("#estat");if(el)el.outerHTML=emailStatus(S.lastOrder);var e2=$("#ostat");if(e2)e2.outerHTML=ownerStatus(S.lastOrder);});
 }
 
 /* ---------- confirmation ---------- */
@@ -1064,16 +1077,17 @@ function renderConf(){
    '<div class="ordno">Order '+o.no+'</div>'+
    '<p style="color:var(--muted)">'+(cust?"Your receipt goes to "+esc(c.email)+".":"Linked to work order #"+esc(c.wo)+" for "+esc(c.tech)+".")+' This is a demonstration, so nothing was ordered from the supplier and nothing was charged.</p>'+
    '<h2 style="font-size:22px;margin-top:26px">How it gets there</h2>'+
-   '<div class="flowbig"><div class="node">Supplier<small>ships the parts</small></div><div class="arrow">&rarr;</div><div class="node dest">'+(cust?esc(c.name)+'<small>'+esc(c.city)+', '+esc(c.state)+' '+esc(c.zip)+'</small>':'Avondale workshop<small>WO #'+esc(c.wo)+'</small>')+'</div></div>'+
-   '<p class="note" style="margin-top:0">'+(cust?"Customer orders drop-ship to the customer. The shop never has to handle the box.":"Mechanic orders drop-ship to the workshop, ready for the job on the lift.")+'</p>'+
+   '<div class="flowbig"><div class="node">Supplier<small>ships the parts</small></div><div class="arrow">&rarr;</div><div class="node dest">'+(o.dest==="home"?esc(c.name)+'<small>'+esc(c.city)+', '+esc(c.state)+' '+esc(c.zip)+'</small>':(o.dest==="pickup"?'Avondale shop<small>'+(c.pickupOpt==="install"?"shop installs":"pickup for "+esc(c.name))+'</small>':'Avondale workshop<small>WO #'+esc(c.wo)+'</small>'))+'</div></div>'+
+   '<p class="note" style="margin-top:0">'+({home:"Ships straight to the customer. The shop never handles the box.",pickup:"Ships to the shop. Dennis lets the customer know when it's in.",workshop:"Mechanic orders drop-ship to the workshop, ready for the job on the lift."})[o.dest]+'</p>'+
    '<h2 style="font-size:22px;margin-top:26px">Behind the scenes <span class="planned">Planned workflow</span></h2>'+
    '<ol class="tl">'+
-    '<li><div class="num">1</div><div><b class="tt">The order email reaches the shop inbox</b><span>The subject line carries a trigger tag <code class="tagc">'+tag+'</code> so Gmail can file it automatically.</span></div></li>'+
+    '<li><div class="num">1</div><div><b class="tt">Dennis gets an order ticket by email, every time</b><span>Sent to '+esc(CONFIG.SHOP_EMAIL)+' whether the parts go to the customer, the shop or the workshop. The subject carries <code class="tagc">'+tag+'</code> so Gmail can file it automatically.</span></div></li>'+
     '<li><div class="num">2</div><div><b class="tt">The supplier order is drafted for the shop</b><span>A ready-to-send supplier order with the '+(cust?"customer's":"workshop")+' ship-to address is saved to <b>Drafts</b>. Fitment flags and the vehicle details ('+esc(c.ymm||"not specified")+') are included.</span></div></li>'+
     '<li class="wall"><div class="num">3</div><div><b class="tt">The owner reviews and sends it</b><span>This is the human review step. Nothing goes to the supplier until the owner checks fitment and price and clicks Send himself.</span></div></li>'+
-    '<li><div class="num">4</div><div><b class="tt">Tracking goes out</b><span>'+(cust?"The customer gets a shipping update when the supplier ships.":"The tech sees the expected arrival on the work order.")+'</span></div></li>'+
+    '<li><div class="num">4</div><div><b class="tt">'+(o.dest==="pickup"?"Customer gets the call":"Tracking goes out")+'</b><span>'+({home:"The customer gets a shipping update when the supplier ships.",pickup:"Dennis lets the customer know the moment it arrives.",workshop:"The tech sees the expected arrival on the work order."})[o.dest]+'</span></div></li>'+
    '</ol>'+
-   (cust?'<h2 style="font-size:22px;margin-top:26px">Email receipt</h2>'+emailStatus(o)+receiptPreview(o):'')+
+   '<h2 style="font-size:22px;margin-top:26px">What Dennis receives</h2>'+ownerStatus(o)+ticketPreview(o)+
+   (cust?'<h2 style="font-size:22px;margin-top:26px">Customer\'s email receipt</h2>'+emailStatus(o)+receiptPreview(o):'')+
    '<div style="margin-top:18px"><button class="btn btn-light" data-help="return">Need to return something? Ask the assistant</button></div>'+
    '<h2 style="font-size:22px;margin-top:26px">Items</h2><div class="panel" style="padding:8px 18px">'+items+'<div class="tot big" style="padding:10px 0"><span>Demo total</span><span>'+money(o.total)+'</span></div></div>'+
    '<div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap"><a class="btn btn-primary" href="#shop">Keep shopping</a><a class="btn btn-light" href="#home">Back to home</a></div>';
@@ -1091,8 +1105,9 @@ $("#resetBtn").onclick=function(){S.cart={};S.co={};S.step=1;S.lastOrder=null;S.
 /* ---------- email ---------- */
 function o_cust(o){return o.mode==="customer";}
 function itemsArr(o){return Object.keys(o.items).map(function(id){var p=byId[id];return {name:p.name,sku:p.sku,qty:o.items[id],price:p.price,fit:p.fit==="u"?"Universal / multi-fit":"FITMENT CHECK REQUIRED"};});}
-function receiptPayload(o){var c=o.co;return {type:"receipt",to:c.email,orderNo:o.no,date:o.date,name:c.name,
-  shipTo:[c.name,c.addr,c.city+", "+c.state+" "+c.zip].join("\n"),vehicle:c.ymm||"",vin:c.vin||"",notes:c.notes||"",phone:c.phone||"",items:itemsArr(o),total:o.total,
+function shipToText(o){var c=o.co;return o.dest==="pickup"?"Avondale Dirt Bike & ATV (shop)\n"+(c.pickupOpt==="install"?"Shop installs":"Customer pickup")+": "+c.name:[c.name,c.addr,c.city+", "+c.state+" "+c.zip].join("\n");}
+function receiptPayload(o){var c=o.co;return {type:"receipt",to:c.email,orderNo:o.no,date:o.date,name:c.name,shipMode:o.dest,pickupOpt:c.pickupOpt||"",
+  shipTo:shipToText(o),vehicle:c.ymm||"",vin:c.vin||"",notes:c.notes||"",phone:c.phone||"",items:itemsArr(o),total:o.total,
   payment:o.pay==="card"?"Card ending "+((c.cc||"").replace(/\D/g,"").slice(-4)||"4242")+" (simulated)":"Wallet (simulated)"};}
 function sendEmail(type,payload,cb){
   if(!CONFIG.EMAIL_ENDPOINT){cb&&cb(false);return;}
@@ -1112,13 +1127,31 @@ function emailStatus(o){
   if(o.emailState==="failed")return '<div class="estat warn" id="estat">The email couldn\'t be sent right now. Here\'s what the customer receives:</div>';
   return '<div class="estat" id="estat">Here\'s the receipt email the customer receives:</div>';
 }
+function ownerStatus(o){
+  if(!CONFIG.EMAIL_ENDPOINT)return '<div class="estat">Order ticket for '+esc(CONFIG.SHOP_EMAIL)+'. Here\'s what lands in his inbox:</div>';
+  var st=o_cust(o)?o.emailState:o.shopEmailState;
+  if(st==="sending")return '<div class="estat" id="ostat"><span class="spin"></span>Emailing the order ticket to '+esc(CONFIG.SHOP_EMAIL)+'…</div>';
+  if(st==="sent")return '<div class="estat ok" id="ostat">✓ Order ticket emailed to '+esc(CONFIG.SHOP_EMAIL)+'</div>';
+  return '<div class="estat warn" id="ostat">The ticket email couldn\'t be sent right now. Here\'s what Dennis receives:</div>';
+}
+function ticketPreview(o){var c=o.co,items=itemsArr(o),cust=o_cust(o);
+  var title=cust?"NEW ONLINE PARTS ORDER":"SHOP PARTS ORDER";
+  var sub={home:"Customer order · drop-ship to customer",pickup:"Customer order · ship to SHOP ("+(c.pickupOpt==="install"?"install":"pickup")+")",workshop:"Mechanic order · drop-ship to workshop"}[o.dest];
+  var rows=cust?[["Customer",esc(c.name)],["Email",esc(c.email)],["Ship to",esc(shipToText(o)).replace(/\n/g,"<br>")],["Vehicle",esc(c.ymm||"not given")]]:[["Work order #",esc(c.wo)],["Technician",esc(c.tech)],["Ship to","WORKSHOP"],["Vehicle",esc(c.ymm||"not given")]];
+  var todo=cust?(o.dest==="pickup"?["Check fitment","Order from J&M, ship to the SHOP","Call or text the customer when it arrives","Hit Reply to email the customer"]:["Check fitment","Order from J&M, ship to the CUSTOMER","Write in J&M order # and tracking #","Hit Reply to send tracking to the customer"]):["Approve parts for WO #"+esc(c.wo),"Order from J&M, ship to the WORKSHOP","Add the parts cost to the repair ticket"];
+  return '<div class="mail"><div class="mail-h"><div><b>To</b>'+esc(CONFIG.SHOP_EMAIL)+'</div><div><b>Subject</b>'+(cust?"[ADB-PARTS-ORDER] ":"[ADB-SHOP-ORDER] ")+o.no+' · '+money(o.total)+'</div></div>'+
+   '<div class="mail-b" style="padding:0"><div style="background:#111;color:#fff;padding:10px 16px"><div style="font-size:11px;letter-spacing:2px;color:#ff8a8f;font-weight:700">AVONDALE DIRT BIKE &amp; ATV</div><div style="font-size:19px;font-weight:700">'+title+'</div><div style="font-size:12.5px;color:#ccc">'+sub+'</div></div>'+
+   '<div style="padding:12px 16px"><table>'+rows.map(function(r){return '<tr><td style="width:34%;font-size:12px;font-weight:700;text-transform:uppercase;color:#555">'+r[0]+'</td><td>'+r[1]+'</td></tr>';}).join("")+'</table>'+
+   '<table>'+items.map(function(i){return '<tr><td><b>'+i.qty+'×</b> '+esc(i.name)+'<br><small style="color:#888">'+esc(i.sku)+' · <span style="color:'+(/CHECK/.test(i.fit)?"#b42318":"#17653a")+'">'+i.fit+'</span></small></td><td class="r">'+money(i.price*i.qty)+'</td></tr>';}).join("")+'</table>'+
+   '<div style="font-size:12px;font-weight:700;letter-spacing:1px;margin-top:8px">TO DO</div>'+todo.map(function(t){return '<div style="padding:5px 0;border-bottom:1px dotted #ccc">☐ '+t+'</div>';}).join("")+'</div></div></div>';
+}
 function mailFrame(to,subject,body){
   return '<div class="mail"><div class="mail-h"><div><b>From</b>'+esc(CONFIG.SHOP_NAME)+'</div><div><b>To</b>'+esc(to)+'</div><div><b>Subject</b>'+esc(subject)+'</div></div><div class="mail-b"><div class="brand">'+esc(CONFIG.SHOP_NAME)+'</div>'+body+'</div></div>';}
 function receiptPreview(o){
   var c=o.co,rows=itemsArr(o).map(function(i){return '<tr><td>'+esc(i.name)+'<br><small style="color:#888">'+i.sku+' · Qty '+i.qty+'</small></td><td class="r">'+money(i.price*i.qty)+'</td></tr>';}).join("");
-  var body='<p>Hi '+esc((c.name||"").split(" ")[0])+',</p><p>Thanks for your order! Here\'s your receipt. Your parts ship straight from our supplier to the address below, and we\'ll email tracking once they ship.</p>'+
+  var body='<p>Hi '+esc((c.name||"").split(" ")[0])+',</p><p>Thanks for your order! Here\'s your receipt. '+(o.dest==="pickup"?"Your parts ship to our shop, and we\'ll contact you as soon as they arrive.":"Your parts ship straight from our supplier to the address below, and we\'ll email tracking once they ship.")+'</p>'+
     '<p><b>Order '+o.no+'</b></p><table>'+rows+'<tr><td><b>Total</b></td><td class="r"><b>'+money(o.total)+'</b></td></tr></table>'+
-    '<p><b>Ships to</b><br>'+esc(c.name)+'<br>'+esc(c.addr)+'<br>'+esc(c.city)+', '+esc(c.state)+' '+esc(c.zip)+'</p>'+
+    '<p><b>Ships to</b><br>'+esc(shipToText(o)).replace(/\n/g,"<br>")+'</p>'+
     '<p>Need to return something? Use <b>Help &amp; Returns</b> on our website and give the assistant this order number.</p>'+
     '<p style="color:#888;font-size:12.5px">Demonstration only. No payment was taken and no parts will ship.</p>';
   return mailFrame(c.email,"Your order "+o.no+" from "+CONFIG.SHOP_NAME,body);

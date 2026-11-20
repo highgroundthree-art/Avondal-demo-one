@@ -56,7 +56,7 @@ function receipt_(d) {
     '<td style="padding:8px 0;border-bottom:1px solid #eee;text-align:right">' + money_(num_(i.price) * num_(i.qty)) + '</td></tr>').join('');
   const body =
     '<p>Hi ' + first_(d.name) + ',</p>' +
-    '<p>Thanks for your order! Here is your receipt. Your parts ship straight from our supplier to the address below, and we will email tracking once they ship.</p>' +
+    '<p>Thanks for your order! Here is your receipt. ' + (d.shipMode === 'pickup' ? 'Your parts ship to our shop, and we will contact you as soon as they arrive.' : 'Your parts ship straight from our supplier to the address below, and we will email tracking once they ship.') + '</p>' +
     '<p><b>Order ' + esc_(d.orderNo) + '</b><br><span style="color:#888">' + esc_(fmtDate_(d.date)) + '</span></p>' +
     '<table style="width:100%;border-collapse:collapse;font-size:14px">' + rows +
     '<tr><td style="padding:10px 0"><b>Total</b></td><td style="padding:10px 0;text-align:right"><b>' + money_(total) + '</b></td></tr></table>' +
@@ -113,24 +113,26 @@ function orderTicket_(d) {
   const items = list_(d.items);
   const total = sum_(items);
   const needsFit = items.some(i => /CHECK/.test(String(i.fit)));
-  const html = ticket_('NEW ONLINE PARTS ORDER', 'Customer order · drop-ship to customer', d.orderNo, d.date, [
+  const pickup = d.shipMode === 'pickup';
+  const install = pickup && d.pickupOpt === 'install';
+  const html = ticket_('NEW ONLINE PARTS ORDER', pickup ? 'Customer order · ship to SHOP (' + (install ? 'shop installs' : 'customer pickup') + ')' : 'Customer order · drop-ship to customer', d.orderNo, d.date, [
     ['Customer', esc_(d.name)],
     ['Email', esc_(d.to)],
     ['Phone', esc_(d.phone || 'not given')],
-    ['Ship to (drop-ship)', br_(d.shipTo)],
+    [pickup ? 'Ship to' : 'Ship to (drop-ship)', pickup ? '<b>THE SHOP</b> · ' + (install ? 'install for customer' : 'customer pickup') : br_(d.shipTo)],
     ['Vehicle', esc_(d.vehicle || 'not given')],
     ['VIN / frame #', esc_(d.vin || 'not given')],
     ['Customer notes', esc_(d.notes || 'none')],
     ['Paid', money_(total) + ' · ' + esc_(d.payment)]
   ], itemTable_(items, true), [
     needsFit ? 'Check fitment on the items flagged FITMENT CHECK REQUIRED against the vehicle above' : 'Fitment: all items are universal or multi-fit. Glance over them anyway',
-    'Place the order with ' + CONFIG.SUPPLIER + ' and ship it to the CUSTOMER address above',
+    pickup ? 'Place the order with ' + CONFIG.SUPPLIER + ' and ship it to the SHOP' : 'Place the order with ' + CONFIG.SUPPLIER + ' and ship it to the CUSTOMER address above',
     'Write the J&M order # here: ______________________',
-    'When J&M ships, write the tracking # here: ______________________',
-    'Hit REPLY. It goes straight to the customer. Paste in the tracking #'
+    pickup ? 'When it arrives, call or text the customer: ' + esc_(d.phone || 'see email') : 'When J&M ships, write the tracking # here: ______________________',
+    install ? 'Quote and schedule the install labor' : 'Hit REPLY. It goes straight to the customer' + (pickup ? '' : '. Paste in the tracking #')
   ]);
   return {
-    subject: '[ADB-PARTS-ORDER] ' + d.orderNo + ' · ' + (d.name || '') + ' · ' + money_(total) + (needsFit ? ' · FITMENT CHECK' : ''),
+    subject: '[ADB-PARTS-ORDER] ' + d.orderNo + ' · ' + (d.name || '') + ' · ' + money_(total) + (pickup ? ' · SHIP TO SHOP' : '') + (needsFit ? ' · FITMENT CHECK' : ''),
     html: html,
     text: 'NEW ONLINE PARTS ORDER ' + d.orderNo + '\nCustomer: ' + d.name + ' <' + d.to + '>\nShip to:\n' + d.shipTo + '\nVehicle: ' + (d.vehicle || '') +
       '\n\n' + items.map(i => i.qty + ' x ' + i.name + ' (' + i.sku + ') ' + i.fit).join('\n') + '\nTotal ' + money_(total)
