@@ -313,6 +313,7 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
 .pfind .mt{font-size:12px;color:var(--muted)}
 .pfind .ca{background:var(--orange);color:#fff;border:0;border-radius:8px;padding:7px 10px;font-weight:700;font-size:13px}
 .pfind .ca.added{background:var(--green)}
+.sl{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;padding:4px 0;border-bottom:1px solid #f0f0f0}.sl b{white-space:nowrap;color:#17653a}.sl.miss b{color:#b42318}
 .rma{background:#fff8f2;border:1.5px dashed var(--orange);border-radius:10px;padding:10px 12px;margin-top:6px;font-family:var(--head);font-size:18px;letter-spacing:.06em;white-space:normal}
 
 @media (max-width:900px){
@@ -654,6 +655,7 @@ footer.site .wrap{display:block}
     </ol>
     <div class="tog"><div><b>Mechanic order mode</b><small>Simulates a technician signed in. Orders ship to the workshop.</small></div><label class="sw"><input type="checkbox" id="staffTog"><span></span></label></div>
     
+    <div class="tog" style="display:block"><b>Chat search log</b><small style="display:block;color:var(--muted);font-size:12px;margin-bottom:6px">What people typed and whether it matched. Use the misses to train the slang list.</small><div id="slog"></div></div>
     <div class="tog"><div><b>Reset demo</b><small>Empties the cart and goes back to Home.</small></div><button class="btn btn-light" id="resetBtn" style="padding:8px 12px">Reset</button></div>
     <p class="note">Shortcut: press <b>P</b> to open or close this panel.</p>
   </div>
@@ -774,7 +776,8 @@ var P=[
  [31,"Wheel Bearing Kit 25-1734","BK734","Wide Open Products",66.30,"wheels",[],"Wheel bearing kit (cross-ref 25-1734). See supplier listing for fitment."],
  [32,"Rear Wheel Bearing Kit, Yamaha 25-1567","BK151","Wide Open Products",27.38,"wheels",["yamaha"],"Yamaha rear wheel bearing kit (cross-ref 25-1567). Confirm model."]
 ];
-var PRODUCTS=P.map(function(p,i){return {id:"p"+i,sku:p[2],brand:p[3],name:p[1],cat:p[5],price:p[4],fit:p[6],desc:p[7],rank:i,img:"images/parts/jm"+p[0]+".jpg"};});
+var VTYPE={"4": "any", "6": "any", "12": "atv", "13": "any", "63": "atv", "14": "moto", "64": "atv", "15": "moto", "16": "any", "9": "any", "18": "any", "66": "any", "67": "any", "19": "any", "25": "any", "0": "atv", "38": "moto", "52": "any", "49": "any", "54": "any", "39": "any", "40": "any", "59": "atv", "61": "atv", "62": "atv", "55": "any", "20": "any", "34": "atv", "21": "atv", "23": "any", "24": "any", "47": "any", "43": "any", "44": "any", "3": "moto", "27": "atv4", "28": "atv4", "42": "atv", "30": "atv4", "10": "atv", "31": "any", "32": "any"};
+var PRODUCTS=P.map(function(p,i){return {id:"p"+i,vt:VTYPE[p[0]]||"any",sku:p[2],brand:p[3],name:p[1],cat:p[5],price:p[4],fit:p[6],desc:p[7],rank:i,img:"images/parts/jm"+p[0]+".jpg"};});
 var byId={};PRODUCTS.forEach(function(p){byId[p.id]=p;});
 function catName(c){for(var i=0;i<CATS.length;i++)if(CATS[i][0]===c)return CATS[i][1];return c;}
 function vehShort(id){for(var i=0;i<VEH.length;i++)if(VEH[i].id===id)return VEH[i].short||VEH[i].label;return id;}
@@ -1081,7 +1084,7 @@ $("#presX").onclick=function(){$("#pres").classList.remove("on");};
 var st=$("#staffTog");
 function applyFlags(){document.body.classList.toggle("staff",S.staff);st.checked=S.staff;}
 st.onchange=function(){S.staff=st.checked;S.step=1;persist();applyFlags();toast(S.staff?"Mechanic order mode on: orders ship to the workshop":"Customer mode: orders ship to the customer");if($("#v-checkout").classList.contains("on"))renderCheckout();};
-$("#resetBtn").onclick=function(){S.cart={};S.co={};S.step=1;S.lastOrder=null;S.orders=[];chatStarted=false;$("#chatLog").innerHTML="";closeChat();S.q="";S.cat="all";S.veh="any";S.staff=false;$("#q").value="";persist();applyFlags();updateCart();$("#pres").classList.remove("on");location.hash="#home";route();toast("Demo reset");};
+$("#resetBtn").onclick=function(){S.cart={};S.co={};S.step=1;S.lastOrder=null;S.orders=[];chatStarted=false;CH.ctx=null;$("#chatLog").innerHTML="";closeChat();S.q="";S.cat="all";S.veh="any";S.staff=false;$("#q").value="";persist();applyFlags();updateCart();$("#pres").classList.remove("on");location.hash="#home";route();toast("Demo reset");};
 
 
 /* ---------- email ---------- */
@@ -1148,7 +1151,7 @@ function me(txt){$("#chatLog").appendChild(cEl(esc(txt),"msg me"));scrollLog();}
 function qrRow(qrs){var r=document.createElement("div");r.className="qrs";
   qrs.forEach(function(q){var b=document.createElement("button");b.type="button";b.textContent=q[0];
     b.onclick=function(){if(q[2]!=="toggle"){r.querySelectorAll("button").forEach(function(x){x.disabled=true;});me(q[0]);}q[1](b);};r.appendChild(b);});return r;}
-function menu(intro){
+function menu(intro){CH.ctx=null;
   bot(intro||"What can I help you with?",[
    ["Find a part",function(){CH.state="find";bot("Tell me what you need. You can include your bike, e.g. <i>\"air filter for my Honda TRX420\"</i> or <i>\"ball joint Kawasaki\"</i>.");}],
    ["Start a return",startReturn],["Return policy",function(){showPolicy();}],["Where's my order?",function(){CH.state="track";bot("Sure. What's your order number? It's on your receipt email and starts with ADB-.",lastOrderQR());}],
@@ -1219,46 +1222,117 @@ function submitReturn(freeLabel,review,reasonTxt){
 }
 
 /* ---------- part finder (chat) ---------- */
-var STOP="i im i'm need needs a an the for my on of to some do you have got any part parts looking want wanted get find me please new replacement replace with and or is it that this one".split(" ");
-var SYN={pad:"pads",pads:"pad",plug:"spark",plugs:"spark",tyre:"tire",tyres:"tire",tires:"tire",shoes:"shoe",filters:"filter",sprockets:"sprocket",cables:"cable",seals:"seal",bearings:"bearing",gaskets:"gasket",lever:"lever",oil:"oil",lube:"lube",light:"light",lights:"light",grips:"grip",carb:"carburetor",carby:"carburetor",tube:"tube",tubes:"tube",chains:"chain",rotor:"rotor",rotors:"rotor",fork:"fork",forks:"fork",shock:"suspension"};
-function detectVeh(low){
-  if(/ice\s?bear/.test(low))return "custom";
-  if(/honda|xr\s?-?\d|crf|cr\s?-?\d{2,3}|trx|pioneer|sportrax/.test(low))return "honda";
-  if(/kawasaki|klx|klr|kfx|\bkx/.test(low))return "kawasaki";
-  if(/yamaha|yz|raptor|grizzly|banshee|\bttr|\bwr\d/.test(low))return "yamaha";
-  if(/polaris|sportsman|outlaw|ranger|rzr|phoenix|sawtooth|predator/.test(low))return "polaris";
-  if(/can-?am|commander|outlander|renegade|\bds\s?\d/.test(low))return "canam";
-  if(/arctic\s?cat/.test(low))return "arcticcat";
-  if(/cf\s?moto/.test(low))return "cfmoto";
-  if(/gy6|chinese|pit\s?bike|taotao|coolster|ssr/.test(low))return "chinese";
-  return null;
-}
-function searchParts(text){
-  var low=text.toLowerCase(),veh=detectVeh(low);
-  var clean=low.replace(/\b(19|20)?\d{2}\b|xr\s?-?\d+|crf\s?-?\d+r?|cr\s?-?\d+r?|trx\s?\d*|ice\s?bear|honda|kawasaki|yamaha|polaris|can-?am|arctic\s?cat|cf\s?moto|trike|bike|atv|utv|quad|dirt/g," ");
-  var toks=clean.split(/[^a-z0-9"]+/).filter(function(t){return t.length>1&&STOP.indexOf(t)<0;});
-  var ex=[];toks.forEach(function(t){ex.push(t);if(SYN[t])ex.push(SYN[t]);if(t.length>3&&t.slice(-1)==="s")ex.push(t.slice(0,-1));});
-  var res=PRODUCTS.filter(prodVisible).map(function(p){
-    var nm=p.name.toLowerCase(),hay=(p.name+" "+catName(p.cat)+" "+p.desc).toLowerCase(),sc=0;
-    ex.forEach(function(t){if(nm.indexOf(t)>=0)sc+=3;else if(hay.indexOf(t)>=0)sc+=1;});
+var STOP="i im i'm ive i've need needs needed a an the for my on of to some do you have got any anything part parts looking look want wanted get find me please new replacement replace with and or is it that this one got sell selling carry stock what which whats can could should would hey hi hello thanks thank like just also too front rear left right".split(" ");
+var SYN={pad:"pads",pads:"pad",shoes:"shoe",filters:"filter",sprockets:"sprocket",cables:"cable",seals:"seal",bearings:"bearing",gaskets:"gasket",grips:"grip",tires:"tire",rotors:"rotor",levers:"lever"};
+/* Rider slang / jargon -> catalog words. Grow this list from real customer searches. */
+var SLANG=[
+ [/\bjug\b|top[\s-]?end|big bore|rebuild kit/,"piston|gasket"],[/\bpiston\b|\brings?\b/,"piston"],
+ [/\bplugs?\b|sparkplug|spark plug/,"spark plug"],[/\bcarb(y|s|ie)?\b|carburet/,"carburetor"],
+ [/fuel valve|gas valve|fuel tap|gas tap|petcock/,"petcock"],[/kill switch|stop switch|stop button|kill button|shut ?off/,"kill switch"],
+ [/\bbrain\b|\bcdi\b|ignition box|ecu/,"cdi"],[/\bcoil\b|ignition coil/,"ignition coil"],
+ [/\br\/?r\b|reg(ulator)?(\s|\/)?rec(tifier)?|voltage reg|regulator|rectifier/,"regulator rectifier"],[/\bstator\b|charging/,"stator"],
+ [/\bstarter\b|starter motor|won'?t crank|clicks?/,"starter"],[/\bbattery\b|\bbatt\b/,"battery"],
+ [/\bpads?\b|brake pad|stopping/,"brake pads"],[/\bshoes?\b|drum brake/,"brake shoes"],[/\brotors?\b|\bdiscs?\b|brake disc/,"brake rotor"],
+ [/\bbrakes?\b/,"brake"],[/air ?filter|air ?box|\bfilter\b|\buni\b|foam filter/,"air filter"],[/filter oil|air filter oil/,"filter oil"],
+ [/gear ?oil|gear ?lube|diff(erential)? oil|tranny oil|trans(mission)? oil/,"gear lube"],
+ [/\bknobb(y|ies)\b|\btires?\b|\btyres?\b|\brubber\b|\bmeats?\b/,"tire"],
+ [/head bearings?|steering stem|steering bearings?|neck bearings?/,"steering bearing"],
+ [/wheel bearings?|hub bearings?/,"wheel bearing"],[/swing ?arm|linkage/,"swing arm bearing"],
+ [/ball ?joints?/,"ball joint"],[/tie ?rods?|steering rods?/,"tie rod"],[/\bcv\b|half ?shaft|\baxles?\b|cv boot/,"cv axle"],
+ [/fork seals?|leaking forks?|dust seals?|seal kit/,"fork seal"],
+ [/clutch cable/,"clutch cable"],[/throttle cable|gas cable|throttle/,"throttle cable"],[/\bcables?\b/,"cable"],
+ [/\blevers?\b|brake handle|clutch handle/,"lever"],[/\bgrips?\b|hand grips?/,"grip"],
+ [/\bsprockets?\b|front gear|counter ?shaft|\bgears?\b(?!\s*(oil|lube))/,"sprocket"],[/\bchain\b/,"chain"],
+ [/exhaust gasket|header gasket|pipe gasket|exhaust leak/,"exhaust gasket"],[/\bgaskets?\b|head gasket|base gasket/,"gasket"]
+];
+var MOTO=/\bktm\b|husq|husky|gas ?gas|\bbeta\b|sherco|\bdirt ?bike|\bmotorcycle|\bmoto\b|\bmx\b|enduro|\bbike\b|pit ?bike|\byz\d*|\bcrf|\bcr\s?\d|\bxr\s?\d|\bkx\s?\d|\bkdx|\bklx|\bklr|\brm\s?z?\d|\bdrz|\bttr|\bwr\s?\d|\bexc\b|\bsx\b|\bsxf|\bxc\b|\bxcw/;
+var ATV=/\bquads?\b|\batv\b|four ?wheeler|4 ?wheeler|\butv\b|side ?by ?side|\bsxs\b|\btrx|sportsman|raptor|banshee|grizzly|rancher|foreman|rubicon|recon|outlaw|scrambler|predator|brute|kfx|bayou|prairie|outlander|renegade|commander|pioneer|rzr|ranger|blaster|warrior|wolverine|kodiak|big bear|sportrax|ltz|ltr|king ?quad/;
+var ATC=/\batc\b|three ?wheeler|3 ?wheeler|trike|ice ?bear/;
+var MAKES=[["honda",/honda|\bcrf|\bcr\s?\d|\bxr\s?\d|\btrx|rancher|foreman|rubicon|recon|pioneer|sportrax|\batc\b/],["kawasaki",/kawasaki|\bkawi|\bkx|\bklx|\bklr|kfx|bayou|prairie|brute/],
+ ["yamaha",/yamaha|\byz|raptor|banshee|grizzly|\bttr|\bwr\s?\d|blaster|warrior|wolverine|kodiak|big bear/],["polaris",/polaris|sportsman|outlaw|scrambler|predator|ranger|rzr|phoenix|sawtooth/],
+ ["canam",/can-?am|outlander|renegade|commander|\bds\s?\d/],["arcticcat",/arctic ?cat/],["cfmoto",/cf ?moto/],["chinese",/gy6|chinese|taotao|coolster|\bssr\b|apollo/],
+ ["ktm",/\bktm\b/],["husqvarna",/husq|husky/],["gasgas",/gas ?gas/],["beta",/\bbeta\b/],["suzuki",/suzuki|\bdrz|\brm\s?z?\d|\bltz|\bltr|king ?quad/]];
+var MAKE_LABEL={ktm:"KTM",husqvarna:"Husqvarna",gasgas:"GasGas",beta:"Beta",suzuki:"Suzuki"};
+function makeLabel(id){return MAKE_LABEL[id]||vehShort(id);}
+function detectVeh(low){if(/ice ?bear/.test(low))return "custom";for(var i=0;i<MAKES.length;i++)if(MAKES[i][1].test(low))return MAKES[i][0];return null;}
+function detectType(low){if(ATC.test(low))return "atc";if(ATV.test(low))return "atv";if(MOTO.test(low))return "moto";return null;}
+function typeOk(p,t){if(!t||p.vt==="any")return true;if(t==="moto")return p.vt==="moto";if(t==="atv")return p.vt==="atv"||p.vt==="atv4";if(t==="atc")return p.vt==="atv";return true;}
+function vehicleWords(low){var bits=[];var y=low.match(/\b(19|20)\d{2}\b/);if(y)bits.push(y[0]);
+  var mk=detectVeh(low);var brand=low.match(/honda|kawasaki|yamaha|polaris|suzuki|ktm|husqvarna|gas ?gas|beta|can-?am|arctic ?cat|cf ?moto/);if(brand)bits.push(brand[0]);
+  var models=low.match(/\b(?!19\d\d\b|20\d\d\b)[a-z]{1,5}-?\d{2,4}[a-z]{0,3}\b/g)||[];models.forEach(function(m){if(!/^\d+x\d+/.test(m))bits.push(m);});
+  var names=low.match(/rancher|foreman|rubicon|recon|pioneer|sportrax|raptor|banshee|grizzly|blaster|warrior|wolverine|kodiak|big bear|sportsman|outlaw|scrambler|predator|ranger|rzr|outlander|renegade|commander|brute|bayou|prairie|ice ?bear/g)||[];names.forEach(function(n){bits.push(n);});
+  if(!models.length&&(brand||names.length||ATC.test(low))){var cc=low.match(/\b\d{2,4}(cc)?\b(?!\s*(tooth|teeth|t\b|mm|in|inch|"|x|ply))/g)||[];cc.forEach(function(c){if(!/^(19|20)\d{2}$/.test(c))bits.push(c);});}
+  if(ATC.test(low)&&!/atc/.test(bits.join(" ")))bits.unshift("atc");
+  var seen={};return bits.filter(function(b){if(seen[b])return false;seen[b]=1;return true;}).map(function(b){return /^[a-z]{1,5}-?\d/.test(b)||/^(ktm|cfmoto|cf moto|atc)$/.test(b)?b.toUpperCase():b.replace(/\b\w/g,function(c){return c.toUpperCase();});}).join(" ");}
+function searchParts(text,ctx){
+  var low=text.toLowerCase();ctx=ctx||{};
+  var dv=detectVeh(low),dt=detectType(low);
+  var veh=dv||((dt&&dt!==ctx.vt)?null:ctx.veh)||null, vt=dt||(dv&&dv!==ctx.veh?null:ctx.vt)||null;
+  var mapped=[];SLANG.forEach(function(r){if(r[0].test(low))r[1].split("|").forEach(function(m){if(mapped.indexOf(m)<0)mapped.push(m);});});
+  var clean=low.replace(MOTO," ").replace(ATV," ").replace(ATC," ");MAKES.forEach(function(m){clean=clean.replace(m[1]," ");});
+  var toks=clean.split(/[^a-z"]+/).filter(function(t){return t.length>2&&STOP.indexOf(t)<0;});
+  var words=mapped.join(" ").split(" ").concat(toks).filter(Boolean);
+  var ex=[];words.forEach(function(t){if(ex.indexOf(t)<0)ex.push(t);if(SYN[t])ex.push(SYN[t]);if(t.length>3&&t.slice(-1)==="s")ex.push(t.slice(0,-1));});
+  var partNo=null;(text.match(/\b[A-Z]{2,5}\d{2,6}[A-Z]?\b/ig)||[]).forEach(function(c){if(PRODUCTS.some(function(p){return p.sku.toLowerCase()===c.toLowerCase();}))partNo=c;});
+  var res=PRODUCTS.map(function(p){
+    var nm=p.name.toLowerCase(),hay=(p.name+" "+catName(p.cat)+" "+p.desc+" "+p.brand).toLowerCase(),sc=0;
+    if(partNo&&p.sku.toLowerCase()===partNo.toLowerCase())sc+=20;
+    ex.forEach(function(t){var re=new RegExp("\\b"+t.replace(/[^a-z0-9]/g,"")+"s?\\b");if(re.test(nm))sc+=3;else if(re.test(hay))sc+=1;});
     return {p:p,sc:sc};}).filter(function(r){return r.sc>=3;});
-  if(veh&&veh!=="custom")res=res.filter(function(r){return fitsVeh(r.p,veh);});
+  if(mapped.length&&!partNo){var ph=res.filter(function(r){var h=(r.p.name+" "+r.p.desc).toLowerCase();return mapped.some(function(m){return m.split(" ").length<2||h.indexOf(m)>=0||h.indexOf(m.replace(/ /g,"-"))>=0;});});res=ph;}
+  var top=res.reduce(function(m,r){return Math.max(m,r.sc);},0);res=res.filter(function(r){return r.sc>=top*0.6;});
+  var hadPartHits=res.length;
+  res=res.filter(function(r){return typeOk(r.p,vt);});
+  var known=veh&&VEH.some(function(v){return v.id===veh;});
+  if(veh&&veh!=="custom")res=res.filter(function(r){return r.p.fit==="u"||r.p.fit.length===0||(known&&fitsVeh(r.p,veh));});
   res.sort(function(a,b){return b.sc-a.sc||(a.p.fit==="u")-(b.p.fit==="u")||a.p.rank-b.p.rank;});
-  return {veh:veh,toks:toks,list:res.slice(0,4).map(function(r){return r.p;}),total:res.length};
+  return {veh:veh,vt:vt,known:known,vehText:vehicleWords(low),toks:words,hasPart:words.length>0||!!partNo,hadPartHits:hadPartHits,list:res.slice(0,4).map(function(r){return r.p;}),total:res.length};
 }
+var SEARCHLOG=[];try{SEARCHLOG=JSON.parse(localStorage.getItem("adb_searchlog")||"[]");}catch(e){}
+function notWhat(text,r,vlabel){
+  SEARCHLOG.push({q:text,n:r.total,shown:r.list.map(function(p){return p.name;}),rejected:true,t:Date.now()});saveLog();
+  CH.state="correct";CH.corr={q:text,vlabel:vlabel};
+  bot("Sorry about that. What were you looking for? Use your own words. It helps us teach the assistant how riders actually ask.");
+}
+function handleCorrection(t){var c=CH.corr||{};
+  SEARCHLOG.push({q:c.q,correction:t,t:Date.now()});saveLog();CH.state="find";
+  var r=searchParts(t,CH.ctx||{});
+  if(r.list.length){showFind(t);return;}
+  CH.state="idle";
+  bot("Thanks, noted. That isn't in the online catalog yet, but the shop can get it.",[["Request this part",function(){startRequest(t,c.vlabel||"");}],["Main menu",function(){menu();}]]);
+}
+function saveLog(){SEARCHLOG=SEARCHLOG.slice(-200);try{localStorage.setItem("adb_searchlog",JSON.stringify(SEARCHLOG));}catch(e){}renderSearchLog();}
+function logSearch(q,r){SEARCHLOG.push({q:q,n:r.total,veh:r.veh||"",vt:r.vt||"",t:Date.now()});SEARCHLOG=SEARCHLOG.slice(-200);try{localStorage.setItem("adb_searchlog",JSON.stringify(SEARCHLOG));}catch(e){}renderSearchLog();}
+function renderSearchLog(){var el=document.getElementById("slog");if(!el)return;var L=SEARCHLOG.slice(-12).reverse();
+  el.innerHTML=(L.length?L.map(function(x){var tag=x.correction?'meant: "'+esc(x.correction)+'"':(x.rejected?'rejected':(x.n?x.n+' found':'no match'));var bad=x.correction||x.rejected||!x.n;return '<div class="sl'+(bad?' miss':'')+'"><span>'+esc(x.q)+'</span><b>'+tag+'</b></div>';}).join(""):'<div class="note">No searches yet.</div>')+
+   (L.length?'<button class="btn btn-light" id="copyLog" style="padding:6px 10px;margin-top:8px;font-size:12.5px">Copy log for training</button>':'');
+  var cb=document.getElementById("copyLog");if(cb)cb.onclick=function(){var txt=SEARCHLOG.map(function(x){return [new Date(x.t).toLocaleString(),x.q,x.correction?"MEANT: "+x.correction:(x.rejected?"REJECTED: "+(x.shown||[]).join("; "):(x.n?x.n+" found":"NO MATCH"))].join(" | ");}).join("\n");
+    try{navigator.clipboard.writeText(txt).then(function(){toast("Search log copied. Paste it to Claude for tuning.");},function(){toast("Couldn't copy here");});}catch(e){toast("Couldn't copy here");}};}
 function showFind(text){
-  var r=searchParts(text);
-  if(r.veh==="custom"){bot("Custom builds like the Ice Bear trike need parts matched by hand. Send the shop a part request and Dennis will source it.",[["Request this part",function(){startRequest(text,"Ice Bear trike");}],["Main menu",function(){menu();}]]);return;}
+  var r=searchParts(text,CH.ctx||{});logSearch(text,r);
+  var sameVeh=CH.ctx&&CH.ctx.veh===r.veh&&CH.ctx.vt===r.vt;
+  CH.ctx={veh:r.veh,vt:r.vt,vehText:r.vehText||(sameVeh?CH.ctx.vehText:"")};
+  var vlabel=CH.ctx.vehText||(r.veh?makeLabel(r.veh):"");
+  if(r.veh==="custom"){bot("Custom builds like the Ice Bear trike need parts matched by hand. Send the shop a part request and Dennis will source it.",[["Request a part",function(){startRequest(text,"Ice Bear trike");}],["Main menu",function(){menu();}]]);return;}
+  if(!r.hasPart){CH.state="find";
+    bot("Got it: "+(vlabel?"<b>"+esc(vlabel)+"</b>":"your machine")+(r.vt?" ("+({moto:"dirt bike",atv:"quad / UTV",atc:"three-wheeler"})[r.vt]+")":"")+". What part do you need? Slang is fine, like <i>top end</i>, <i>plug</i>, <i>pads</i>, <i>head bearings</i> or <i>R/R</i>.");return;}
   if(!r.list.length){CH.state="idle";
-    bot("I couldn't find that in our online catalog. The shop can source most dirt bike and ATV parts, though. Want me to send them a part request? They'll email you back with price and availability.",
-      [["Yes, request this part",function(){startRequest(text,r.veh?vehShort(r.veh):"");}],["Search again",function(){CH.state="find";bot("Okay. Try describing it another way.");}],["Main menu",function(){menu();}]]);return;}
-  var vtxt=r.veh?" listed for <b>"+esc(vehShort(r.veh))+"</b>":"";
-  bot("Here's what I found"+vtxt+":",null,function(){
+    var low=text.toLowerCase(),quadOnly=/ball ?joint|tie ?rod|\bcv\b|half ?shaft|a-?arm/.test(low);
+    var why;
+    if((r.vt==="moto"||r.vt==="atc")&&quadOnly)why="Heads up: "+(r.vt==="moto"?"dirt bikes":"three-wheelers")+" don't use "+(/tie ?rod/.test(low)?"tie rods":(/cv|half/.test(low)?"CV axles":(/a-?arm/.test(low)?"A-arms":"ball joints")))+". Those are quad and UTV parts. Did you mean steering head bearings, fork seals, or something else?";
+    else if(r.veh&&!r.known)why="We don't have any "+esc(makeLabel(r.veh))+" parts in the online catalog yet.";
+    else if(r.hadPartHits&&r.vt)why="We don't carry that for a "+({moto:"dirt bike",atv:"quad / UTV",atc:"three-wheeler"})[r.vt]+" in the online catalog yet.";
+    else why="I couldn't find that in the online catalog.";
+    bot(why+" The shop can source it, though. Want me to send Dennis a part request? He'll email you back with price and availability.",
+      [["Yes, request this part",function(){startRequest(text,vlabel);}],["Search again",function(){CH.state="find";bot("Okay. Try describing it another way.");}],["Main menu",function(){menu();}]]);return;}
+  var vtxt=vlabel?" for your <b>"+esc(vlabel)+"</b>":"";
+  var note=(r.veh&&!r.known)?"<br><small style=\"color:#8a5a10\">Nothing in the online catalog is listed for "+esc(makeLabel(r.veh))+" yet, so these are universal items. Check the specs.</small>":"";
+  bot("Here's what I found"+vtxt+":"+note,null,function(){
     var box=document.createElement("div");box.className="pfind";
     box.innerHTML=r.list.map(function(p){return '<div class="row"><div class="th">'+pic(p)+'</div><div><div class="nm">'+esc(p.name)+'</div><div class="mt">'+esc(p.brand)+' · '+money(p.price)+' · '+(p.fit==="u"?"Universal":"Fitment check")+'</div></div><button class="ca" data-chatadd="'+p.id+'">Add</button></div>';}).join("");
     $("#chatLog").appendChild(box);
-    var q=[];if(r.total>4)q.push(["See all "+r.total+" in the shop",function(){S.q=r.toks.join(" ");S.cat="all";S.veh=(r.veh&&r.veh!=="custom")?r.veh:"any";$("#q").value=S.q;closeChat();location.hash="#shop";if(location.hash==="#shop")renderShop();}]);
-    q.push(["Not what I need",function(){startRequest(text,r.veh?vehShort(r.veh):"");}]);
+    var q=[];if(r.total>4)q.push(["See all "+r.total+" in the shop",function(){S.q=r.toks.slice(0,2).join(" ");S.cat="all";S.veh=(r.veh&&r.known)?r.veh:"any";$("#q").value=S.q;closeChat();location.hash="#shop";if(location.hash==="#shop")renderShop();}]);
+    q.push(["Not what I need",function(){notWhat(text,r,vlabel);}]);
     $("#chatLog").appendChild(qrRow(q));scrollLog();CH.state="find";
   });
 }
@@ -1282,6 +1356,7 @@ function finishRequest(email){
 }
 function freeText(t){
   var low=t.toLowerCase();
+  if(CH.state==="correct"){handleCorrection(t);return;}
   if(CH.state==="req_veh"){CH.req.veh=t;askReqEmail();return;}
   if(CH.state==="req_email"){finishRequest(t.trim());return;}
   if(/adb-?demo-?\d{4}/i.test(t)||CH.state==="order"||CH.state==="track"){handleOrderNo(t);return;}
@@ -1289,7 +1364,8 @@ function freeText(t){
   if(/\breturn\b|send (it|this) back/.test(low)&&!/policy|how long|window/.test(low)){startReturn();return;}
   if(/policy/.test(low)){showPolicy();return;}
   var best=null,score=0;FAQ.forEach(function(f){var s=0;f.k.forEach(function(k){if(low.indexOf(k)>=0)s+=k.length;});if(s>score){score=s;best=f;}});
-  var pr=searchParts(t);
+  var pr=searchParts(t,CH.ctx||{});
+  if(!pr.hasPart&&(pr.veh||pr.vt)){showFind(t);return;}
   if(pr.list.length&&(!best||score<6||/need|looking|want|have|got|sell|buy|price|cost|for my/.test(low))){showFind(t);return;}
   if(best){bot(best.a,[["Start a return",startReturn],["Main menu",function(){menu();}]]);return;}
   if(/need|looking|want|have|got|sell|buy|price|for my/.test(low)){showFind(t);return;}
@@ -1306,7 +1382,8 @@ document.addEventListener("click",function(e){var t=e.target.closest("[data-help
 $("#chatX").onclick=closeChat;
 $("#chatForm").addEventListener("submit",function(e){e.preventDefault();var i=$("#chatTxt"),v=i.value.trim();if(!v)return;i.value="";me(v);freeText(v);});
 
-applyFlags();updateCart();route();
+applyFlags();updateCart();route();renderSearchLog();
+window.__adb={searchParts:searchParts,SLANG:SLANG};
 })();
 </script>
 </body>
