@@ -1,7 +1,8 @@
 const CONFIG = {
   SHOP_NAME: 'Avondale Dirt Bike & ATV',
   SHOP_PHONE: '(480) 270-4465',
-  SHOP_INBOX: 'doughertyent@gmail.com',
+  SHOP_INBOX: 'parts@avondaledirtbikeatv.com',
+  SERVICE_INBOX: 'service@avondaledirtbikeatv.com',
   SUPPLIER: 'J&M ATV/UTV Supply (jmatv.com)',
   TOKEN: 'adb-demo-2026',
   DAILY_LIMIT: 40,
