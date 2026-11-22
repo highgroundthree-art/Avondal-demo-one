@@ -110,6 +110,10 @@ section.block{padding:56px 0}
 .ownfit input{width:20px;height:20px;margin-top:2px;flex-shrink:0}
 @media (max-width:900px){.ride-grid{grid-template-columns:1fr 1fr}}
 @media (max-width:520px){.ride-grid{grid-template-columns:1fr}}
+.lookup{background:#f4f7fb;border:1px solid #d5e0ee;border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:14px}
+.lookup-row{display:flex;gap:8px;margin:8px 0 4px}
+.lookup-row input{flex:1;min-width:0;border:1px solid #c9d3df;border-radius:8px;padding:10px 12px;font-size:15px}
+.lookup small{color:var(--muted)}
 .rides{display:flex;flex-wrap:wrap;gap:10px}
 .ride{background:var(--card);border:1px solid #e2dccf;border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600}
 .ride small{font-weight:500;color:var(--muted)}
@@ -625,6 +629,11 @@ footer.site .wrap{display:block}
     <div>
       <div class="chipbar" id="chipBar"></div>
       <div class="vehicle-note" id="vehNote" hidden></div>
+      <div class="lookup" id="lookup">
+        <b>Not sure which part fits?</b> Look up the part number, then paste it in the search box above.
+        <div class="lookup-row"><input id="luQ" placeholder="e.g. Uni air filter for 2022 Honda CRF450R" autocomplete="off"><button class="btn btn-light" id="luGo" type="button">Look it up</button></div>
+        <small>Opens a Google search in a new tab. Part numbers like <b>NU-4153ST</b> or <b>AF4153</b> both work in our search.</small>
+      </div>
       <div class="results-meta"><span id="count"></span>
         <label>Sort <select id="sort"><option value="feat">Featured</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option><option value="az">Name A–Z</option></select></label></div>
       <div class="grid-p" id="grid"></div>
@@ -875,6 +884,8 @@ function fitsVeh(p,v){if(v==="any")return true;if(p.fit==="u")return true;return
 function prodVisible(p){
   return true;
 }
+function pnNorm(x){return String(x).toLowerCase().replace(/^nu-?/,"").replace(/^af/,"").replace(/[^a-z0-9]/g,"");}
+function pnMatch(p,q){var n=pnNorm(q);if(n.length<4||!/\d/.test(n))return false;var cands=[p.sku].concat((p.name.match(/[A-Z]{1,4}-?\d{3,6}[A-Z]{0,3}/g)||[]));return cands.some(function(c){return pnNorm(c)===n;});}
 function filtered(){
   var q=S.q.trim().toLowerCase();
   var list=PRODUCTS.filter(function(p){
@@ -882,6 +893,7 @@ function filtered(){
     if(S.cat!=="all"&&p.cat!==S.cat)return false;
     if(!fitsVeh(p,S.veh))return false;
     if(RIDE.active){if(!fitsRide(p))return false;if(RIDE.sys&&p.cat!==RIDE.sys)return false;}
+    if(q&&pnMatch(p,q))return true;
     if(q){var hay=(p.name+" "+catName(p.cat)+" "+p.desc+" "+p.sku).toLowerCase();
       var terms=q.split(/\s+/);for(var i=0;i<terms.length;i++){if(hay.indexOf(terms[i])<0)return false;}}
     return true;});
@@ -948,7 +960,7 @@ function renderShop(){
   }
   var list=filtered();
   $("#count").textContent=list.length+" part"+(list.length===1?"":"s")+(S.q?' matching "'+S.q+'"':"");
-  $("#grid").innerHTML=list.length?list.map(card).join(""):'<div class="empty"><b>No parts match that search.</b><br>Try a different word, or <button class="btn btn-light" data-clear style="margin-top:10px;padding:8px 14px">clear filters</button></div>';
+  $("#grid").innerHTML=list.length?list.map(card).join(""):'<div class="empty"><b>No parts match that search.</b><br>'+(S.q&&/\d{3,}/.test(S.q)?'Part '+esc(S.q)+' isn\'t in our online catalog yet, but the shop can get it. <button class="btn btn-primary" data-help="request" style="margin:10px 0;padding:8px 14px">Request this part</button><br>':'')+'Try a different word, or <button class="btn btn-light" data-clear style="margin-top:10px;padding:8px 14px">clear filters</button></div>';
 }
 function pic(p,cls){return p.img?'<img src="'+p.img+'" alt="'+esc(p.name)+'" loading="lazy">':IC[p.cat];}
 function card(p){
@@ -962,6 +974,9 @@ $("#veh").addEventListener("change",function(e){S.veh=e.target.value;renderShop(
 ["rYear","rMake","rType","rModel","rSys"].forEach(function(id,k){$("#"+id).addEventListener("change",function(e){
   var keys=["year","make","type","model","sys"];RIDE[keys[k]]=e.target.value;for(var j=k+1;j<keys.length;j++)RIDE[keys[j]]="";
   if(k<4)RIDE.sys="";renderRide();});});
+$("#luGo").addEventListener("click",function(){var t=$("#luQ").value.trim();
+  if(!t){var parts=[RIDE.year,RIDE.make?vehShort(RIDE.make):"",RIDE.model].filter(Boolean).join(" ");t=(RIDE.sys?catName(RIDE.sys).split(" ")[0]+" part":"which part")+(parts?" fits a "+parts:"");}
+  var a=document.createElement("a");a.href="https://www.google.com/search?q="+encodeURIComponent(t);a.target="_blank";a.rel="noopener";document.body.appendChild(a);a.click();a.remove();});
 $("#rFind").addEventListener("click",function(){if(!RIDE.year&&!RIDE.make){toast("Pick at least a year and make first.");return;}RIDE.active=true;S.cat="all";S.veh="any";renderShop();var g=$("#grid");if(g)g.scrollIntoView({behavior:"smooth",block:"start"});});
 $("#rReset").addEventListener("click",function(){RIDE={year:"",make:"",type:"",model:"",sys:"",active:false};renderShop();});
 $("#sort").addEventListener("change",function(e){S.sort=e.target.value;renderShop();});
@@ -1499,8 +1514,9 @@ function freeText(t){
 }
 function openChat(mode){
   $("#chat").classList.add("on");$("#chatFab").style.display="none";
-  if(!chatStarted){chatStarted=true;bot("Hi! I'm the parts assistant for "+esc(CONFIG.SHOP_NAME)+". Tell me what part you're looking for and I'll find it, or I can help with a return. No phone call needed.",null,function(){if(mode==="return")startReturn();else menu();});}
+  if(!chatStarted){chatStarted=true;bot("Hi! I'm the parts assistant for "+esc(CONFIG.SHOP_NAME)+". Tell me what part you're looking for and I'll find it, or I can help with a return. No phone call needed.",null,function(){if(mode==="return")startReturn();else if(mode==="request")startRequest(S.q,"");else menu();});}
   else if(mode==="return")startReturn();
+  else if(mode==="request")startRequest(S.q,"");
   setTimeout(function(){var i=$("#chatTxt");if(i&&window.innerWidth>560)i.focus();},50);
 }
 function closeChat(){$("#chat").classList.remove("on");$("#chatFab").style.display="";}
