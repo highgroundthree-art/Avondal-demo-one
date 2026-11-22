@@ -124,9 +124,11 @@ function orderTicket_(d) {
     ['Vehicle', esc_(d.vehicle || 'not given')],
     ['VIN / frame #', esc_(d.vin || 'not given')],
     ['Customer notes', esc_(d.notes || 'none')],
-    ['Paid', money_(total) + ' · ' + esc_(d.payment)]
+    ['Paid', money_(total) + ' · ' + esc_(d.payment)],
+    ['Promos', (d.freeShip ? 'FREE SHIPPING (order over $175, items under 10 lb)' : 'Shipping charged') + (d.gift ? ' · FREE foam filter oil (order over $250)' : '')],
+    ['Fitment', d.ownFit ? 'Customer confirmed the parts fit their machine (their responsibility)' : 'Not confirmed by customer']
   ], itemTable_(items, true), [
-    needsFit ? 'Check fitment on the items flagged FITMENT CHECK REQUIRED against the vehicle above' : 'Fitment: all items are universal or multi-fit. Glance over them anyway',
+    d.gift ? 'Add the free foam filter oil (UFF100) to the supplier order' : 'Review the parts and the vehicle above',
     pickup ? 'Place the order with ' + CONFIG.SUPPLIER + ' and ship it to the SHOP' : 'Place the order with ' + CONFIG.SUPPLIER + ' and ship it to the CUSTOMER address above',
     'Write the J&M order # here: ______________________',
     pickup ? 'When it arrives, call or text the customer: ' + esc_(d.phone || 'see email') : 'When J&M ships, write the tracking # here: ______________________',

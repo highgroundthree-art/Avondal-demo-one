@@ -26,7 +26,7 @@ input,select,textarea{font:inherit}
 .sr{position:absolute;left:-9999px}
 
 /* demo banner */
-.demo-bar{background:#fff3c4;color:#5b4500;font-size:13px;text-align:center;padding:6px 12px;border-bottom:1px solid #e8d48a}
+.demo-bar{background:#fff3c4;color:#5b4500;font-size:14.5px;text-align:center;padding:6px 12px;border-bottom:1px solid #e8d48a}
 .demo-bar b{font-weight:700}
 
 /* header */
@@ -93,6 +93,23 @@ section.block{padding:56px 0}
 .band li svg{flex-shrink:0;width:20px;height:20px;color:var(--orange);margin-top:2px}
 .contact-panel{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}
 @media (max-width:760px){.contact-panel{grid-template-columns:1fr}.contact-panel .btn{flex:1 1 100%}}
+.ryd{background:#111;border:2px solid var(--orange);border-radius:12px;padding:16px;margin-top:14px}
+.ride-h{font-weight:800;letter-spacing:.12em;color:#fff;margin-bottom:10px;font-size:15px}
+.ride-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.ride-grid label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:#ccc;letter-spacing:.04em}
+.ride-grid select{height:46px;border-radius:8px;border:0;padding:0 10px;font-size:15px;background:#fff;color:#111;min-width:0}
+.ride-grid select:disabled{background:#3a3a3a;color:#999}
+.ride-btns{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.ride-btns .btn{padding:11px 22px;font-size:16px}
+.ride-btns .btn-light{background:#fff}
+.promo-strip{margin-top:12px;background:#c1272d;color:#fff;font-weight:700;border-radius:8px;padding:9px 14px;font-size:14px;text-align:center}
+.fit.fits{background:#eef4ff;color:#1d4f86;white-space:normal;line-height:1.35}
+.promo-line{font-size:13px;border-radius:8px;padding:8px 10px;margin:8px 0;background:#eef7f0;color:#17653a;font-weight:600}
+.promo-line.todo{background:#fff6e5;color:#8a5a10}
+.ownfit{display:flex;gap:10px;align-items:flex-start;background:#fff8f2;border:1.5px solid var(--orange);border-radius:10px;padding:12px;margin-top:12px;font-size:14px}
+.ownfit input{width:20px;height:20px;margin-top:2px;flex-shrink:0}
+@media (max-width:900px){.ride-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.ride-grid{grid-template-columns:1fr}}
 .rides{display:flex;flex-wrap:wrap;gap:10px}
 .ride{background:var(--card);border:1px solid #e2dccf;border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600}
 .ride small{font-weight:500;color:var(--muted)}
@@ -371,10 +388,10 @@ code.tagc{background:#16181b;color:#ffb27e;padding:2px 6px;border-radius:4px;fon
 :root{--orange:#c1272d;--orange-d:#9e1d22;--head:'Montserrat',Arial,sans-serif;--body:'Montserrat',Arial,sans-serif}
 body{background:#fff}
 header.site{background:#fff;color:#000;box-shadow:0 1px 0 #e6e6e6}
-.hbar{height:120px}
-.logo img{width:112px;height:112px;display:block}
+.hbar{height:168px}
+.logo img{width:156px;height:156px;display:block}
 nav.main{margin:0 auto}
-nav.main a{color:#000;font-weight:700;font-size:14px;padding:8px 7px;font-family:'Montserrat',sans-serif}
+nav.main a{color:#000;font-weight:700;font-size:15.5px;padding:10px 6px;font-family:'Montserrat',sans-serif}
 nav.main a:hover{background:#f2f2f2;color:#000}
 nav.main a.shop-tab{background:var(--orange);color:#fff;border-radius:6px}
 nav.main a.active:not(.shop-tab){box-shadow:inset 0 -2px 0 var(--orange);color:#000}
@@ -441,7 +458,9 @@ footer.site .wrap{display:block}
 .flinks a{color:#fff;text-decoration:none;font-weight:600}
 .fline{margin-top:6px;font-size:13.5px}
 .shop-hero{background:#2b2f33}
-@media (max-width:1280px){nav.main a{font-size:12.5px;padding:8px 5px}.logo img{width:90px;height:90px}.hbar{height:100px}}
+@media (max-width:1500px){nav.main a{font-size:14px;padding:8px 5px}.hbar{gap:12px}}
+@media (max-width:1280px){nav.main a{font-size:13.5px;padding:8px 4px}.logo img{width:124px;height:124px}.hbar{height:140px}}
+@media (max-width:1020px){nav.main{top:140px!important}}
 @media (max-width:1020px){
   nav.main{display:none;position:absolute;top:100px;left:0;right:0;background:#fff;flex-direction:column;align-items:stretch;padding:8px 12px 14px;gap:2px;box-shadow:0 10px 20px rgba(0,0,0,.12)}
   nav.main.open{display:flex}
@@ -455,7 +474,7 @@ footer.site .wrap{display:block}
   .hr-grid{grid-template-columns:1fr 1fr}
 }
 @media (max-width:620px){
-  .hbar{height:84px}.logo img{width:70px;height:70px}nav.main{top:84px}
+  .hbar{height:104px}.logo img{width:92px;height:92px}nav.main{top:104px!important}
   .rev-grid,.svc-grid,.hr-grid{grid-template-columns:1fr}
   .svc-form .trio{grid-template-columns:1fr 1fr 1fr}
   .expert-h,.ours-h,.hourly h2{font-size:30px}
@@ -580,12 +599,24 @@ footer.site .wrap{display:block}
   <section class="shop-hero">
     <div class="wrap">
       <h1>Shop Parts</h1>
-      <p>Browse by category, search by name, or pick your ride.</p>
+      <p>Pick your ride to see the parts that fit it, or search by name.</p>
+      <div class="ryd" id="ride">
+        <div class="ride-h">PICK YOUR RIDE</div>
+        <div class="ride-grid">
+          <label><span>1 · Year</span><select id="rYear"></select></label>
+          <label><span>2 · Make</span><select id="rMake" disabled></select></label>
+          <label><span>3 · Type</span><select id="rType" disabled></select></label>
+          <label><span>4 · Model</span><select id="rModel" disabled></select></label>
+          <label><span>5 · System</span><select id="rSys" disabled></select></label>
+        </div>
+        <div class="ride-btns"><button class="btn btn-shop" id="rFind" type="button">Find it</button><button class="btn btn-light" id="rReset" type="button">Start over</button></div>
+      </div>
+      <div class="promo-strip">Free shipping on orders over $175 (items under 10 lb, U.S. only) · Free bottle of foam filter oil on orders over $250</div>
       <div class="searchrow">
         <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
           <label class="sr" for="q">Search parts</label><input id="q" type="search" placeholder="Search parts: brake pads, air filter, chain…" autocomplete="off"></div>
         <label class="sr" for="veh">Shopping for</label>
-        <select id="veh" class="vsel"></select>
+        <select id="veh" class="vsel" hidden></select>
       </div>
     </div>
   </section>
@@ -780,7 +811,9 @@ var P=[
  [32,"Rear Wheel Bearing Kit, Yamaha 25-1567","BK151","Wide Open Products",27.38,"wheels",["yamaha"],"Yamaha rear wheel bearing kit (cross-ref 25-1567). Confirm model."]
 ];
 var VTYPE={"4": "any", "6": "any", "12": "atv", "13": "any", "63": "atv", "14": "moto", "64": "atv", "15": "moto", "16": "any", "9": "any", "18": "any", "66": "any", "67": "any", "19": "any", "25": "any", "0": "atv", "38": "moto", "52": "any", "49": "any", "54": "any", "39": "any", "40": "any", "59": "atv", "61": "atv", "62": "atv", "55": "any", "20": "any", "34": "atv", "21": "atv", "23": "any", "24": "any", "47": "any", "43": "any", "44": "any", "3": "moto", "27": "atv4", "28": "atv4", "42": "atv", "30": "atv4", "10": "atv", "31": "any", "32": "any"};
-var PRODUCTS=P.map(function(p,i){return {id:"p"+i,vt:VTYPE[p[0]]||"any",sku:p[2],brand:p[3],name:p[1],cat:p[5],price:p[4],fit:p[6],desc:p[7],rank:i,img:"images/parts/jm"+p[0]+".jpg"};});
+var FITDATA={"12": [["arcticcat", "ATV", "90 Y-12 Youth", 2002, 2005], ["canam", "ATV", "DS 70 Mini", 2008, 2015], ["polaris", "ATV", "Outlaw 50 (rear)", 2016, 2018], ["polaris", "ATV", "90 2x4", 2001, 2015]], "63": [["canam", "UTV", "Commander 1000 DPS", 2011, 2017], ["canam", "UTV", "Commander 1000 LTD", 2012, 2017]], "14": [["honda", "Dirt bike", "CRF450", 2019, 2019]], "64": [["honda", "ATV", "TRX420 Rancher", 2007, 2013]], "15": [["kawasaki", "Dirt bike", "KLR250", 1985, 1985]], "0": [["polaris", "ATV", "Sportsman 400", null, null]], "38": [["kawasaki", "Dirt bike", "KLX650", 1993, 1996]], "49": [["chinese", "Scooter / pit bike", "GY6 150cc", null, null]], "59": [["honda", "ATV", "TRX450R", 2006, 2009]], "61": [["honda", "UTV", "Pioneer 1000 (SXS1000)", 2016, 2020]], "21": [["honda", "ATV", "TRX450R", 2004, 2008]], "27": [["kawasaki", "ATV", "KFX", 2003, 2003]], "28": [["honda", "ATV", "TRX250X / TRX250EX Sportrax", 2001, 2021]], "42": [["honda", "ATV", "TRX400EX", 1999, 2008], ["honda", "ATV", "TRX400X", 2009, 2014]], "30": [["canam", "ATV", "Outlander / Renegade (G2)", null, null]]};
+var HEAVY=[10, 34, 25, 30];
+var PRODUCTS=P.map(function(p,i){return {id:"p"+i,fits:FITDATA[p[0]]||null,heavy:HEAVY.indexOf(p[0])>=0,vt:VTYPE[p[0]]||"any",sku:p[2],brand:p[3],name:p[1],cat:p[5],price:p[4],fit:p[6],desc:p[7],rank:i,img:"images/parts/jm"+p[0]+".jpg"};});
 var byId={};PRODUCTS.forEach(function(p){byId[p.id]=p;});
 function catName(c){for(var i=0;i<CATS.length;i++)if(CATS[i][0]===c)return CATS[i][1];return c;}
 function vehShort(id){for(var i=0;i<VEH.length;i++)if(VEH[i].id===id)return VEH[i].short||VEH[i].label;return id;}
@@ -848,34 +881,71 @@ function filtered(){
     if(!prodVisible(p))return false;
     if(S.cat!=="all"&&p.cat!==S.cat)return false;
     if(!fitsVeh(p,S.veh))return false;
+    if(RIDE.active){if(!fitsRide(p))return false;if(RIDE.sys&&p.cat!==RIDE.sys)return false;}
     if(q){var hay=(p.name+" "+catName(p.cat)+" "+p.desc+" "+p.sku).toLowerCase();
       var terms=q.split(/\s+/);for(var i=0;i<terms.length;i++){if(hay.indexOf(terms[i])<0)return false;}}
     return true;});
   var s=S.sort;
   list.sort(function(a,b){if(s==="lo")return a.price-b.price;if(s==="hi")return b.price-a.price;if(s==="az")return a.name.localeCompare(b.name);
-    if(S.veh!=="any"){var au=a.fit==="u"?1:0,bu=b.fit==="u"?1:0;if(au!==bu)return au-bu;}return a.rank-b.rank;});
+    if(S.veh!=="any"||RIDE.active){var au=a.fit==="u"?1:0,bu=b.fit==="u"?1:0;if(au!==bu)return au-bu;}return a.rank-b.rank;});
   return list;
+}
+function yrs(f){return f[3]?(f[3]===f[4]?String(f[3]):f[3]+"–"+String(f[4]).slice(-2)):"";}
+function fitText(p){
+  if(p.fit==="u")return "Universal / multi-fit";
+  if(p.fits)return "Fits: "+p.fits.map(function(f){return vehShort(f[0])+" "+f[2]+(f[3]?" "+yrs(f):"");}).join("; ");
+  var m=(p.desc||"").match(/^Fits: ([^.]+(\.\d+)?[^.]*)\./);
+  if(m)return "Fits: "+m[1];
+  return "Fitment: see details";
 }
 function fitBadge(p,full){
   if(p.fit==="u")return '<span class="fit univ">Universal / multi-fit</span>';
-  var names=p.fit.map(vehShort);
-  if(full)return '<span class="fit chk">Fitment check required</span>';
-  return '<span class="fit chk" title="Listed for: '+esc(names.join(", "))+'">Fitment check required</span>';
+  var t=fitText(p);
+  if(!full&&t.length>70)t=t.slice(0,67)+"…";
+  return '<span class="fit fits">'+esc(t)+'</span>';
 }
+/* ---------- pick your ride (5 layers) ---------- */
+var RIDE={year:"",make:"",type:"",model:"",sys:"",active:false};
+function rideRows(){var out=[];PRODUCTS.forEach(function(p){(p.fits||[]).forEach(function(f){out.push({p:p,make:f[0],type:f[1],model:f[2],y1:f[3],y2:f[4]});});});return out;}
+function yearOk(r,y){if(!y)return true;if(!r.y1)return true;return +y>=r.y1&&+y<=r.y2;}
+function rideMatch(r){return yearOk(r,RIDE.year)&&(!RIDE.make||r.make===RIDE.make)&&(!RIDE.type||r.type===RIDE.type)&&(!RIDE.model||r.model===RIDE.model);}
+function opt(v,l,sel){return '<option value="'+esc(v)+'"'+(v===sel?" selected":"")+'>'+esc(l)+'</option>';}
+function uniq(a){return a.filter(function(x,i){return a.indexOf(x)===i;});}
+function renderRide(){
+  var rows=rideRows();
+  var years=[];rows.forEach(function(r){if(r.y1)for(var y=r.y1;y<=r.y2;y++)years.push(y);});years=uniq(years).sort(function(a,b){return b-a;});
+  $("#rYear").innerHTML=opt("","Select year",RIDE.year)+years.map(function(y){return opt(String(y),String(y),RIDE.year);}).join("");
+  var r1=rows.filter(function(r){return yearOk(r,RIDE.year);});
+  var makes=uniq(r1.map(function(r){return r.make;})).sort(function(a,b){return vehShort(a).localeCompare(vehShort(b));});
+  var mk=$("#rMake");mk.disabled=!RIDE.year;mk.innerHTML=opt("","Select make",RIDE.make)+makes.map(function(m){return opt(m,vehShort(m),RIDE.make);}).join("");
+  var r2=r1.filter(function(r){return !RIDE.make||r.make===RIDE.make;});
+  var types=uniq(r2.map(function(r){return r.type;})).sort();
+  var ty=$("#rType");ty.disabled=!RIDE.make;ty.innerHTML=opt("","Select type",RIDE.type)+types.map(function(t){return opt(t,t,RIDE.type);}).join("");
+  var r3=r2.filter(function(r){return !RIDE.type||r.type===RIDE.type;});
+  var models=uniq(r3.map(function(r){return r.model;})).sort();
+  var mo=$("#rModel");mo.disabled=!RIDE.type;mo.innerHTML=opt("","Select model",RIDE.model)+models.map(function(m){return opt(m,m,RIDE.model);}).join("");
+  var r4=r3.filter(function(r){return !RIDE.model||r.model===RIDE.model;});
+  var cats=uniq(r4.map(function(r){return r.p.cat;})).concat(uniq(PRODUCTS.filter(function(p){return p.fit==="u";}).map(function(p){return p.cat;})));cats=uniq(cats);
+  var sy=$("#rSys");sy.disabled=!RIDE.model;sy.innerHTML=opt("","All systems",RIDE.sys)+CATS.filter(function(c){return cats.indexOf(c[0])>=0;}).map(function(c){return opt(c[0],c[1],RIDE.sys);}).join("");
+}
+function rideLabel(){var mk=RIDE.make?vehShort(RIDE.make):"";return [RIDE.year,mk,RIDE.model].filter(Boolean).join(" ")+(RIDE.type&&!RIDE.model?" "+RIDE.type:"");}
+function fitsRide(p){if(p.fit==="u")return true;if(!p.fits)return false;return p.fits.some(function(f){return rideMatch({make:f[0],type:f[1],model:f[2],y1:f[3],y2:f[4]});});}
 function renderShop(){
   var vs=$("#veh");
   vs.innerHTML='<optgroup label="Make">'+visibleVeh().map(function(v){return '<option value="'+v.id+'"'+(v.id===S.veh?" selected":"")+'>'+(v.id==="any"?"Make: All makes":esc(v.label))+'</option>';}).join("")+'</optgroup>';
-  var base=PRODUCTS.filter(function(p){return prodVisible(p)&&fitsVeh(p,S.veh);});
+  var base=PRODUCTS.filter(function(p){return prodVisible(p)&&fitsVeh(p,S.veh)&&(!RIDE.active||fitsRide(p));});
   var counts={all:base.length};base.forEach(function(p){counts[p.cat]=(counts[p.cat]||0)+1;});
   var catBtns=[["all","All parts"]].concat(CATS);
   catBtns=catBtns.filter(function(c){return c[0]==="all"||counts[c[0]]||S.cat===c[0];});
   $("#catList").innerHTML=catBtns.map(function(c){return '<button data-cat="'+c[0]+'" class="'+(S.cat===c[0]?"on":"")+'"><span>'+esc(c[1])+'</span><span class="n">'+(counts[c[0]]||0)+'</span></button>';}).join("");
   $("#chipBar").innerHTML=catBtns.map(function(c){return '<button data-cat="'+c[0]+'" class="'+(S.cat===c[0]?"on":"")+'">'+esc(c[1])+'</button>';}).join("");
-  var vn=$("#vehNote");
-  if(S.veh!=="any"){
-    var v=VEH.filter(function(x){return x.id===S.veh;})[0];
-    vn.hidden=false;vn.innerHTML="<b>Showing parts for "+esc(v.label)+"</b>, plus universal items. Fitment to your exact year and model is confirmed by the shop before anything ships.";
-  } else vn.hidden=true;
+  var vn=$("#vehNote");vn.hidden=false;
+  renderRide();
+  if(RIDE.active){
+    vn.innerHTML="<b>Showing parts that fit your "+esc(rideLabel())+"</b>"+(RIDE.sys?" ("+esc(catName(RIDE.sys))+")":"")+", plus universal items. Check the <b>Fits</b> line on each part before you order. You choose the part for your machine.";
+  } else {
+    vn.innerHTML="<b>Find parts that fit:</b> use <b>Pick Your Ride</b> above. Choose your year, make, type, model and system, then tap <b>Find it</b>. Each part lists what it fits, so you choose the right part for your machine.";
+  }
   var list=filtered();
   $("#count").textContent=list.length+" part"+(list.length===1?"":"s")+(S.q?' matching "'+S.q+'"':"");
   $("#grid").innerHTML=list.length?list.map(card).join(""):'<div class="empty"><b>No parts match that search.</b><br>Try a different word, or <button class="btn btn-light" data-clear style="margin-top:10px;padding:8px 14px">clear filters</button></div>';
@@ -889,6 +959,11 @@ function card(p){
 }
 var qT;$("#q").addEventListener("input",function(e){clearTimeout(qT);var v=e.target.value;qT=setTimeout(function(){S.q=v;renderShop();},120);});
 $("#veh").addEventListener("change",function(e){S.veh=e.target.value;renderShop();});
+["rYear","rMake","rType","rModel","rSys"].forEach(function(id,k){$("#"+id).addEventListener("change",function(e){
+  var keys=["year","make","type","model","sys"];RIDE[keys[k]]=e.target.value;for(var j=k+1;j<keys.length;j++)RIDE[keys[j]]="";
+  if(k<4)RIDE.sys="";renderRide();});});
+$("#rFind").addEventListener("click",function(){if(!RIDE.year&&!RIDE.make){toast("Pick at least a year and make first.");return;}RIDE.active=true;S.cat="all";S.veh="any";renderShop();var g=$("#grid");if(g)g.scrollIntoView({behavior:"smooth",block:"start"});});
+$("#rReset").addEventListener("click",function(){RIDE={year:"",make:"",type:"",model:"",sys:"",active:false};renderShop();});
 $("#sort").addEventListener("change",function(e){S.sort=e.target.value;renderShop();});
 document.addEventListener("click",function(e){
   var t=e.target.closest("[data-cat],[data-add],[data-open],[data-clear],[data-close],[data-inc],[data-dec],[data-rm],[data-go]");
@@ -934,11 +1009,21 @@ function updateCart(){
   $("#cartCount").textContent=cartCount();
   var ids=Object.keys(S.cart);
   $("#cartLines").innerHTML=ids.length?ids.map(function(id){return lineHTML(id,true);}).join(""):'<div class="empty" style="box-shadow:none;margin-top:20px">Your cart is empty.<br><button class="btn btn-primary" data-go="shop" style="margin-top:12px">Shop Parts</button></div>';
-  var fit=ids.some(function(id){return byId[id].fit!=="u";});
   $("#cartFoot").innerHTML=ids.length?('<div class="tot"><span>Subtotal</span><span>'+money(subtotal())+'</span></div><div class="tot"><span>Shipping &amp; tax</span><span>At checkout</span></div>'+
-   (fit?'<p class="note" style="margin:6px 0 10px">Some items need a fitment check. The shop confirms before anything ships.</p>':'')+
+   promoHTML()+
+   '<p class="note" style="margin:6px 0 10px">Check the <b>Fits</b> line on each part. You choose the parts for your machine.</p>'+
    '<button class="btn btn-primary btn-block btn-lg" data-go="checkout" style="margin-top:8px">Checkout</button>'):"";
 }
+var PROMO={ship:175,gift:250,giftName:"Uni Foam Filter Oil (free gift)",giftValue:13.95};
+function heavyInCart(){return Object.keys(S.cart).some(function(id){return byId[id].heavy;});}
+function freeShip(){return subtotal()>=PROMO.ship;}
+function giftOn(){return subtotal()>=PROMO.gift;}
+function promoHTML(){var sub=subtotal(),h="";
+  if(sub<PROMO.ship)h+='<div class="promo-line todo">Add '+money(PROMO.ship-sub)+' more for <b>free shipping</b> (items under 10 lb).</div>';
+  else h+='<div class="promo-line">✓ Free shipping'+(heavyInCart()?' on items under 10 lb. Heavier items ship at cost.':' unlocked.')+'</div>';
+  if(sub>=PROMO.ship&&sub<PROMO.gift)h+='<div class="promo-line todo">Add '+money(PROMO.gift-sub)+' more for a <b>free bottle of foam filter oil</b> ($13.95 value).</div>';
+  if(sub>=PROMO.gift)h+='<div class="promo-line">✓ Free foam filter oil added ($13.95 value).</div>';
+  return h;}
 function openCart(){$("#drawer").classList.add("on");$("#scrim").classList.add("on");}
 function closeAll(){$("#drawer").classList.remove("on");$("#pModal").classList.remove("on");$("#scrim").classList.remove("on");}
 $("#cartBtn").addEventListener("click",openCart);
@@ -1008,6 +1093,7 @@ function renderCheckout(){renderSteps();renderSummary();
       '<div class="shipto"><b>Delivery</b>'+(m==="customer"?(dest()==="pickup"?'Ship to the shop: Avondale Dirt Bike &amp; ATV<br>'+esc(c.name)+' · '+(c.pickupOpt==="install"?"Shop installs":"Customer pickup")+'<br><span style="color:var(--muted);font-size:13px">Dennis contacts you when it arrives</span>':esc(c.name)+"<br>"+esc(c.addr)+", "+esc(c.city)+", "+esc(c.state)+" "+esc(c.zip)+'<br><span style="color:var(--muted);font-size:13px">Drop-ships from the supplier directly to this address</span>'):'Avondale workshop (address on file)<br>Work order #'+esc(c.wo)+' · Tech: '+esc(c.tech)+'<br><span style="color:var(--muted);font-size:13px">Drop-ships from the supplier directly to the workshop</span>')+'</div>'+
       '<div class="shipto"><b>Vehicle</b>'+esc(c.ymm||"Not specified")+(c.vin?" · VIN "+esc(c.vin):"")+(c.notes?'<br><span style="color:var(--muted);font-size:13px">'+esc(c.notes)+'</span>':'')+'</div>'+
       '<div class="shipto"><b>Payment</b>'+(m==="customer"?(S.pay==="card"?"Card ending "+esc((c.cc||"").replace(/\D/g,"").slice(-4)||"····")+" (simulated)":"Wallet (simulated)"):"Shop supplier account (demo)")+'</div>'+
+      (m==="customer"?'<label class="ownfit"><input type="checkbox" id="ownFit"'+(S.co.ownFit?" checked":"")+'><span><b>I checked that these parts fit my machine.</b> I chose them using the year, make and model listed on each part, and I understand fitment is my responsibility.</span></label><div class="err" id="err"></div>':'')+
       '<div class="co-nav"><button class="btn btn-light" id="back">&larr; Back</button><button class="btn btn-primary btn-lg" id="place">Place demo order</button></div>';
   }
   $("#coPanel").innerHTML=h;
@@ -1030,7 +1116,7 @@ function wireStep(){
     if(e){$("#err").textContent=e;return;}
     S.step++;renderCheckout();window.scrollTo(0,0);
   };
-  if(place)place.onclick=placeOrder;
+  if(place)place.onclick=function(){var cb=$("#ownFit");if(cb){S.co.ownFit=cb.checked;if(!cb.checked){$("#err").textContent="Please confirm the parts fit your machine before placing the order.";return;}}placeOrder();};
 }
 function keepAll(){document.querySelectorAll("#coPanel input,#coPanel textarea,#coPanel select").forEach(function(el){S.co[el.id]=el.value.trim();});}
 function validate(){
@@ -1054,14 +1140,16 @@ function renderSummary(){
   var sub=subtotal(), m=mode();
   $("#coSum").innerHTML='<h3 style="font-size:20px">Order summary</h3>'+ids.map(function(id){return lineHTML(id,S.step<4);}).join("")+
    '<div style="margin-top:10px"><div class="tot"><span>Subtotal</span><span>'+money(sub)+'</span></div>'+
-   '<div class="tot"><span>Shipping</span><span>'+(dest()==="home"?"Quoted by supplier":(dest()==="pickup"?"Free to the shop":"Shop account"))+'</span></div>'+
+   (giftOn()&&m==="customer"?'<div class="tot"><span>'+PROMO.giftName+'</span><span>$0.00</span></div>':'')+
+   '<div class="tot"><span>Shipping</span><span>'+(dest()==="home"?(freeShip()?(heavyInCart()?"Free under 10 lb · heavy items at cost":"Free"):"Quoted at checkout"):(dest()==="pickup"?"Free to the shop":"Shop account"))+'</span></div>'+
    '<div class="tot"><span>Sales tax</span><span>Calculated in production</span></div>'+
    '<div class="tot big"><span>Demo total</span><span>'+money(sub)+'</span></div></div>'+
+   (m==="customer"?promoHTML():'')+
    '<div class="shipto" style="margin-top:12px"><b>Fulfillment</b>'+({home:"Supplier &rarr; customer's address",pickup:"Supplier &rarr; shop (customer pickup)",workshop:"Supplier &rarr; workshop (mechanic order)"})[dest()]+'</div>';
 }
 function placeOrder(){
   var m=mode(),n=Math.floor(1000+Math.random()*9000);
-  S.lastOrder={no:"ADB-DEMO-"+n,mode:m,dest:dest(),items:JSON.parse(JSON.stringify(S.cart)),total:subtotal(),co:JSON.parse(JSON.stringify(S.co)),pay:S.pay};
+  S.lastOrder={no:"ADB-DEMO-"+n,mode:m,dest:dest(),gift:(m==="customer"&&giftOn()),freeShip:(m==="customer"&&freeShip()),ownFit:!!S.co.ownFit,items:JSON.parse(JSON.stringify(S.cart)),total:subtotal(),co:JSON.parse(JSON.stringify(S.co)),pay:S.pay};
   S.lastOrder.date=new Date().toISOString();S.lastOrder.emailState=(o_cust(S.lastOrder)&&CONFIG.EMAIL_ENDPOINT)?"sending":"off";
   S.orders.push(S.lastOrder);
   S.cart={};persist();updateCart();S.step=1;
@@ -1079,6 +1167,7 @@ function renderConf(){
    '<h1 style="font-size:36px">'+(cust?"Order received. Thank you!":"Shop order submitted")+'</h1>'+
    '<div class="ordno">Order '+o.no+'</div>'+
    '<p style="color:var(--muted)">'+(cust?"Your receipt goes to "+esc(c.email)+".":"Linked to work order #"+esc(c.wo)+" for "+esc(c.tech)+".")+' This is a demonstration, so nothing was ordered from the supplier and nothing was charged.</p>'+
+   (o.gift||o.freeShip?'<div class="promo-line">'+(o.freeShip?"✓ Free shipping applied. ":"")+(o.gift?"✓ Free foam filter oil included ($13.95 value).":"")+'</div>':'')+
    '<h2 style="font-size:22px;margin-top:26px">How it gets there</h2>'+
    '<div class="flowbig"><div class="node">Supplier<small>ships the parts</small></div><div class="arrow">&rarr;</div><div class="node dest">'+(o.dest==="home"?esc(c.name)+'<small>'+esc(c.city)+', '+esc(c.state)+' '+esc(c.zip)+'</small>':(o.dest==="pickup"?'Avondale shop<small>'+(c.pickupOpt==="install"?"shop installs":"pickup for "+esc(c.name))+'</small>':'Avondale workshop<small>WO #'+esc(c.wo)+'</small>'))+'</div></div>'+
    '<p class="note" style="margin-top:0">'+({home:"Ships straight to the customer. The shop never handles the box.",pickup:"Ships to the shop. Dennis lets the customer know when it's in.",workshop:"Mechanic orders drop-ship to the workshop, ready for the job on the lift."})[o.dest]+'</p>'+
@@ -1107,9 +1196,9 @@ $("#resetBtn").onclick=function(){S.cart={};S.co={};S.step=1;S.lastOrder=null;S.
 
 /* ---------- email ---------- */
 function o_cust(o){return o.mode==="customer";}
-function itemsArr(o){return Object.keys(o.items).map(function(id){var p=byId[id];return {name:p.name,sku:p.sku,qty:o.items[id],price:p.price,fit:p.fit==="u"?"Universal / multi-fit":"FITMENT CHECK REQUIRED"};});}
+function itemsArr(o){var a=Object.keys(o.items).map(function(id){var p=byId[id];return {name:p.name,sku:p.sku,qty:o.items[id],price:p.price,fit:(p.fit==="u"?"Universal / multi-fit":fitText(p))+(p.heavy?" · over 10 lb":"")};});if(o.gift)a.push({name:PROMO.giftName,sku:"UFF100",qty:1,price:0,fit:"Promo: orders over $250"});return a;}
 function shipToText(o){var c=o.co;return o.dest==="pickup"?"Avondale Dirt Bike & ATV (shop)\n"+(c.pickupOpt==="install"?"Shop installs":"Customer pickup")+": "+c.name:[c.name,c.addr,c.city+", "+c.state+" "+c.zip].join("\n");}
-function receiptPayload(o){var c=o.co;return {type:"receipt",to:c.email,orderNo:o.no,date:o.date,name:c.name,shipMode:o.dest,pickupOpt:c.pickupOpt||"",
+function receiptPayload(o){var c=o.co;return {type:"receipt",to:c.email,orderNo:o.no,date:o.date,name:c.name,shipMode:o.dest,pickupOpt:c.pickupOpt||"",ownFit:!!o.ownFit,freeShip:!!o.freeShip,gift:!!o.gift,
   shipTo:shipToText(o),vehicle:c.ymm||"",vin:c.vin||"",notes:c.notes||"",phone:c.phone||"",items:itemsArr(o),total:o.total,
   payment:o.pay==="card"?"Card ending "+((c.cc||"").replace(/\D/g,"").slice(-4)||"4242")+" (simulated)":"Wallet (simulated)"};}
 function sendEmail(type,payload,cb){
@@ -1168,7 +1257,7 @@ var FAQ=[
  {k:["label","return shipping","who pays","shipping cost","postage"],a:"If we sent the wrong part or it arrived damaged or defective, we email you a prepaid return label. For other returns (ordered the wrong part, changed your mind), return shipping comes out of your refund."+POLICY_TAG},
  {k:["installed","used","mounted","ridden"],a:"Parts that have been installed or used can't be returned unless they're defective. Defective parts go through a warranty review, and we help you file it."+POLICY_TAG},
  {k:["electrical","stator","coil","battery","cdi","regulator"],a:"Electrical parts can only be returned unopened, because they can't be tested once installed. Defective electrical parts go through a warranty review."+POLICY_TAG},
- {k:["fit","fitment","wrong part","doesn't fit","doesnt fit","compatible"],a:"If a part doesn't fit, start a return and choose \"Doesn't fit my vehicle\". Include your year, make and model. If we confirmed fitment before shipping and it's still wrong, the return label is on us."+POLICY_TAG},
+ {k:["fit","fitment","wrong part","doesn't fit","doesnt fit","compatible"],a:"If a part doesn't fit, start a return and choose \"Doesn't fit my vehicle\". Include your year, make and model. Customers choose their own parts, so returns for fit follow the shop's return policy (unused, original packaging), and return shipping comes out of the refund."+POLICY_TAG},
  {k:["damaged","broken","cracked","bent","missing"],a:"Sorry about that! Report shipping damage within 48 hours of delivery and include a photo. Start a return and choose \"Arrived damaged\"."+POLICY_TAG},
  {k:["exchange","swap","different size"],a:"The quickest way to exchange is to start a return for the old part and place a new order for the right one. The shop can help you pick the correct part."},
  {k:["warranty","defect","defective","stopped working","failed"],a:"Defective parts go through a warranty review with the manufacturer. Start a return, choose \"Defective\", and we'll take it from there."},
@@ -1235,7 +1324,7 @@ function finishEval(){
   if((r==="changed"||r==="wrong"||r==="fit")&&c==="installed"){CH.state="idle";
     bot("Under the return policy, parts that have been installed can't be returned unless they're defective. If you think it's defective, I can start a warranty review instead."+POLICY_TAG,
       [["It's defective, start a review",function(){CH.reason="defective";finishEval();}],["Call the shop",function(){answer("phone");}],["Main menu",function(){menu();}]]);return;}
-  var freeLabel=(r==="damaged"||r==="defective"||(r==="fit"));
+  var freeLabel=(r==="damaged"||r==="defective");
   var review=(r==="defective"&&c==="installed");
   CH.state="confirm";
   var items=Object.keys(CH.sel).filter(function(k){return CH.sel[k];}).map(function(id){return esc(byId[id].name)+" ×"+o.items[id];}).join("<br>");
