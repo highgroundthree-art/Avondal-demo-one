@@ -114,6 +114,8 @@ section.block{padding:56px 0}
 .lookup-row{display:flex;gap:8px;margin:8px 0 4px}
 .lookup-row input{flex:1;min-width:0;border:1px solid #c9d3df;border-radius:8px;padding:10px 12px;font-size:15px}
 .lookup small{color:var(--muted)}
+.price s.was{font-size:.7em;color:#888;font-weight:500;margin-left:4px}
+.price small.saletag{display:inline-block;background:#c1272d;color:#fff;border-radius:4px;padding:1px 6px;letter-spacing:.04em;margin-top:2px}
 .rides{display:flex;flex-wrap:wrap;gap:10px}
 .ride{background:var(--card);border:1px solid #e2dccf;border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600}
 .ride small{font-weight:500;color:var(--muted)}
@@ -695,6 +697,7 @@ footer.site .wrap{display:block}
       <li>Tap <b>Help &amp; Returns</b>, then "Start a return". He picks the part and a reason and gets a return number plus a follow-up email.</li>
       <li>Turn on <b>Mechanic order</b> below and run the same flow again. This time it ships to the workshop with a work order number.</li>
     </ol>
+    <div class="tog"><div><b>Preview Black Friday prices</b><small>Turns on automatically Nov 27 – Dec 25.</small></div><label class="sw"><input type="checkbox" id="bfTog"><span></span></label></div>
     <div class="tog"><div><b>Mechanic order mode</b><small>Simulates a technician signed in. Orders ship to the workshop.</small></div><label class="sw"><input type="checkbox" id="staffTog"><span></span></label></div>
     
     <div class="tog" style="display:block"><b>Chat search log</b><small style="display:block;color:var(--muted);font-size:12px;margin-bottom:6px">What people typed and whether it matched. Use the misses to train the slang list.</small><div id="slog"></div></div>
@@ -823,6 +826,14 @@ var VTYPE={"4": "any", "6": "any", "12": "atv", "13": "any", "63": "atv", "14": 
 var FITDATA={"12": [["arcticcat", "ATV", "90 Y-12 Youth", 2002, 2005], ["canam", "ATV", "DS 70 Mini", 2008, 2015], ["polaris", "ATV", "Outlaw 50 (rear)", 2016, 2018], ["polaris", "ATV", "90 2x4", 2001, 2015]], "63": [["canam", "UTV", "Commander 1000 DPS", 2011, 2017], ["canam", "UTV", "Commander 1000 LTD", 2012, 2017]], "14": [["honda", "Dirt bike", "CRF450", 2019, 2019]], "64": [["honda", "ATV", "TRX420 Rancher", 2007, 2013]], "15": [["kawasaki", "Dirt bike", "KLR250", 1985, 1985]], "0": [["polaris", "ATV", "Sportsman 400", null, null]], "38": [["kawasaki", "Dirt bike", "KLX650", 1993, 1996]], "49": [["chinese", "Scooter / pit bike", "GY6 150cc", null, null]], "59": [["honda", "ATV", "TRX450R", 2006, 2009]], "61": [["honda", "UTV", "Pioneer 1000 (SXS1000)", 2016, 2020]], "21": [["honda", "ATV", "TRX450R", 2004, 2008]], "27": [["kawasaki", "ATV", "KFX", 2003, 2003]], "28": [["honda", "ATV", "TRX250X / TRX250EX Sportrax", 2001, 2021]], "42": [["honda", "ATV", "TRX400EX", 1999, 2008], ["honda", "ATV", "TRX400X", 2009, 2014]], "30": [["canam", "ATV", "Outlander / Renegade (G2)", null, null]]};
 var HEAVY=[10, 34, 25, 30];
 var PRODUCTS=P.map(function(p,i){return {id:"p"+i,fits:FITDATA[p[0]]||null,heavy:HEAVY.indexOf(p[0])>=0,vt:VTYPE[p[0]]||"any",sku:p[2],brand:p[3],name:p[1],cat:p[5],price:p[4],fit:p[6],desc:p[7],rank:i,img:"images/parts/jm"+p[0]+".jpg"};});
+var PRICES={"CBD0402": [20.99, 19.82, 18.73], "CBD0416": [20.99, 19.82, 18.73], "BS151J": [25.99, 23.65, 22.35], "BD120S": [30.95, 25.93, 24.51], "BR896": [66.42, 51.8, 48.96], "AF4149": [32.95, 24.48, 23.13], "AF4142": [35.95, 28.87, 27.28], "AF2357": [13.95, 10.36, 9.79], "UFF100": [14.67, 12.03, 11.36], "KL8090": [21.95, 21.12, 19.96], "PL223": [4.96, 4.13, 3.91], "PL222": [11.49, 8.94, 8.45], "PL115": [14.66, 12.22, 11.55], "ST509": [128.73, 113.28, 107.05], "REG3": [52.8, 45.44, 42.94], "CCL0304": [27.99, 24.95, 23.57], "CKS0600": [15.99, 14.29, 13.5], "CK9224": [169.95, 143.1, 135.23], "CK9127": [69.95, 63.21, 59.73], "PK305X": [78.75, 64.94, 61.36], "EG3136": [9.88, 7.71, 7.29], "GKP001C": [25.45, 23.63, 22.33], "PC002": [19.52, 12.94, 12.22], "CSP031212": [16.99, 14.95, 14.13], "CB2405A": [11.83, 9.23, 8.72], "CCB275": [18.99, 16.84, 15.91], "CBL0501R": [14.99, 13.65, 12.9], "M5403R": [7.5, 5.53, 5.22], "M5401B": [6.95, 5.42, 5.12], "SB500": [58.08, 45.3, 42.81], "BJ601": [32.99, 25.73, 24.31], "BJ303": [48.22, 37.61, 35.54], "SKIT53A": [69.58, 54.27, 51.29], "D251012": [165.5, 129.49, 122.37], "BK151": [27.38, 22.65, 21.4]};/* Dennis's price file 11/22/2026: [retail, regular sell, Black Friday/Christmas] */
+var SALE={start:"2026-11-27",end:"2026-12-25",preview:false};
+function saleOn(){if(SALE.preview)return true;var d=new Date().toISOString().slice(0,10);return d>=SALE.start&&d<=SALE.end;}
+PRODUCTS.forEach(function(p){var x=PRICES[p.sku];p.retail=x?x[0]:p.price;p.regular=x?x[1]:p.price;p.bf=x?x[2]:null;p.fromDennis=!!x;
+  Object.defineProperty(p,"price",{get:function(){return (saleOn()&&this.bf)?this.bf:this.regular;},configurable:true});});
+function priceHTML(p,big){var cur=p.price,was=(saleOn()&&p.bf)?p.regular:p.retail;
+  if(saleOn()&&p.bf)return money(cur)+' <s class="was">'+money(p.regular)+'</s><small class="saletag">Black Friday</small>';
+  return money(cur)+(p.retail>cur+0.004?'<small>Retail <s>'+money(p.retail)+'</s></small>':'');}
 var byId={};PRODUCTS.forEach(function(p){byId[p.id]=p;});
 function catName(c){for(var i=0;i<CATS.length;i++)if(CATS[i][0]===c)return CATS[i][1];return c;}
 function vehShort(id){for(var i=0;i<VEH.length;i++)if(VEH[i].id===id)return VEH[i].short||VEH[i].label;return id;}
@@ -967,7 +978,7 @@ function card(p){
   var inC=S.cart[p.id];
   return '<article class="pcard"><button class="pimg'+(p.img?' has-img':'')+'" data-open="'+p.id+'" aria-label="View '+esc(p.name)+'">'+pic(p)+(p.img?'':'<span class="ph">Photo placeholder</span>')+'</button>'+
    '<div class="pbody"><div class="pcat">'+esc(p.brand)+' · '+esc(p.sku)+'</div><button class="pname" data-open="'+p.id+'">'+esc(p.name)+'</button>'+fitBadge(p)+
-   '<div class="prow"><div class="price">'+money(p.price)+'</div><button class="add'+(inC?" added":"")+'" data-add="'+p.id+'">'+(inC?"✓ In cart":"Add")+'</button></div></div></article>';
+   '<div class="prow"><div class="price">'+priceHTML(p)+'</div><button class="add'+(inC?" added":"")+'" data-add="'+p.id+'">'+(inC?"✓ In cart":"Add")+'</button></div></div></article>';
 }
 var qT;$("#q").addEventListener("input",function(e){clearTimeout(qT);var v=e.target.value;qT=setTimeout(function(){S.q=v;renderShop();},120);});
 $("#veh").addEventListener("change",function(e){S.veh=e.target.value;renderShop();});
@@ -1001,7 +1012,7 @@ function openProduct(id){
   $("#pBox").innerHTML='<button class="x" data-close aria-label="Close">&times;</button><div class="pd"><div class="pimg'+(p.img?' has-img':'')+'">'+pic(p)+(p.img?'':'<span class="ph">Photo placeholder</span>')+'</div><div class="info">'+
    '<div class="pcat">'+esc(catName(p.cat))+'</div><h2>'+esc(p.name)+'</h2>'+fitBadge(p,true)+
    '<p>'+esc(p.desc)+'</p><div class="kv"><div><b>Brand:</b> '+esc(p.brand)+'</div><div><b>Part #:</b> '+esc(p.sku)+'</div><div><b>Listed for:</b> '+esc(listed)+'</div><div><b>Availability:</b> confirmed when the order is placed.</div><div><b>Fitment:</b> supplier listing. The shop confirms it fits your machine before ordering.</div></div>'+
-   '<div class="price" style="font-size:26px;margin:10px 0">'+money(p.price)+'</div>'+
+   '<div class="price" style="font-size:26px;margin:10px 0">'+priceHTML(p,true)+'</div>'+
    '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div class="qty"><button id="mq-" aria-label="Less">−</button><span id="mq">1</span><button id="mq+" aria-label="More">+</button></div><button class="btn btn-primary" id="mAdd">Add to cart</button></div></div></div>';
   var q=1;
   document.getElementById("mq-").onclick=function(){q=Math.max(1,q-1);$("#mq").textContent=q;};
@@ -1204,6 +1215,7 @@ function renderConf(){
 $("#presFab").onclick=function(){$("#pres").classList.toggle("on");};
 $("#presX").onclick=function(){$("#pres").classList.remove("on");};
 var st=$("#staffTog");
+$("#bfTog").onchange=function(){SALE.preview=this.checked;updateCart();if($("#v-shop").classList.contains("on"))renderShop();if($("#v-checkout").classList.contains("on"))renderCheckout();toast(this.checked?"Showing Black Friday prices":"Showing regular prices");};
 function applyFlags(){document.body.classList.toggle("staff",S.staff);st.checked=S.staff;}
 st.onchange=function(){S.staff=st.checked;S.step=1;persist();applyFlags();toast(S.staff?"Mechanic order mode on: orders ship to the workshop":"Customer mode: orders ship to the customer");if($("#v-checkout").classList.contains("on"))renderCheckout();};
 $("#resetBtn").onclick=function(){S.cart={};S.co={};S.step=1;S.lastOrder=null;S.orders=[];chatStarted=false;CH.ctx=null;$("#chatLog").innerHTML="";closeChat();S.q="";S.cat="all";S.veh="any";S.staff=false;$("#q").value="";persist();applyFlags();updateCart();$("#pres").classList.remove("on");location.hash="#home";route();toast("Demo reset");};
