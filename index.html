@@ -724,7 +724,10 @@ var CONFIG={
   SHOP_NAME:"Avondale Dirt Bike & ATV",
   SHOP_PHONE:"(480) 270-4465",
   SHOP_EMAIL:"parts@avondaledirtbikeatv.com",
-  SERVICE_EMAIL:"service@avondaledirtbikeatv.com"
+  SERVICE_EMAIL:"service@avondaledirtbikeatv.com",
+  /* Analytics: paste Dennis's IDs to turn on. GA4 looks like G-XXXXXXX; Clarity is a 10-character project ID. */
+  GA4_ID:"",
+  CLARITY_ID:""
 };
 /* ---------- icons ---------- */
 var IC={
@@ -1006,8 +1009,16 @@ document.addEventListener("click",function(e){
 });
 
 /* ---------- product modal ---------- */
+
+/* ===== Analytics (off until IDs are set in CONFIG) ===== */
+(function(){
+  if(CONFIG.GA4_ID){var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id="+CONFIG.GA4_ID;document.head.appendChild(s);
+    window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments);};gtag("js",new Date());gtag("config",CONFIG.GA4_ID);}
+  if(CONFIG.CLARITY_ID){(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script",CONFIG.CLARITY_ID);}
+})();
+function track(name,params){try{if(window.gtag)gtag("event",name,params||{});if(window.clarity)clarity("event",name);}catch(e){}}
 function openProduct(id){
-  var p=byId[id];
+  var p=byId[id];track("view_item",{currency:"USD",value:p.price,items:[{item_id:p.sku,item_name:p.name,item_brand:p.brand}]});
   var listed=p.fit==="u"?"Universal / multi-fit item":(p.fit.length?p.fit.map(vehShort).join(", "):"See supplier description");
   $("#pBox").innerHTML='<button class="x" data-close aria-label="Close">&times;</button><div class="pd"><div class="pimg'+(p.img?' has-img':'')+'">'+pic(p)+(p.img?'':'<span class="ph">Photo placeholder</span>')+'</div><div class="info">'+
    '<div class="pcat">'+esc(catName(p.cat))+'</div><h2>'+esc(p.name)+'</h2>'+fitBadge(p,true)+
@@ -1025,7 +1036,7 @@ $("#pModal").addEventListener("click",function(e){if(e.target===this)closeAll();
 /* ---------- cart ---------- */
 function cartCount(){var n=0;for(var k in S.cart)n+=S.cart[k];return n;}
 function subtotal(){var s=0;for(var k in S.cart)s+=byId[k].price*S.cart[k];return Math.round(s*100)/100;}
-function addToCart(id,q){S.cart[id]=Math.min(20,(S.cart[id]||0)+q);persist();updateCart();if($("#v-shop").classList.contains("on"))renderShop();toast("Added to cart: "+byId[id].name);}
+function addToCart(id,q){track("add_to_cart",{currency:"USD",value:byId[id].price*q,items:[{item_id:byId[id].sku,item_name:byId[id].name,quantity:q}]});S.cart[id]=Math.min(20,(S.cart[id]||0)+q);persist();updateCart();if($("#v-shop").classList.contains("on"))renderShop();toast("Added to cart: "+byId[id].name);}
 function setQty(id,q){if(q<=0)delete S.cart[id];else S.cart[id]=Math.min(20,q);persist();updateCart();if($("#v-shop").classList.contains("on"))renderShop();if($("#v-checkout").classList.contains("on")){if(cartCount()===0){closeAll();location.hash="#shop";}else renderSummary();}}
 function lineHTML(id,editable){var p=byId[id],q=S.cart[id];
   return '<div class="line"><div class="thumb">'+pic(p)+'</div><div><div class="nm">'+esc(p.name)+'</div><div class="sku">'+p.sku+(editable?'':' · Qty '+q)+'</div>'+
@@ -1177,7 +1188,7 @@ function placeOrder(){
   var m=mode(),n=Math.floor(1000+Math.random()*9000);
   S.lastOrder={no:"ADB-DEMO-"+n,mode:m,dest:dest(),gift:(m==="customer"&&giftOn()),freeShip:(m==="customer"&&freeShip()),ownFit:!!S.co.ownFit,items:JSON.parse(JSON.stringify(S.cart)),total:subtotal(),co:JSON.parse(JSON.stringify(S.co)),pay:S.pay};
   S.lastOrder.date=new Date().toISOString();S.lastOrder.emailState=(o_cust(S.lastOrder)&&CONFIG.EMAIL_ENDPOINT)?"sending":"off";
-  S.orders.push(S.lastOrder);
+  S.orders.push(S.lastOrder);track("purchase",{transaction_id:S.lastOrder.no,currency:"USD",value:S.lastOrder.total,fulfillment:S.lastOrder.dest});
   S.cart={};persist();updateCart();S.step=1;
   location.hash="#confirmation";
   if(!o_cust(S.lastOrder)&&CONFIG.EMAIL_ENDPOINT){var so=S.lastOrder,sc=so.co;so.shopEmailState="sending";sendEmail("shoporder",{to:"shop",orderNo:so.no,date:so.date,wo:sc.wo,tech:sc.tech,cust:sc.cust||"",needBy:sc.eta||"",vehicle:sc.ymm||"",vin:sc.vin||"",notes:sc.notes||"",items:itemsArr(so),total:so.total},function(ok){so.shopEmailState=ok?"sent":"failed";var el=$("#ostat");if(el)el.outerHTML=ownerStatus(so);});}
